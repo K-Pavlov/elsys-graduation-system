@@ -23,46 +23,38 @@ MANAGERS = ADMINS
 SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
 
 # App engine database settings
-#if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
-#    # Running on production App Engine, so use a Google Cloud SQL database.
-#    DATABASES = {
-#        'default': {
-#            'ENGINE': 'django.db.backends.mysql',
-#            'HOST': '/cloudsql/elsys-graduation-system:elsys-graduation-system',
-#            'NAME': 'elsys_graduation_system',
-#            'USER': 'root',
-#        }
-#    }
-#elif os.getenv('SETTINGS_MODE') == 'prod':
-#    # Running in development, but want to access the Google Cloud SQL instance
-#    # in production.
-#    DATABASES = {
-#        'default': {
-#            'ENGINE': 'google.appengine.ext.django.backends.rdbms',
-#            'INSTANCE': 'elsys-graduation-system:elsys-graduation-system',
-#            'NAME': 'elsys_graduation_system',
-#            'USER': 'root',
-#        }
-#}
-#else:
-#    # Running in development, so use a local MySQL database.
-#    DATABASES = {
-#        'default': {
-#            'ENGINE': 'django.db.backends.sqlite3',
-#            'NAME': 'elsys_graduation_systemm',
-#            'USER': 'root',
-#            'PASSWORD': 'root',
-#        }
-#    }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'google.appengine.ext.django.backends.rdbms',
-        'INSTANCE': 'elsys-graduation-system:elsys-graduation-system',
-        'NAME': 'elsys_graduation_system',
-        'USER': 'root',
+if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+    # Running on production App Engine, so use a Google Cloud SQL database.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '/cloudsql/elsys-graduation-system:elsys-graduation-system',
+            'NAME': 'elsys_graduation_system',
+            'USER': 'root',
+        }
     }
+elif os.getenv('SETTINGS_MODE') == 'prod':
+    # Running in development, but want to access the Google Cloud SQL instance
+    # in production.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'google.appengine.ext.django.backends.rdbms',
+            'INSTANCE': 'elsys-graduation-system:elsys-graduation-system',
+            'NAME': 'elsys_graduation_system',
+            'USER': 'root',
+        }
 }
+else:
+    print('hi')
+    # Running in development, so use a local MySQL database.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'elsys_graduation_systemm',
+            'USER': 'root',
+            'PASSWORD': 'root',
+        }
+    }
 
 LOGIN_URL = '/login'
 

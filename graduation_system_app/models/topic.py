@@ -1,11 +1,12 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from graduation_system_app.common.uuid_generator import make_uuid_charfield
 
-from . import Mentor
-
-class Topic(object):
+class Topic(models.Model):
+    id = make_uuid_charfield()
     title = models.CharField(max_length=100)
     description = models.TextField()
-    mentor = models.ForeignKey(Mentor, blank=True, null=True)
+
+    class Meta:
+        app_label = "graduation_system_app"
 
 
