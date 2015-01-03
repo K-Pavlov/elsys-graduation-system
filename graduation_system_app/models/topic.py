@@ -6,6 +6,10 @@ class Topic(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
 
+    @staticmethod
+    def from_csv(csvfile):
+        pass
+
     class Meta:
         app_label = "graduation_system_app"
 

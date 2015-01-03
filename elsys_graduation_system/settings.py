@@ -8,19 +8,20 @@ from os import path
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 DIRNAME = os.path.dirname(__file__)
 
-DEBUG = True
+if(os.getenv('SETTINGS_MODE') == 'dev'):
+    DEBUG = True
+else:
+    DEBUG = False
+
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ('localhost',)
+ALLOWED_HOSTS = ('*')
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
-
-# because of google app engines django installion 
-SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
 
 # App engine database settings
 if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
@@ -36,6 +37,13 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
 elif os.getenv('SETTINGS_MODE') == 'prod':
     # Running in development, but want to access the Google Cloud SQL instance
     # in production.
+
+    # because of google app engines django installion
+    # south adapter must be declared
+    SOUTH_DATABASE_ADAPTERS = {
+            'default': 'south.db.postgresql_psycopg2'
+        }
+
     DATABASES = {
         'default': {
             'ENGINE': 'google.appengine.ext.django.backends.rdbms',
@@ -45,7 +53,6 @@ elif os.getenv('SETTINGS_MODE') == 'prod':
         }
 }
 else:
-    print('hi')
     # Running in development, so use a local MySQL database.
     DATABASES = {
         'default': {
