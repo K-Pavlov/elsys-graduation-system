@@ -1,0 +1,22 @@
+application: elsys-graduation-system
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+libraries:
+- name: django
+  version: "1.5"
+- name: MySQLdb
+  version: "latest"
+
+builtins:
+- django_wsgi: on
+- remote_api: on
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: 'elsys_graduation_system.settings'
+
+handlers:
+- url: /static
+  static_dir: graduation_system_app/static

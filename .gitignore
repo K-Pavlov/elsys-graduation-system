@@ -217,6 +217,9 @@ csx/
 # Windows Store app package directory
 AppPackages/
 
+#Python project
+*.pyproj
+
 # Others
 *.Cache
 ClientBin/
