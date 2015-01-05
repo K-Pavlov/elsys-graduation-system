@@ -1,7 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from .klass import Klass
 from .mentor import Mentor
 from .topic import Topic
 from graduation_system_app.common.uuid_generator import make_uuid_charfield
@@ -11,7 +10,8 @@ class Student(models.Model):
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50)
-    klass = models.ForeignKey(Klass, blank=True, null=True, related_name='students')
+    class_letter = models.CharField(max_length=1, blank=True, null=True)
+    specialization = models.CharField(max_length=150, blank=True, null=True)
     topic = models.ForeignKey(Topic, blank=True, null=True, related_name='students')
     mentor = models.ForeignKey(Mentor, blank=True, null=True, related_name='students')
     grade = models.FloatField(

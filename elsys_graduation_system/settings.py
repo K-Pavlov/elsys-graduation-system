@@ -4,17 +4,13 @@ Django settings for elsys_graduation_system project.
 import os
 from os import path
 
-SOUTH_DATABASE_ADAPTERS = {
-        'default': 'south.db.postgresql_psycopg2'
-    }
-
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 DIRNAME = os.path.dirname(__file__)
 
 if(os.getenv('SETTINGS_MODE') == 'dev'):
     DEBUG = True
 else:
-    DEBUG = True
+    DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -44,6 +40,10 @@ elif os.getenv('SETTINGS_MODE') == 'prod':
 
     # because of google app engines django installion
     # south adapter must be declared
+    SOUTH_DATABASE_ADAPTERS = {
+        'default': 'south.db.postgresql_psycopg2'
+    }
+
     DATABASES = {
         'default': {
             'ENGINE': 'google.appengine.ext.django.backends.rdbms',

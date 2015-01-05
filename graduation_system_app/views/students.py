@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 
 from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
-from datetime import datetime
+
+from graduation_system_app.models.student import Student
 
 def all(request):
     """Renders the home page."""
@@ -15,5 +17,6 @@ def all(request):
         {
             'title': u'Ученици',
             'year': datetime.now().year,
+            'students': Student.objects.all(),
         })
     )

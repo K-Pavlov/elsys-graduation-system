@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^students/$', students.all, name='all_students'),
     url(r'^topics/$', topics.all, name='all_topics'),
     url(r'^mentors/$', mentors.all, name='all_mentors'),
+    url(r'^mentors/edit/(?P<id>\d+)/$', metors.edit, name='edit_mentors'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {
