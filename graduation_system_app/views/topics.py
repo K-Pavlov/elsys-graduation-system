@@ -5,15 +5,15 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
 
-def index(request):
+def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'index.html',
+        'topics/all.html',
         context_instance = RequestContext(request,
         {
-            'title': u'Система за дипломиране',
+            'title': u'Теми',
             'year': datetime.now().year,
         })
     )

@@ -1,6 +1,4 @@
-"""
-Definition of urls for elsys_graduation_system.
-"""
+# -*- coding: utf-8 -*-
 
 from datetime import datetime
 
@@ -8,12 +6,16 @@ from django.contrib import admin
 from django.conf.urls import patterns, url
 
 from graduation_system_app.forms.login import BootstrapAuthenticationForm
-from graduation_system_app.views import home
+from graduation_system_app.views import home, students, topics, mentors
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', home.index, name='home'),
+    url(r'^students/$', students.all, name='all_students'),
+    url(r'^topics/$', topics.all, name='all_topics'),
+    url(r'^mentors/$', mentors.all, name='all_mentors'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {
@@ -21,8 +23,8 @@ urlpatterns = patterns('',
             'authentication_form': BootstrapAuthenticationForm,
             'extra_context':
             {
-                'title':'Log in',
-                'year':datetime.now().year,
+                'title': u'Влизане в системата',
+                'year': datetime.now().year,
             }
         },
         name='login'),
@@ -32,7 +34,6 @@ urlpatterns = patterns('',
             'next_page': '/',
         },
         name='logout'),
-
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
