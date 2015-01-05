@@ -4,7 +4,9 @@ Django settings for elsys_graduation_system project.
 import os
 from os import path
 
-
+SOUTH_DATABASE_ADAPTERS = {
+        'default': 'south.db.postgresql_psycopg2'
+    }
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 DIRNAME = os.path.dirname(__file__)
 
@@ -29,25 +31,22 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'HOST': '/cloudsql/elsys-graduation-system:elsys-graduation-system',
+            'HOST': '/cloudsql/elsys-graduation-system:grad-system',
             'NAME': 'elsys_graduation_system',
             'USER': 'root',
         }
     }
 elif os.getenv('SETTINGS_MODE') == 'prod':
+    print 'hi'
     # Running in development, but want to access the Google Cloud SQL instance
     # in production.
 
     # because of google app engines django installion
     # south adapter must be declared
-    SOUTH_DATABASE_ADAPTERS = {
-            'default': 'south.db.postgresql_psycopg2'
-        }
-
     DATABASES = {
         'default': {
             'ENGINE': 'google.appengine.ext.django.backends.rdbms',
-            'INSTANCE': 'elsys-graduation-system:elsys-graduation-system',
+            'INSTANCE': 'elsys-graduation-system:grad-system',
             'NAME': 'elsys_graduation_system',
             'USER': 'root',
         }
@@ -138,6 +137,7 @@ MIDDLEWARE_CLASSES = ('django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'elsys_graduation_system.require_login_midware.LoginRequiredMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
