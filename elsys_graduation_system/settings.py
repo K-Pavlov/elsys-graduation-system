@@ -7,13 +7,14 @@ from os import path
 SOUTH_DATABASE_ADAPTERS = {
         'default': 'south.db.postgresql_psycopg2'
     }
+
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 DIRNAME = os.path.dirname(__file__)
 
 if(os.getenv('SETTINGS_MODE') == 'dev'):
     DEBUG = True
 else:
-    DEBUG = False
+    DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 
