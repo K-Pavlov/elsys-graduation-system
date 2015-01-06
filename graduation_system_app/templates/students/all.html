@@ -1,5 +1,28 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-
+<table class="table table-hover">
+    <tr>
+        <th>Име</th>
+        <th>Презиме</th>
+        <th>Фамилия</th>
+        <th>Клас</th>
+        <th>Профил</th>
+        <th>Тема</th>
+        <th>Ръководител</th>
+        <th>Оценка</th>
+    </tr>
+    {% for student in students %}
+        <tr>
+            <td>{{ student.first_name }}</td>
+            <td>{{ student.middle_name }}</td>
+            <td>{{ student.last_name }}</td>
+            <td>{{ student.class_letter }}</td>
+            <td>{{ student.specialization }}</td>
+            <td>{{ student.topic }}</td>
+            <td>{{ student.mentor }}</td>
+            <td>{{ student.grade }}</td>
+        </tr>
+    {% endfor %}
+</table>
 {% endblock %}

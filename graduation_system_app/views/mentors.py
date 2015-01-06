@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
-from ..forms.mentor_form import MentorForm
+from ..forms.mentor import MentorForm
 from ..models.mentor import Mentor
 from . import create_from_form
 

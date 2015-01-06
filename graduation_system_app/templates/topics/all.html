@@ -1,5 +1,16 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-
+<table class="table table-hover">
+    <tr>
+        <th>Заглавие</th>
+        <th>Описание</th>
+    </tr>
+    {% for topic in topics %}
+        <tr>
+            <td>{{ topic.title }}</td>
+            <td>{{ topic.description }}</td>
+        </tr>
+    {% endfor %}
+</table>
 {% endblock %}
