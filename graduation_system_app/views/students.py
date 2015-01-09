@@ -9,7 +9,7 @@ from django.template import RequestContext
 
 from ..forms.student import StudentForm
 from ..models.student import Student
-from . import create_from_form
+from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""
@@ -33,7 +33,7 @@ def edit(request, id):
             'title': u'Промени ръководител',
             'year': datetime.now().year,
         }
-        return create_from_form(request, StudentForm, 
+        return create_from_form_edit(request, StudentForm, 
                             'all_students', 
                             'students/edit.html', context_data)
 
@@ -43,7 +43,7 @@ def create(request):
             'year': datetime.now().year,
         }
 
-    return create_from_form(request, StudentForm, 
+    return create_from_form_post(request, StudentForm, 
                             'all_students', 
                             'students/create.html', context_data)
 

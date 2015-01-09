@@ -12,6 +12,9 @@
             <td>{{ mentor.first_name }}</td>
             <td>{{ mentor.middle_name }}</td>
             <td>{{ mentor.last_name }}</td>
+            <td>
+                <a href="{% url 'edit_mentor' id=mentor.id %}">Edit</a>    
+            </td>
         </tr>
     {% endfor %}
 </table>

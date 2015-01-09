@@ -9,7 +9,7 @@ from django.template import RequestContext
 
 from ..forms.topic import TopicForm
 from ..models.topic import Topic
-from . import create_from_form
+from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""
@@ -33,7 +33,7 @@ def edit(request, id):
             'title': u'Промени тема',
             'year': datetime.now().year,
         }
-        return create_from_form(request, TopicForm, 
+        return create_from_form_edit(request, TopicForm, 
                             'all_mentors', 
                             'topics/edit.html', context_data)
 
@@ -43,7 +43,7 @@ def create(request):
             'year': datetime.now().year,
         }
 
-    return create_from_form(request, TopicForm, 
+    return create_from_form_post(request, TopicForm, 
                             'all_topics', 
                             'topics/create.html', context_data)
 
