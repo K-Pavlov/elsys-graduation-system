@@ -26,16 +26,21 @@ def all(request):
     )
 
 def edit(request, id):
-    if not id or Student.objects.filter(id=id).exists():
-        return HttpResponseRedirect('/mentors/create')
+    student = Student.objects.filter(id=id)
+
+    if not id or not student.exists():
+        return HttpResponseRedirect('/students/create')
     else: 
         context_data = {
             'title': u'Промени ръководител',
             'year': datetime.now().year,
+            'id': student[0].id
         }
         return create_from_form_edit(request, StudentForm, 
                             'all_students', 
-                            'students/edit.html', context_data)
+                            'students/edit.html', 
+                            context_data,
+                            student[0])
 
 def create(request):
     context_data = {
@@ -45,7 +50,8 @@ def create(request):
 
     return create_from_form_post(request, StudentForm, 
                             'all_students', 
-                            'students/create.html', context_data)
+                            'students/create.html', 
+                            context_data)
 
 def delete(request, id):
     pass

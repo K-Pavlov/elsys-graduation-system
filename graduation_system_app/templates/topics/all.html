@@ -11,7 +11,7 @@
             <td>{{ topic.title }}</td>
             <td>{{ topic.description }}</td>
             <td>
-                <a href="{% url 'topics/edit/' + topic.id %}">Edit</a>
+                <a href="{% url 'edit_topic' id=topic.id %}">Edit</a>
             </td>
         </tr>
     {% endfor %}

@@ -26,16 +26,21 @@ def all(request):
     )
 
 def edit(request, id):
-    if not id or Mentor.objects.filter(id=id).exists():
+    topic = Topic.objects.filter(id=id)
+
+    if not id or not topic.exists():
         return HttpResponseRedirect('/topics/create')
     else: 
         context_data = {
             'title': u'Промени тема',
             'year': datetime.now().year,
+            'id': topic[0].id
         }
         return create_from_form_edit(request, TopicForm, 
-                            'all_mentors', 
-                            'topics/edit.html', context_data)
+                            'all_topics', 
+                            'topics/edit.html', 
+                            context_data,
+                            topic[0])
 
 def create(request):
     context_data = {
@@ -45,7 +50,8 @@ def create(request):
 
     return create_from_form_post(request, TopicForm, 
                             'all_topics', 
-                            'topics/create.html', context_data)
+                            'topics/create.html', 
+                            context_data)
 
 def delete(request, id):
     pass
