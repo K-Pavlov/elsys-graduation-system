@@ -23,7 +23,7 @@
             <td>{{ student.mentor }}</td>
             <td>{{ student.grade }}</td>
             <td>
-                <a href="{% url 'edit_student' id=student.id %}">Edit</a>
+                <a class="btn btn-info" href="{% url 'edit_student' id=student.id %}">Edit</a>
             </td>
         </tr>
     {% endfor %}
