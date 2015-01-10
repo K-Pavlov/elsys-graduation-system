@@ -1,0 +1,12 @@
+chardet==2.3.0
+Django==1.5
+django-bootstrap-form==3.1
+django-cors-headers==1.0.0
+enum==0.4.4
+html5lib==0.999
+Pillow==2.7.0
+pisa==3.0.33
+pyPdf==1.13
+six==1.9.0
+South==1.0.2
+unicodecsv==0.10.1
