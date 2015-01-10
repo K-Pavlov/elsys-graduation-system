@@ -8,14 +8,29 @@
         <th>Фамилия</th>
     </tr>
     {% for mentor in mentors %}
-        <tr>
+        <tr id="{{ mentor.id }}">
             <td>{{ mentor.first_name }}</td>
             <td>{{ mentor.middle_name }}</td>
             <td>{{ mentor.last_name }}</td>
             <td>
-                <a class="btn btn-info" href="{% url 'edit_mentor' id=mentor.id %}">Edit</a>    
+                <a class="btn btn-info" style="float:left" href="{% url 'edit_mentor' id=mentor.id %}">Промени</a>
+                <form class="delete-form" style="float:left" mentor-id="{{ mentor.id }}" action="{% url 'delete_mentor' id=mentor.id %}" method="delete">
+                        {% csrf_token %}
+                        <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                </form>
             </td>
         </tr>
     {% endfor %}
 </table>
 {% endblock %}
+{% block scripts %}
+    <script>
+        var $forms = $('.delete-form');
+        $forms.each(function () {
+            var $this = $(this),
+                $mentorToDelete = $('#' + $this.attr('mentor-id'));
+
+            ajaxOvverideForm($this, $mentorToDelete);
+        });
+</script>
+{% endblock%}

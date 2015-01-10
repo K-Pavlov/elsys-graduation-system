@@ -8,6 +8,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'content/site.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'content/toastr.css' %}" />
     <script src="{% static 'scripts/modernizr-2.6.2.js' %}"></script>
 </head>
 
@@ -48,6 +49,12 @@
     <script src="{% static 'scripts/jquery.cookie.js' %}"></script>
     <script src="{% static 'scripts/bootstrap.js' %}"></script>
     <script src="{% static 'scripts/respond.js' %}"></script>
+    <script src="{% static 'scripts/toastr.js' %}"></script>
+    <script src="{% static 'scripts/ajaxCrsf.js' %}"></script>
+    <script src="{% static 'scripts/sendForm.js' %}"></script>
+    <script>
+        toastr.options.closeButton = true;
+    </script>
 {% block scripts %}{% endblock %}
 
 </body>

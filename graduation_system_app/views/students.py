@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
+from django.http import HttpResponse
+from django.http import HttpResponseNotFound
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
@@ -54,4 +57,10 @@ def create(request):
                             context_data)
 
 def delete(request, id):
-    pass
+    if request.is_ajax():
+        student = Student.objects.filter(id=id)
+        student.delete()
+
+        return HttpResponse(json.dumps('Success'), content_type = "application/json")
+
+    return HttpResponseNotFound() 
