@@ -163,6 +163,7 @@ INSTALLED_APPS = ('django.contrib.auth',
     'django.contrib.staticfiles',
     'graduation_system_app',
     'django.contrib.admin',
+    'bootstrapform',
     'south',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
