@@ -1,4 +1,4 @@
-﻿function ajaxOvverideForm($form, $elementToDelete) {
+﻿function ajaxOvverideDelForm($form, $elementToDelete) {
     $form.submit(function (e) {
         e.preventDefault();
         $.ajax({

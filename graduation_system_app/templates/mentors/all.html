@@ -1,7 +1,7 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-<table class="table table-hover">
+<table id="all-table" class="table table-hover">
     <tr>
         <th>Име</th>
         <th>Презиме</th>
@@ -22,6 +22,7 @@
         </tr>
     {% endfor %}
 </table>
+<a class="btn btn-primary" href="{% url 'create_mentor' %}">Създай</a>
 {% endblock %}
 {% block scripts %}
     <script>
@@ -30,7 +31,7 @@
             var $this = $(this),
                 $mentorToDelete = $('#' + $this.attr('mentor-id'));
 
-            ajaxOvverideForm($this, $mentorToDelete);
+            ajaxOvverideDelForm($this, $mentorToDelete);
         });
 </script>
 {% endblock%}

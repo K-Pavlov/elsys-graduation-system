@@ -1,7 +1,7 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-<table class="table table-hover">
+<table id="all-table" class="table table-hover">
     <tr>
         <th>Име</th>
         <th>Презиме</th>
@@ -32,6 +32,8 @@
         </tr>
     {% endfor %}
 </table>
+<a class="btn btn-primary" href="{% url 'create_student' %}">Създай</a>
+
 {% endblock %}
 {% block scripts %}
     <script>
@@ -40,7 +42,7 @@
             var $this = $(this),
                 $topicToDelete = $('#' + $this.attr('topic-id'));
 
-            ajaxOvverideForm($this, $topicToDelete);
+            ajaxOvverideDelForm($this, $topicToDelete);
         });
 </script>
 {% endblock%}

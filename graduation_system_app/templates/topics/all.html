@@ -20,6 +20,8 @@
             </tr>
         {% endfor %}
     </table>
+
+    <a class="btn btn-primary" href="{% url 'create_topic' %}">Създай</a>
 {% endblock %}
 {% block scripts %}
     <script>
@@ -28,7 +30,7 @@
             var $this = $(this),
                 $topicToDelete = $('#' + $this.attr('topic-id'));
 
-            ajaxOvverideForm($this, $topicToDelete);
+            ajaxOvverideDelForm($this, $topicToDelete);
         });
 </script>
 {% endblock%}

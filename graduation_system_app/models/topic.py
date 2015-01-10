@@ -6,8 +6,8 @@ from ..common.uuid_generator import make_uuid_charfield
 
 class Topic(models.Model):
     id = make_uuid_charfield()
-    title = models.CharField(max_length=100)
-    description = models.TextField()
+    title = models.CharField(verbose_name='Заглавие', max_length=100)
+    description = models.TextField(verbose_name='Описание', )
 
     @staticmethod
     def from_csv(csvfile):
