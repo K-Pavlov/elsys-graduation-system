@@ -266,5 +266,6 @@ pyPdf/
 reportlab/
 south/
 sx/
+unicodecsv/
 enum.py
 six.py
