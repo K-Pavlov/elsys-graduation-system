@@ -1,7 +1,7 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-    <table class="table table-hover">
+    <table class="table table-bordered table-condensed">
         <tr>
             <th>Заглавие</th>
             <th>Описание</th>
@@ -10,8 +10,8 @@
             <tr id="{{ topic.id }}">
                 <td>{{ topic.title }}</td>
                 <td>{{ topic.description }}</td>
-                <td>
-                    <a class="btn btn-info" style="float:left" href="{% url 'edit_topic' id=topic.id %}">Промени</a>
+                <td class="col-md-2">
+                    <a class="btn btn-info" style="float:left" topic-id="{{ topic.id }}" href="{% url 'edit_topic' id=topic.id %}">Промени</a>
                     <form class="delete-form" style="float:left" action="{% url 'delete_topic' id=topic.id %}" method="delete">
                         {% csrf_token %}
                         <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />

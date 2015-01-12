@@ -1,7 +1,7 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-<table id="all-table" class="table table-hover">
+<table id="all-table" class="table table-bordered table-condensed">
     <tr>
         <th>Име</th>
         <th>Презиме</th>
@@ -12,7 +12,7 @@
             <td>{{ mentor.first_name }}</td>
             <td>{{ mentor.middle_name }}</td>
             <td>{{ mentor.last_name }}</td>
-            <td>
+            <td class="col-md-2">
                 <a class="btn btn-info" style="float:left" href="{% url 'edit_mentor' id=mentor.id %}">Промени</a>
                 <form class="delete-form" style="float:left" mentor-id="{{ mentor.id }}" action="{% url 'delete_mentor' id=mentor.id %}" method="delete">
                         {% csrf_token %}
@@ -33,5 +33,5 @@
 
             ajaxOvverideDelForm($this, $mentorToDelete);
         });
-</script>
+    </script>
 {% endblock%}

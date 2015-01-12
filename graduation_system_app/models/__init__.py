@@ -1,5 +1,6 @@
 from mentor import Mentor
 from topic import Topic
 from student import Student
+from season import Season
 
-from graduation_system_app.common.pdf_renderer import render_to_pdf
+from ..common.pdf_renderer import render_to_pdf

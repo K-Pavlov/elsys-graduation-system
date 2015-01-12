@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext

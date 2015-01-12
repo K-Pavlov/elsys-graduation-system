@@ -10,3 +10,4 @@ class StudentForm(ModelForm):
         fields = ['first_name','middle_name','last_name', 
                   'class_letter', 'specialization', 'topic',
                   'mentor', 'grade']
+

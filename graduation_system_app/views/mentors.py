@@ -58,10 +58,28 @@ def create(request):
 
 def delete(request, id):
     if request.is_ajax():
-        mentor = Mentor.objects.filter(id=id)
-        mentor.delete()
+        if request.method == 'DELETE':
+            mentor = Mentor.objects.filter(id=id)
+            mentor.delete()
 
-        return HttpResponse(json.dumps('Success'), content_type = "application/json")
+            return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound() 
+    return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
+
+def upload_csv(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            file = request.FILES['file']
+            if file:
+                create_from_csv(file)
+                return HttpResponse(json.dumps('Success'), content_type = "application/json")
+
+    return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при качването на файла, моля опитайте отново.'
+                                }), content_type = "application/json")
+
+def create_from_csv(csv_file):
+    pass
 

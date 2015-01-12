@@ -33,10 +33,10 @@ class Student(models.Model):
                                       choices=Specialization)
     topic = models.ForeignKey(Topic, verbose_name='Тема', blank=True, null=True,
                               related_name='students', default='',
-                              on_delete=models.SET_DEFAULT,)
+                              on_delete=models.SET_NULL,)
     mentor = models.ForeignKey(Mentor, verbose_name='Дипломен ръководител', blank=True,
                                null=True, default='', related_name='students',
-                               on_delete=models.SET_DEFAULT,)
+                               on_delete=models.SET_NULL,)
     grade = models.FloatField(verbose_name='Оценка', blank=True, default=2.0,
                               validators=[MinValueValidator(2.0), MaxValueValidator(6.0)],)
 
@@ -44,7 +44,7 @@ class Student(models.Model):
             return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
 
     @staticmethod
-    def from_csv(csvfile):
+    def from_csv(csvfile_path):
         pass
 
     class Meta:
