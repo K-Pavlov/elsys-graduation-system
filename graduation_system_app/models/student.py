@@ -5,14 +5,16 @@ from django.db import models
 
 from .mentor import Mentor
 from .topic import Topic
+from .season import Season 
 from ..common.uuid_generator import make_uuid_charfield
 
 class Student(models.Model):
+    # change to db realtion
     ClassLetters = (
-        ('A', 'А'),
-        ('B', 'Б'),
-        ('V', 'В'),
-        ('G', 'Г')
+        ('А', 'А'),
+        ('Б', 'Б'),
+        ('В', 'В'),
+        ('Г', 'Г')
     )
 
     Specialization = (
@@ -37,6 +39,9 @@ class Student(models.Model):
     mentor = models.ForeignKey(Mentor, verbose_name='Дипломен ръководител', blank=True,
                                null=True, default='', related_name='students',
                                on_delete=models.SET_NULL,)
+    season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
+                            null=True, default='', related_name='students',
+                            on_delete=models.SET_NULL,)
     grade = models.FloatField(verbose_name='Оценка', blank=True, default=2.0,
                               validators=[MinValueValidator(2.0), MaxValueValidator(6.0)],)
 

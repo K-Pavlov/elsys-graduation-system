@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils.encoding import smart_bytes
 
+from .season import Season
 from ..common.uuid_generator import make_uuid_charfield
 
 class Mentor(models.Model):
@@ -9,6 +10,9 @@ class Mentor(models.Model):
     first_name = models.CharField(verbose_name='Име', max_length=50)
     middle_name = models.CharField(verbose_name='Презиме', max_length=50, blank=True, null=True, default='')
     last_name = models.CharField(verbose_name='Фамилия', max_length=50)
+    season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
+                            null=True, default='', related_name='mentors',
+                            on_delete=models.SET_NULL,)
 
     @staticmethod
     def from_csv(csvfile_path):

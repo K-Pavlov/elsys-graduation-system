@@ -1,0 +1,35 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<table id="all-table" class="table table-bordered table-condensed">
+    <tr>
+        <th>Година</th>
+        <th>Активен</th>
+    </tr>
+    {% for season in seasons %}
+        <tr id="{{ season.id }}">
+            <td>{{ season.year }}</td>
+            <td>{{ season.is_active }}</td>
+            <td class="col-md-2">
+                <a class="btn btn-info" style="float:left" href="{% url 'edit_season' id=season.id %}">Промени</a>
+                <form class="delete-form" style="float:left" season-id="{{ season.id }}" action="{% url 'delete_season' id=season.id %}" method="delete">
+                        {% csrf_token %}
+                        <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<a class="btn btn-primary" href="{% url 'create_season' %}">Създай</a>
+{% endblock %}
+{% block scripts %}
+    <script>
+        var $forms = $('.delete-form');
+        $forms.each(function () {
+            var $this = $(this),
+                $seasonToDelete = $('#' + $this.attr('season-id'));
+
+            ajaxOvverideDelForm($this, $seasonToDelete);
+        });
+    </script>
+{% endblock%}

@@ -5,11 +5,13 @@
         <tr>
             <th>Заглавие</th>
             <th>Описание</th>
+            <th>Сезон</th>
         </tr>
         {% for topic in topics %}
             <tr id="{{ topic.id }}">
                 <td>{{ topic.title }}</td>
                 <td>{{ topic.description }}</td>
+                <td>{{ topic.season|default_if_none:'' }}</td>
                 <td class="col-md-2">
                     <a class="btn btn-info" style="float:left" topic-id="{{ topic.id }}" href="{% url 'edit_topic' id=topic.id %}">Промени</a>
                     <form class="delete-form" style="float:left" action="{% url 'delete_topic' id=topic.id %}" method="delete">

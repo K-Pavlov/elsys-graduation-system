@@ -11,17 +11,19 @@
         <th>Тема</th>
         <th>Ръководител</th>
         <th>Оценка</th>
+        <th>Сезон</th>
     </tr>
     {% for student in students %}
         <tr id="{{ student.id }}">
             <td>{{ student.first_name }}</td>
             <td>{{ student.middle_name }}</td>
             <td>{{ student.last_name }}</td>
-            <td>{{ student.class_letter }}</td>
-            <td>{{ student.specialization }}</td>
+            <td>{{ student.class_letter|default_if_none:'' }}</td>
+            <td>{{ student.specialization|default_if_none:'' }}</td>
             <td>{{ student.topic|default_if_none:'' }}</td>
             <td>{{ student.mentor|default_if_none:'' }}</td>
             <td>{{ student.grade }}</td>
+            <td>{{ student.season|default_if_none:'' }}</td>
             <td class="col-md-2">
                 <a class="btn btn-info" style="float:left" href="{% url 'edit_student' id=student.id %}">Промени</a>
                 <form class="delete-form form-horizontal" style="float:left" student-id="{{ student.id }}" action="{% url 'delete_student' id=student.id %}" method="delete">

@@ -7,19 +7,16 @@ from django.template import RequestContext
 def create_from_form_post(request, model_form, redir_view_name, template, context_data):
     if request.method == 'POST':
         form = model_form(request.POST)
-
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse(redir_view_name))
     else:
         form = model_form()
 
-        print handle_invalid_model(form, context_data, request, template)
     return handle_invalid_model(form, context_data, request, template)
 
 def create_from_form_edit(request, model_form, redir_view_name, template, context_data, model):
     if request.method == 'POST':
-        print(model)
         form = model_form(request.POST, instance= model)
 
         if form.is_valid():

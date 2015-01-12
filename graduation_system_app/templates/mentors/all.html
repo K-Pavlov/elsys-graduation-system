@@ -6,12 +6,14 @@
         <th>Име</th>
         <th>Презиме</th>
         <th>Фамилия</th>
+        <th>Сезон</th>
     </tr>
     {% for mentor in mentors %}
         <tr id="{{ mentor.id }}">
             <td>{{ mentor.first_name }}</td>
             <td>{{ mentor.middle_name }}</td>
             <td>{{ mentor.last_name }}</td>
+            <td>{{ mentor.season|default_if_none:'' }}</td>
             <td class="col-md-2">
                 <a class="btn btn-info" style="float:left" href="{% url 'edit_mentor' id=mentor.id %}">Промени</a>
                 <form class="delete-form" style="float:left" mentor-id="{{ mentor.id }}" action="{% url 'delete_mentor' id=mentor.id %}" method="delete">
