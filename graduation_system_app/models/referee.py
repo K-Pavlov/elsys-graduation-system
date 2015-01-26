@@ -10,13 +10,14 @@ from ..common.uuid_generator import make_uuid_charfield
 
 class Referee(models.Model):
     id = make_uuid_charfield() 
-    first_name = models.CharField(verbose_name='???', max_length=50)
-    middle_name = models.CharField(verbose_name='???????', max_length=50, blank=True, null=True, default='')
-    last_name = models.CharField(verbose_name='???????', max_length=50)
-    firm = models.ForeignKey(Firm, verbose_name='????????', blank=true,
-                             null=true, default='', related_name='referees',
-                             on_delete=models.SET_NULL,)
-    season = models.ForeignKey(Season, verbose_name='?????', blank=True,
+    first_name = models.CharField(verbose_name='Име', max_length=50)
+    middle_name = models.CharField(verbose_name='Презиме', max_length=50, blank=True, null=True, default='')
+    last_name = models.CharField(verbose_name='Фамилия', max_length=50)
+    referal = models.FileField(verbose_name='Рецензия', upload_to='.')
+    firm = models.ForeignKey(Firm, verbose_name='Фирма', blank=True,
+                            null=True, default='', related_name='referees',
+                            on_delete=models.SET_NULL,)
+    season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
                             null=True, default='', related_name='referees',
                             on_delete=models.SET_NULL,)
 
@@ -25,6 +26,7 @@ class Referee(models.Model):
         i = 0
         created_model = []
         reader = csv.reader(csvfile)
+        reader.next()
 
         for row in reader:
             first_name = row[0]

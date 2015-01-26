@@ -8,7 +8,7 @@ class Firm(models.Model):
     id = make_uuid_charfield() 
     name = models.CharField(verbose_name='???', max_length=100)
 
-    def __str__():
+    def __str__(self):
         string = u"%s" % (self.name)
         return smart_bytes(string)
 

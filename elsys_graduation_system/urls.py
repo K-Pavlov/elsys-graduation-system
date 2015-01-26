@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.conf.urls import patterns, url
  
 from graduation_system_app.forms.login import BootstrapAuthenticationForm
-from graduation_system_app.views import home, students, topics, mentors, seasons
+from graduation_system_app.views import home, students, topics, mentors, seasons, referees
  
 admin.autodiscover()
  
@@ -32,6 +32,11 @@ urlpatterns = patterns('',
     url(r'^mentors/edit/(?P<id>\d+)/$', mentors.edit, name='edit_mentor'),
     url(r'^mentors/delete/(?P<id>\d+)/$', mentors.delete, name='delete_mentor'),
     url(r'^mentors/upload/$', mentors.upload_csv, name='upload_mentors'),
+    url(r'^referees/$', referees.all, name='all_referees'),
+    url(r'^referees/create/$', referees.create, name='create_referee'),
+    url(r'^referees/edit/(?P<id>\d+)/$', referees.edit, name='edit_referee'),
+    url(r'^referees/delete/(?P<id>\d+)/$', referees.delete, name='delete_referee'),
+    url(r'^referees/upload/$', referees.upload_csv, name='upload_referees'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {

@@ -21,6 +21,7 @@ class Mentor(models.Model):
         i = 0
         created_model = []
         reader = csv.reader(csvfile)
+        reader.next()
 
         for row in reader:
             first_name = row[0]
