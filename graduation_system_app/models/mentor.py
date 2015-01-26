@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import csv
+
 from django.db import models
 from django.utils.encoding import smart_bytes
 
@@ -15,32 +17,32 @@ class Mentor(models.Model):
                             on_delete=models.SET_NULL,)
 
     @staticmethod
-    def from_csv(csvfile_path):
+    def from_csv(csvfile):
         i = 0
         created_model = []
+        reader = csv.reader(csvfile)
 
-        with open(csvfile_path) as csv_file:
-            rows = [row for row in csv.reader(csv_file, encoding='utf-8')]
-            for row in rows:
-                if(not already_exists(row[0], row[1], row[2])):
-                    model = Mentor()
-                    model.first_name = row[0]
-                    model.middle_name = row[1]
-                    model.last_name = row[2]
-                    created_model.append(model)
+        for row in reader:
+            first_name = row[0]
+            middle_name = row[1]
+            last_name = row[2]
 
-                i += 1
-                if i % 50 == 0:
-                    Mentor.objects.bulk_create(created_model)
-                    created_model = []
+            if (Mentor.objects.filter(first_name= first_name, middle_name= middle_name,
+                                       last_name= last_name).count() == 0):
+                model = Mentor()
+                model.first_name = first_name
+                model.middle_name = middle_name
+                model.last_name = last_name
 
-            if created_model.count != 0:
+                created_model.append(model)
+ 
+            i += 1
+            if (i % 50 == 0):
                 Mentor.objects.bulk_create(created_model)
-
-    @staticmethod
-    def already_exists(values):
-        return Mentor.objects.filter(first_name= values[0], middle_name= values[1],
-                                     last_name= values[2]).count() > 0
+                created_model = []
+ 
+        if (created_model.count != 0):
+            Mentor.objects.bulk_create(created_model)
 
     def __str__(self):
         string = u"%s %s %s" % (self.first_name,

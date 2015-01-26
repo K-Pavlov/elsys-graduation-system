@@ -34,7 +34,6 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
         }
     }
 elif os.getenv('SETTINGS_MODE') == 'prod':
-    print 'hi'
     # Running in development, but want to access the Google Cloud SQL instance
     # in production.
 

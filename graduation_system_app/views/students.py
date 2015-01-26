@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.template import RequestContext
 
 from ..forms.student import StudentForm
+from ..forms.file import UploadForm
 from ..models.student import Student
 from . import create_from_form_post, create_from_form_edit
 
@@ -25,6 +26,7 @@ def all(request):
             'title': u'Ученици',
             'year': datetime.now().year,
             'students': Student.objects.all(),
+            'upload_form': UploadForm(),
         })
     )
 
@@ -63,4 +65,11 @@ def delete(request, id):
 
         return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound() 
+    return HttpResponseNotFound()
+
+def upload_csv(request):
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            Student.from_csv(form.cleaned_data['file'])
+    return HttpResponseRedirect(reverse('all_students')) 

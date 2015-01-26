@@ -1,38 +1,49 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-    <table class="table table-bordered table-condensed">
-        <tr>
-            <th>Заглавие</th>
-            <th>Описание</th>
-            <th>Сезон</th>
-        </tr>
-        {% for topic in topics %}
-            <tr id="{{ topic.id }}">
-                <td>{{ topic.title }}</td>
-                <td>{{ topic.description }}</td>
-                <td>{{ topic.season|default_if_none:'' }}</td>
-                <td class="col-md-2">
-                    <a class="btn btn-info" style="float:left" topic-id="{{ topic.id }}" href="{% url 'edit_topic' id=topic.id %}">Промени</a>
-                    <form class="delete-form" style="float:left" action="{% url 'delete_topic' id=topic.id %}" method="delete">
-                        {% csrf_token %}
-                        <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+<table class="table table-bordered table-condensed">
+    <tr>
+        <th>Заглавие</th>
+        <th>Описание</th>
+        <th>Ръководител</th>
+        <th>Сезон</th>
+    </tr>
+    {% for topic in topics %}
+    <tr id="{{ topic.id }}">
+        <td>{{ topic.title }}</td>
+        <td>{{ topic.description }}</td>
+        <td>{{ topic.mentor|default_if_none:'' }}</td>
+        <td>{{ topic.season|default_if_none:'' }}</td>
+        <td class="col-md-2">
+            <a class="btn btn-info" style="float:left" topic-id="{{ topic.id }}" href="{% url 'edit_topic' id=topic.id %}">Промени</a>
+            <form class="delete-form" style="float:left" action="{% url 'delete_topic' id=topic.id %}" method="delete">
+                {% csrf_token %}
+                <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 
-    <a class="btn btn-primary" href="{% url 'create_topic' %}">Създай</a>
+<a class="btn btn-primary" href="{% url 'create_topic' %}">Създай</a>
+<form id="upload_file" action="{% url 'upload_topics' %}" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+
+    {{ upload_form }}
+    <input class="btn btn-info" type="submit" name="upload" value="Качи" />
+</form>
 {% endblock %}
 {% block scripts %}
-    <script>
-        var $form = $('.delete-form');
-        $form.each(function () {
-            var $this = $(this),
-                $topicToDelete = $('#' + $this.attr('topic-id'));
+<script>
+    var $form = $('.delete-form');
+    $form.each(function () {
+        var $this = $(this),
+            $topicToDelete = $('#' + $this.attr('topic-id'));
 
-            ajaxOvverideDelForm($this, $topicToDelete);
-        });
+        ajaxOvverideDelForm($this, $topicToDelete);
+    });
+
+    // var $uploadForm = $('#upload_file');
+    // ajaxOvverideUploadForm($uploadForm);
 </script>
 {% endblock%}

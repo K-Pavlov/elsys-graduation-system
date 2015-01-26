@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.template import RequestContext
 
 from ..forms.mentor import MentorForm
+from ..forms.file import UploadForm
 from ..models.mentor import Mentor
 from . import create_from_form_post, create_from_form_edit
 
@@ -25,6 +26,7 @@ def all(request):
             'title': u'Ръководители',
             'year': datetime.now().year,
             'mentors': Mentor.objects.all(),
+            'upload_form': UploadForm(),
         })
     )
 
@@ -69,17 +71,10 @@ def delete(request, id):
                                 }), content_type = "application/json")
 
 def upload_csv(request):
-    if request.is_ajax():
-        if request.method == 'POST':
-            file = request.FILES['file']
-            if file:
-                create_from_csv(file)
-                return HttpResponse(json.dumps('Success'), content_type = "application/json")
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            Mentor.from_csv(form.cleaned_data['file'])
 
-    return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при качването на файла, моля опитайте отново.'
-                                }), content_type = "application/json")
-
-def create_from_csv(csv_file):
-    pass
+    return HttpResponseRedirect(reverse('all_topics'))
 
