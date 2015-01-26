@@ -4,6 +4,7 @@ import csv
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .referee import Referee
 from .mentor import Mentor
 from .topic import Topic
 from .season import Season 
@@ -34,6 +35,8 @@ class Student(models.Model):
     specialization = models.CharField(verbose_name='Специалност', max_length=150,
                                       blank=True, null=True, default='',
                                       choices=Specialization)
+    grade = models.FloatField(verbose_name='Оценка', blank=True, default=2.0,
+                              validators=[MinValueValidator(2.0), MaxValueValidator(6.0)],)
     topic = models.ForeignKey(Topic, verbose_name='Тема', blank=True, null=True,
                               related_name='students', default='',
                               on_delete=models.SET_NULL,)
@@ -43,8 +46,9 @@ class Student(models.Model):
     season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
                             null=True, default='', related_name='students',
                             on_delete=models.SET_NULL,)
-    grade = models.FloatField(verbose_name='Оценка', blank=True, default=2.0,
-                              validators=[MinValueValidator(2.0), MaxValueValidator(6.0)],)
+    referee = models.ForeignKey(Referee, verbose_name='Рецензент', blank=True, null=True,
+                              related_name='students', default='',
+                              on_delete=models.SET_NULL,)
 
     def __str__(self):
             return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)

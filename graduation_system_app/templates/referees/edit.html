@@ -1,0 +1,11 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+    <form method="post" action="#/{{ id }}">
+        {% csrf_token %}
+        {% load bootstrap %}
+
+        {{ form|bootstrap }}
+        <input type="submit" value="Промени" />
+    </form>
+{% endblock %}
