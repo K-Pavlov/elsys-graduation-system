@@ -1,0 +1,63 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title></title>
+</head>
+{% load staticfiles %}
+<body>
+    <style>
+
+        @font-face {
+            font-family: 'DejaVuSansMono';
+            src: url('{{ path }}');
+        }
+
+        html, body {
+            font-size: 12pt;
+            font-family: 'DejaVuSansMono';
+        }
+
+        table {
+            border: 1px solid #666666;
+            border-collapse: collapse;
+            border-color: #ccc;
+        }
+
+        td, th {
+            border: 1px solid #666666;
+            font-size: 11px;
+            line-height: 13px;
+            border-bottom: 1px solid #666666;
+            vertical-align: top;
+            padding: 5px;
+            font-family: "DejaVuSansMono";
+        }
+    </style>
+    <table>
+        <tr>
+            <th>Име</th>
+            <th>Презиме</th>
+            <th>Фамилия</th>
+            <th>Клас</th>
+            <th>Тема</th>
+            <th>Ръководител</th>
+            <th>Рецензент</th>
+            <th>Оценка</th>
+            <th>Сезон</th>
+        </tr>
+        {% for student in students %}
+        <tr id="{{ student.id }}">
+            <td>{{ student.first_name }}</td>
+            <td>{{ student.middle_name }}</td>
+            <td>{{ student.last_name }}</td>
+            <td>{{ student.klass|default_if_none:'' }}</td>
+            <td>{{ student.topic|default_if_none:'' }}</td>
+            <td>{{ student.mentor|default_if_none:'' }}</td>
+            <td>{{ student.referee|default_if_none:'' }}</td>
+            <td>{{ student.grade }}</td>
+            <td>{{ student.season|default_if_none:'' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

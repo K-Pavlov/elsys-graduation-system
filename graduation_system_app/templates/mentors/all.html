@@ -8,6 +8,7 @@
         <th>Фамилия</th>
         <th>Фирма</th>
         <th>Сезон</th>
+        <th></th>
     </tr>
     {% for mentor in mentors %}
         <tr id="{{ mentor.id }}">
@@ -17,7 +18,7 @@
             <td>{{ mentor.teacher.firm|default_if_none:'' }}</td>
             <td>{{ mentor.season|default_if_none:'' }}</td>
             <td class="col-md-2">
-                <a class="btn btn-info" style="float:left" href="{% url 'edit_mentor' id=mentor.id %}">Промени</a>
+                <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url 'edit_mentor' id=mentor.id %}">Промени</a>
                 <form class="delete-form" style="float:left" mentor-id="{{ mentor.id }}" action="{% url 'delete_mentor' id=mentor.id %}" method="delete">
                         {% csrf_token %}
                         <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />

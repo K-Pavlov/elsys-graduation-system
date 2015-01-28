@@ -5,13 +5,14 @@
     <tr>
         <th>Година</th>
         <th>Активен</th>
+        <th></th>
     </tr>
     {% for season in seasons %}
         <tr id="{{ season.id }}">
             <td>{{ season.year }}</td>
             <td>{{ season.is_active }}</td>
             <td class="col-md-2">
-                <a class="btn btn-info" style="float:left" href="{% url 'edit_season' id=season.id %}">Промени</a>
+                <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url 'edit_season' id=season.id %}">Промени</a>
                 <form class="delete-form" style="float:left" season-id="{{ season.id }}" action="{% url 'delete_season' id=season.id %}" method="delete">
                         {% csrf_token %}
                         <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />

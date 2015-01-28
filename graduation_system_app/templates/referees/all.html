@@ -8,6 +8,7 @@
         <th>Фамилия</th>
         <th>Фирма</th>
         <th>Сезон</th>
+        <th></th>
     </tr>
     {% for referee in referees %}
         <tr id="{{ referee.id }}">
@@ -17,7 +18,7 @@
             <td>{{ referee.teacher.firm|default_if_none:'ТУЕС' }}</td>
             <td>{{ referee.season|default_if_none:'' }}</td>
             <td class="col-md-2">
-                <a class="btn btn-info" style="float:left" href="{% url 'edit_referee' id=referee.id %}">Промени</a>
+                <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url 'edit_referee' id=referee.id %}">Промени</a>
                 <form class="delete-form" style="float:left" referee-id="{{ referee.id }}" action="{% url 'delete_referee' id=referee.id %}" method="delete">
                         {% csrf_token %}
                         <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />

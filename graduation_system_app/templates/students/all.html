@@ -39,12 +39,19 @@
 </table>
 <a class="btn btn-primary" href="{% url 'create_students' %}">Създай</a>
 <hr />
-<form id="upload_file" action="{% url 'upload_students' %}" enctype="multipart/form-data" method="post">
-    {% csrf_token %}
+<div class="row">
+    <div class="col-md-2">
+        <form id="upload_file" action="{% url 'upload_students' %}" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
 
-    {{ upload_form }}
-    <input class="btn btn-info" type="submit" name="upload" value="Качи" />
-</form>
+            {{ upload_form }}
+            <input class="btn btn-info" type="submit" name="upload" value="Качи" />
+        </form>
+    </div>
+    <div class="col-md-2">
+        <a class="btn btn-info" href="{% url 'generate_individual_protocol' %}">Генериране на индивидулен протокол</a>
+    </div>
+</div>
 
 {% endblock %}
 {% block scripts %}

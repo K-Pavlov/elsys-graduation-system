@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from ..common.pdf_renderer import render_to_pdf
 from ..forms.student import StudentForm
 from ..forms.file import UploadForm
 from ..models.student import Student
@@ -72,4 +73,11 @@ def upload_csv(request):
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             Student.from_csv(form.cleaned_data['file'])
-    return HttpResponseRedirect(reverse('all_students')) 
+    return HttpResponseRedirect(reverse('all_students'))
+
+def generate_protocol(request):
+    context = {
+        'students': Student.objects.all()
+    }
+    return render_to_pdf('students/students_table.html', context)
+   
