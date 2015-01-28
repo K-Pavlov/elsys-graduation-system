@@ -4,6 +4,8 @@ import csv
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .teacher import Teacher
+from .comission import Comission
 from .klass import Klass
 from .referee import Referee
 from .mentor import Mentor
@@ -29,6 +31,9 @@ class Student(models.Model):
                                null=True, default='', related_name='students',
                                on_delete=models.SET_NULL,)
     season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
+                            null=True, default='', related_name='students',
+                            on_delete=models.SET_NULL,)
+    comission = models.ForeignKey(Comission, verbose_name='Комисия', blank=True,
                             null=True, default='', related_name='students',
                             on_delete=models.SET_NULL,)
     referee = models.ForeignKey(Referee, verbose_name='Рецензент', blank=True, null=True,

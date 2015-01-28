@@ -10,6 +10,7 @@
         <th>Тема</th>
         <th>Ръководител</th>
         <th>Рецензент</th>
+        <th>Комисия</th>
         <th>Оценка</th>
         <th>Сезон</th>
         <th></th>
@@ -23,6 +24,7 @@
             <td>{{ student.topic|default_if_none:'' }}</td>
             <td>{{ student.mentor|default_if_none:'' }}</td>
             <td>{{ student.referee|default_if_none:'' }}</td>
+            <td>{{ student.comission|default_if_none:'' }}</td>
             <td>{{ student.grade }}</td>
             <td>{{ student.season|default_if_none:'' }}</td>
             <td class="col-md-2">

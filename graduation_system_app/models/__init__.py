@@ -4,5 +4,3 @@ from student import Student
 from season import Season
 from referee import Referee
 from teacher import Teacher
-
-from ..common.pdf_renderer import render_to_pdf
