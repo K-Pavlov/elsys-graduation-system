@@ -41,8 +41,10 @@ class Student(models.Model):
                               on_delete=models.SET_NULL,)
 
     def save(self, *args, **kwargs):
-        current_season = Season.objects.get(is_active=True)
-        self.season = Season.objects.get(is_active=True)
+        try:
+            self.season = Season.objects.get(is_active=True)
+        except Season.DoesNotExist:
+            pass
         super(Student, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -83,6 +85,11 @@ class Student(models.Model):
                         model.mentor = Mentor.objects.get(first_name= row[6], middle_name= row[7], last_name= row[8])
                     except Mentor.DoesNotExist:
                         pass
+
+                try:
+                    model.season = Season.objects.get(is_active=True)
+                except Season.DoesNotExist:
+                    pass
 
                 created_model.append(model)
  

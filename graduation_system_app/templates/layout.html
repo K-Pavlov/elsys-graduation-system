@@ -27,10 +27,11 @@
                 <ul class="nav navbar-nav">
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'home' %}">Начало</a></li>
-                    <li><a href="{% url 'all_mentors' %}">Ръководители</a></li>
+                    <li><a href="{% url 'all_teachers' %}">Учители</a></li>
                     <li><a href="{% url 'all_students' %}">Ученици</a></li>
-                    <li><a href="{% url 'all_topics' %}">Теми</a></li>
+                    <li><a href="{% url 'all_mentors' %}">Ръководители</a></li>
                     <li><a href="{% url 'all_referees' %}">Рецензенти</a></li>
+                    <li><a href="{% url 'all_topics' %}">Теми</a></li>
                     <li><a href="{% url 'all_klasses' %}">Класове</a></li>
                     {% endif %}
                 </ul>

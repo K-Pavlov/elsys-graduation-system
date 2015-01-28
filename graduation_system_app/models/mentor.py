@@ -19,8 +19,10 @@ class Mentor(models.Model):
                             on_delete=models.SET_NULL,)
 
     def save(self, *args, **kwargs):
-        current_season = Season.objects.get(is_active=True)
-        self.season = Season.objects.get(is_active=True)
+        try:
+            self.season = Season.objects.get(is_active=True)
+        except Season.DoesNotExist:
+            pass
         super(Mentor, self).save(*args, **kwargs)
 
     @staticmethod
@@ -35,10 +37,10 @@ class Mentor(models.Model):
             first_name = row[0]
             middle_name = row[1]
             last_name = row[2]
-
-            if (Teacher.objects.filter(first_name= first_name, middle_name= middle_name,
-                                       last_name= last_name).count() == 0):
-                model = Mentor()
+            model = Mentor()
+            teacher = Teacher.objects.filter(first_name= first_name, middle_name= middle_name,
+                                       last_name= last_name)
+            if (teacher.count() == 0):
                 teacher = Teacher()
 
                 teacher.first_name = first_name
@@ -55,10 +57,16 @@ class Mentor(models.Model):
                 else:
                     firm = Firm.objects.get(name=DEFAULT)
 
+                try:
+                    model.season = Season.objects.get(is_active=True)
+                except Season.DoesNotExist:
+                    pass
                 teacher.firm = firm
                 teacher.save()
                 model.teacher = teacher
                 created_model.append(model)
+            else:
+                model.teacher = teacher[0]
  
             i += 1
             if (i % 50 == 0):

@@ -66,14 +66,20 @@ class Topic(models.Model):
                             except Firm.DoesNotExist:
                                 firm = Firm()
                                 firm.name = row[6]
+                                firm.save()
 
                             teacher.firm = firm
+                        teacher.save()
 
                         mentor.teacher = teacher
                         mentor.save()
 
                     model.mentor = mentor
 
+                try:
+                    model.season = Season.objects.get(is_active=True)
+                except Season.DoesNotExist:
+                    pass
                 created_model.append(model)
  
             i += 1

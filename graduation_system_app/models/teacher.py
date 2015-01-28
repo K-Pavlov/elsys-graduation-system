@@ -16,8 +16,11 @@ class Teacher(models.Model):
                             on_delete=models.SET_NULL,)
 
     def save(self, *args, **kwargs):
-        current_season = Season.objects.get(is_active=True)
-        self.season = Season.objects.get(is_active=True)
+        try:
+            self.season = Season.objects.get(is_active=True)
+        except Teacher.DoesNotExist:
+            pass
+
         super(Teacher, self).save(*args, **kwargs)
 
     def __str__(self):

@@ -20,8 +20,10 @@ class Referee(models.Model):
                             on_delete=models.SET_NULL,)
 
     def save(self, *args, **kwargs):
-        current_season = Season.objects.get(is_active=True)
-        self.season = Season.objects.get(is_active=True)
+        try:
+            self.season = Season.objects.get(is_active=True)
+        except Season.DoesNotExist:
+            pass
         super(Referee, self).save(*args, **kwargs)
 
     @staticmethod
@@ -41,6 +43,11 @@ class Referee(models.Model):
             try:
                teacher = Teacher.objects.get(first_name= first_name, middle_name= middle_name,
                                        last_name= last_name)
+               try:
+                   Referee.objects.get(teacher=teacher)
+                   continue
+               except Referee.DoesNotExist:
+                   pass
             except Teacher.DoesNotExist:
                 teacher = Teacher()
                 teacher.first_name = first_name
@@ -61,6 +68,11 @@ class Referee(models.Model):
                 teacher.firm = firm
                 teacher.save()
             
+            try:
+                model.season = Season.objects.get(is_active=True)
+            except Season.DoesNotExist:
+                pass
+
             model.teacher = teacher
             created_model.append(model)
             i += 1

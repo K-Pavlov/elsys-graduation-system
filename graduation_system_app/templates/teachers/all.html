@@ -1,0 +1,54 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<table id="all-table" class="table table-bordered table-condensed">
+    <tr>
+        <th>Име</th>
+        <th>Презиме</th>
+        <th>Фамилия</th>
+        <th>Фирма</th>
+        <th></th>
+    </tr>
+    {% for teacher in teachers %}
+    <tr id="{{ teacher.id }}">
+        <td>{{ teacher.first_name }}</td>
+        <td>{{ teacher.middle_name }}</td>
+        <td>{{ teacher.last_name }}</td>
+        <td>{{ teacher.firm|default_if_none:'' }}</td>
+        <td class="col-md-2">
+            <a class="btn btn-info" style="float:left; margin-right: 10px;"
+               href="{% url 'edit_teacher' id=teacher.id %}">Промени</a>
+            <form class="delete-form form-horizontal" style="float:left" teacher-id="{{ teacher.id }}"
+                  action="{% url 'delete_teacher' id=teacher.id %}" method="delete">
+                {% csrf_token %}
+                <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a class="btn btn-primary" href="{% url 'create_teacher' %}">Създай</a>
+<hr />
+<div class="row">
+    <div class="col-md-2">
+        <form id="upload_file" action="{% url 'upload_teachers' %}" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+
+            {{ upload_form }}
+            <input class="btn btn-info" type="submit" name="upload" value="Качи" />
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    var $forms = $('.delete-form');
+    $forms.each(function () {
+        var $this = $(this),
+            $topicToDelete = $('#' + $this.attr('teacher-id'));
+
+        ajaxOvverideDelForm($this, $topicToDelete);
+    });
+</script>
+{% endblock%}

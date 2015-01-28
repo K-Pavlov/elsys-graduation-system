@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.conf.urls import patterns, url
  
 from graduation_system_app.forms.login import BootstrapAuthenticationForm
-from graduation_system_app.views import home, students, topics, mentors, seasons, referees, klasses
+from graduation_system_app.views import home, students, topics, mentors, seasons, referees, klasses, teachers
  
 admin.autodiscover()
  
@@ -39,10 +39,15 @@ urlpatterns = patterns('',
     url(r'^referees/edit/(?P<id>\d+)/$', referees.edit, name='edit_referee'),
     url(r'^referees/delete/(?P<id>\d+)/$', referees.delete, name='delete_referee'),
     url(r'^referees/upload/$', referees.upload_csv, name='upload_referees'),
-    url(r'^klasss/$', klasses.all, name='all_klasses'),
-    url(r'^klasss/create/$', klasses.create, name='create_klass'),
-    url(r'^klasss/edit/(?P<id>\d+)/$', klasses.edit, name='edit_klass'),
-    url(r'^klasss/delete/(?P<id>\d+)/$', klasses.delete, name='delete_klass'),
+    url(r'^klasses/$', klasses.all, name='all_klasses'),
+    url(r'^klasses/create/$', klasses.create, name='create_klass'),
+    url(r'^klasses/edit/(?P<id>\d+)/$', klasses.edit, name='edit_klass'),
+    url(r'^klasses/delete/(?P<id>\d+)/$', klasses.delete, name='delete_klass'),
+    url(r'^teachers/$', teachers.all, name='all_teachers'),
+    url(r'^teachers/create/$', teachers.create, name='create_teacher'),
+    url(r'^teachers/edit/(?P<id>\d+)/$', teachers.edit, name='edit_teacher'),
+    url(r'^teachers/delete/(?P<id>\d+)/$', teachers.delete, name='delete_teacher'),
+    url(r'^teacherss/upload/$', teachers.upload_csv, name='upload_teachers'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {
