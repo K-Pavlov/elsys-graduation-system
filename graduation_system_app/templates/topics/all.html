@@ -6,6 +6,7 @@
         <th>Заглавие</th>
         <th>Описание</th>
         <th>Ръководител</th>
+        <th>Рецензент</th>
         <th>Сезон</th>
     </tr>
     {% for topic in topics %}
@@ -13,10 +14,11 @@
         <td>{{ topic.title }}</td>
         <td>{{ topic.description }}</td>
         <td>{{ topic.mentor|default_if_none:'' }}</td>
+        <td>{{ topic.referee|default_if_none:'' }}</td>
         <td>{{ topic.season|default_if_none:'' }}</td>
         <td class="col-md-2">
-            <a class="btn btn-info" style="float:left" topic-id="{{ topic.id }}" href="{% url 'edit_topic' id=topic.id %}">Промени</a>
-            <form class="delete-form" style="float:left" action="{% url 'delete_topic' id=topic.id %}" method="delete">
+            <a class="btn btn-info" style="float:left" href="{% url 'edit_topic' id=topic.id %}">Промени</a>
+            <form class="delete-form" style="float:left" topic-id="{{ topic.id }}" action="{% url 'delete_topic' id=topic.id %}" method="delete">
                 {% csrf_token %}
                 <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
             </form>
@@ -24,12 +26,13 @@
     </tr>
     {% endfor %}
 </table>
-
 <a class="btn btn-primary" href="{% url 'create_topic' %}">Създай</a>
+<hr />
 <form id="upload_file" action="{% url 'upload_topics' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
+    {% load bootstrap %}
 
-    {{ upload_form }}
+    {{ upload_form|bootstrap }}
     <input class="btn btn-info" type="submit" name="upload" value="Качи" />
 </form>
 {% endblock %}
@@ -41,9 +44,6 @@
             $topicToDelete = $('#' + $this.attr('topic-id'));
 
         ajaxOvverideDelForm($this, $topicToDelete);
-    });
-
-    // var $uploadForm = $('#upload_file');
-    // ajaxOvverideUploadForm($uploadForm);
+    }); 
 </script>
 {% endblock%}

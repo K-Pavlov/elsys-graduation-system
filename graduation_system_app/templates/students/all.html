@@ -10,6 +10,7 @@
         <th>Профил</th>
         <th>Тема</th>
         <th>Ръководител</th>
+        <th>Рецензент</th>
         <th>Оценка</th>
         <th>Сезон</th>
     </tr>
@@ -18,15 +19,17 @@
             <td>{{ student.first_name }}</td>
             <td>{{ student.middle_name }}</td>
             <td>{{ student.last_name }}</td>
-            <td>{{ student.class_letter|default_if_none:'' }}</td>
-            <td>{{ student.specialization|default_if_none:'' }}</td>
+            <td>{{ student.klass|default_if_none:'' }}</td>
             <td>{{ student.topic|default_if_none:'' }}</td>
             <td>{{ student.mentor|default_if_none:'' }}</td>
+            <td>{{ student.referee|default_if_none:'' }}</td>
             <td>{{ student.grade }}</td>
             <td>{{ student.season|default_if_none:'' }}</td>
             <td class="col-md-2">
-                <a class="btn btn-info" style="float:left" href="{% url 'edit_student' id=student.id %}">Промени</a>
-                <form class="delete-form form-horizontal" style="float:left" student-id="{{ student.id }}" action="{% url 'delete_student' id=student.id %}" method="delete">
+                <a class="btn btn-info" style="float:left; margin-right: 10px;" 
+                   href="{% url 'edit_student' id=student.id %}">Промени</a>
+                <form class="delete-form form-horizontal" style="float:left" student-id="{{ student.id }}" 
+                      action="{% url 'delete_student' id=student.id %}" method="delete">
                     {% csrf_token %}
                     <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
                 </form>
@@ -35,6 +38,7 @@
     {% endfor %}
 </table>
 <a class="btn btn-primary" href="{% url 'create_students' %}">Създай</a>
+<hr />
 <form id="upload_file" action="{% url 'upload_students' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
 

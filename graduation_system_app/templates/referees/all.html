@@ -27,6 +27,7 @@
     {% endfor %}
 </table>
 <a class="btn btn-primary" href="{% url 'create_referee' %}">Създай</a>
+<hr />
 <form id="upload_file" action="{% url 'upload_referees' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
 

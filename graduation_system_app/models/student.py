@@ -4,6 +4,7 @@ import csv
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .klass import Klass
 from .referee import Referee
 from .mentor import Mentor
 from .topic import Topic
@@ -11,32 +12,16 @@ from .season import Season
 from ..common.uuid_generator import make_uuid_charfield
 
 class Student(models.Model):
-    # change to db realtion
-    ClassLetters = (
-        ('А', 'А'),
-        ('Б', 'Б'),
-        ('В', 'В'),
-        ('Г', 'Г')
-    )
-
-    Specialization = (
-        ('software', u'Софтуерно инженерство'),
-        ('computer_networks', u'Компютърни мрежи'),
-        ('hardware', u'Компютърна техника и технологии')
-    )
-
     id = make_uuid_charfield()
     first_name = models.CharField(verbose_name='Име', max_length=50)
     middle_name = models.CharField(verbose_name='Презиме', max_length=50,
                                    blank=True, null=True, default='')
     last_name = models.CharField(verbose_name='Фамилия', max_length=50)
-    class_letter = models.CharField(verbose_name='Клас', max_length=1, blank=True,
-                                    null=True, default='',choices=ClassLetters)
-    specialization = models.CharField(verbose_name='Специалност', max_length=150,
-                                      blank=True, null=True, default='',
-                                      choices=Specialization)
     grade = models.FloatField(verbose_name='Оценка', blank=True, default=2.0,
                               validators=[MinValueValidator(2.0), MaxValueValidator(6.0)],)
+    klass = models.ForeignKey(Klass, verbose_name='Клас', blank=True, null=True,
+                              related_name='students', default='',
+                              on_delete=models.SET_NULL,)
     topic = models.ForeignKey(Topic, verbose_name='Тема', blank=True, null=True,
                               related_name='students', default='',
                               on_delete=models.SET_NULL,)
@@ -61,9 +46,9 @@ class Student(models.Model):
         reader.next()
 
         for row in reader:
-            first_name = row[0]
-            middle_name = row[1]
-            last_name = row[2]
+            first_name = row['Име']
+            middle_name = row['Презиме']
+            last_name = row['Фамилия']
 
             if (Student.objects.filter(first_name= first_name, middle_name= middle_name,
                                        last_name= last_name).count() == 0):
@@ -71,16 +56,18 @@ class Student(models.Model):
                 model.first_name = first_name
                 model.middle_name = middle_name
                 model.last_name = last_name
-                model.class_letter = row[3]
-                model.specialization = row[4]
+                try:
+                    model.klass = Klass.objects.get(row[3])
+                except Klass.DoesNotExist:
+                    pass
 
-                if (len(row) > 5):
+                if (len(row) > 4):
                     try:
                         model.topic = Topic.objects.get(title= row[5])
                     except Topic.DoesNotExist:
                         pass
 
-                if(len(row) > 6):
+                if(len(row) > 5):
                     try: 
                         model.mentor = Mentor.objects.get(first_name= row[6], middle_name= row[7], last_name= row[8])
                     except Mentor.DoesNotExist:
@@ -98,5 +85,3 @@ class Student(models.Model):
 
     class Meta:
         app_label = "graduation_system_app"
-
-

@@ -23,6 +23,7 @@ class Referee(models.Model):
 
     @staticmethod
     def from_csv(csvfile):
+        DEFAULT = 'ТУЕС'
         i = 0
         created_model = []
         reader = csv.reader(csvfile)
@@ -41,7 +42,10 @@ class Referee(models.Model):
                 model.last_name = last_name
                 firm = None
 
-                if (len(row) > 3):
+                if(len(row) > 4):
+
+                    pass
+                elif (len(row) > 3):
                     try:
                         firm = Firm.objects.get(name=row[3])
                     except Firm.DoesNotExist:

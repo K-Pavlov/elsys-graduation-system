@@ -40,6 +40,7 @@ def edit(request, id):
             'year': datetime.now().year,
             'id': referee[0].id
         }
+        print(referee[0])
 
         return create_from_form_edit(request, RefereeForm, 
                             'all_referees', 
