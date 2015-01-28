@@ -11,36 +11,43 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
  
+from ..forms.season import SeasonYearsOnly
 from ..forms.topic import TopicForm
 from ..forms.file import UploadForm
+from ..models.season import Season
 from ..models.topic import Topic
 from . import create_from_form_post, create_from_form_edit
  
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
+    current_season = Season.objects.get(is_active=True)
     return render(
         request,
         'topics/all.html',
         context_instance = RequestContext(request,
         {
             'title': u'Теми',
+            'season': current_season.year,
             'year': datetime.now().year,
             'topics': Topic.objects.all(),
-            'upload_form': UploadForm()
+            'upload_form': UploadForm(),
+            'season_form': SeasonYearsOnly()
         })
     )
  
 def edit(request, id):
     topic = Topic.objects.filter(id=id)
- 
+    current_season = Season.objects.get(is_active=True)
     if not id or not topic.exists():
         return HttpResponseRedirect('/topics/create')
     else:
         context_data = {
             'title': u'Промени тема',
+            'season': current_season.year,
             'year': datetime.now().year,
-            'id': topic[0].id
+            'id': topic[0].id,
+            'season_form': SeasonYearsOnly()
         }
         return create_from_form_edit(request, TopicForm,
                             'all_topics',
@@ -49,9 +56,12 @@ def edit(request, id):
                             topic[0])
  
 def create(request):
+    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай тема',
+            'season': current_season.year,
             'year': datetime.now().year,
+            'season_form': SeasonYearsOnly(),
         }
  
     return create_from_form_post(request, TopicForm,

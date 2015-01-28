@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from datetime import datetime
+from pprint import pprint
 
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
@@ -10,13 +11,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
-from ..forms.season import SeasonForm
+from ..forms.season import SeasonForm, SeasonYearsOnly
 from ..models.season import Season
 from . import create_from_form_post, create_from_form_edit
 
 def all(request):
+    print(Season.objects.all())
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
+    current_season = Season.objects.get(is_active=True)
     return render(
         request,
         'seasons/all.html',
@@ -24,19 +27,24 @@ def all(request):
         {
             'title': u'Сезони',
             'year': datetime.now().year,
+            'season': current_season.year,
             'seasons': Season.objects.all(),
+            'season_form': SeasonYearsOnly(),
         })
     )
 
 def edit(request, id):
     season = Season.objects.filter(id=id)
+    current_season = Season.objects.get(is_active=True)
     if not id or not season.exists():
         return HttpResponseRedirect('/seasons/create')
     else: 
         context_data = {
             'title': u'Промени сезон',
+            'season': current_season.year,
             'year': datetime.now().year,
-            'id': mentor[0].id
+            'id': season[0].id,
+            'season_form': SeasonYearsOnly(),
         }
 
         return create_from_form_edit(request, SeasonForm, 
@@ -46,9 +54,12 @@ def edit(request, id):
                             season[0])
 
 def create(request):
+    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай сезон',
+            'season': current_season.year,
             'year': datetime.now().year,
+            'season_form': SeasonYearsOnly(),
         }
 
     return create_from_form_post(request, SeasonForm, 
@@ -68,21 +79,22 @@ def delete(request, id):
                                     error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
                                 }), content_type = "application/json")
 
-def upload_csv(request):
+def change(request):
     if request.is_ajax():
         if request.method == 'POST':
-            file = request.FILES['file']
-            if file:
-                create_from_csv(file)
-                return HttpResponse(json.dumps('Success'), content_type = "application/json")
+            form = SeasonYearsOnly(request.POST)
+            print (form.errors)
+            if form.is_valid():
+                answer = form.cleaned_data['years']
+                try:
+                    season = Season.objects.get(year= answer)
+                    print(season)
+                    season.is_active = True
+                    season.save()
+                except Season.DoesNotExist:
+                    pass
+            return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
     return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при качването на файла, моля опитайте отново.'
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
                                 }), content_type = "application/json")
-
-def create_from_csv(csv_file):
-    pass
-
-
-
-

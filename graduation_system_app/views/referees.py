@@ -10,13 +10,16 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from ..forms.season import SeasonYearsOnly
 from ..forms.referee import RefereeForm
 from ..forms.file import UploadForm
+from ..models.season import Season
 from ..models.referee import Referee
 from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""
+    current_season = Season.objects.get(is_active=True)
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -24,21 +27,26 @@ def all(request):
         context_instance = RequestContext(request,
         {
             'title': u'Рецензенти',
+            'season': current_season.year,
             'year': datetime.now().year,
             'referees': Referee.objects.all(),
             'upload_form': UploadForm(),
+            'season_form': SeasonYearsOnly(),
         })
     )
 
 def edit(request, id):
+    current_season = Season.objects.get(is_active=True)
     referee = Referee.objects.filter(id=id)
     if not id or not referee.exists():
         return HttpResponseRedirect('/referees/create')
     else: 
         context_data = {
             'title': u'Промени рецензент',
+            'season': current_season.year,
             'year': datetime.now().year,
-            'id': referee[0].id
+            'id': referee[0].id,
+            'season_form': SeasonYearsOnly()
         }
         print(referee[0])
 
@@ -49,9 +57,12 @@ def edit(request, id):
                             referee[0])
 
 def create(request):
+    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай рецензент',
+            'season': current_season.year,
             'year': datetime.now().year,
+            'season_form': SeasonYearsOnly(),
         }
 
     return create_from_form_post(request, RefereeForm, 

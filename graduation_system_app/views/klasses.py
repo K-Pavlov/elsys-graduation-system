@@ -11,34 +11,42 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from ..forms.season import SeasonYearsOnly
 from ..forms.klass import KlassForm
 from ..forms.file import UploadForm
+from ..models.season import Season
 from ..models.klass import Klass
 from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
+    current_season = Season.objects.get(is_active=True)
     return render(
         request,
         'klasses/all.html',
         context_instance = RequestContext(request,
         {
             'title': u'Класове',
+            'season': current_season.year,
             'year': datetime.now().year,
             'klasses': Klass.objects.all(),
+            'season_form': SeasonYearsOnly(),
         })
     )
 
 def edit(request, id):
     klass = Klass.objects.filter(id=id)
+    current_season = Season.objects.get(is_active=True)
     if not id or not klass.exists():
         return HttpResponseRedirect('/klasses/create')
     else: 
         context_data = {
             'title': u'Промени клас',
+            'season': current_season.year,
             'year': datetime.now().year,
-            'id': klass[0].id
+            'id': klass[0].id,
+            'season_form': SeasonYearsOnly(),
         }
         print(klass[0])
 
@@ -49,9 +57,12 @@ def edit(request, id):
                             klass[0])
 
 def create(request):
+    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай клас',
+            'season': current_season.year,
             'year': datetime.now().year,
+            'season_form': SeasonYearsOnly(),
         }
 
     return create_from_form_post(request, KlassForm, 

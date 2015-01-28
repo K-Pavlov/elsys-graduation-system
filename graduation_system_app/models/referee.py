@@ -19,6 +19,11 @@ class Referee(models.Model):
                             null=True, default='', related_name='referees',
                             on_delete=models.SET_NULL,)
 
+    def save(self, *args, **kwargs):
+        current_season = Season.objects.get(is_active=True)
+        self.season = Season.objects.get(is_active=True)
+        super(Referee, self).save(*args, **kwargs)
+
     @staticmethod
     def from_csv(csvfile):
         DEFAULT = 'ТУЕС'

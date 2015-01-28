@@ -35,6 +35,11 @@ class Student(models.Model):
                               related_name='students', default='',
                               on_delete=models.SET_NULL,)
 
+    def save(self, *args, **kwargs):
+        current_season = Season.objects.get(is_active=True)
+        self.season = Season.objects.get(is_active=True)
+        super(Student, self).save(*args, **kwargs)
+
     def __str__(self):
             return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
 

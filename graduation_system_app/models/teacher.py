@@ -15,6 +15,11 @@ class Teacher(models.Model):
                             null=True, default='', related_name='referees',
                             on_delete=models.SET_NULL,)
 
+    def save(self, *args, **kwargs):
+        current_season = Season.objects.get(is_active=True)
+        self.season = Season.objects.get(is_active=True)
+        super(Teacher, self).save(*args, **kwargs)
+
     def __str__(self):
         string = u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
         return smart_bytes(string)

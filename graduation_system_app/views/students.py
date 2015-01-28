@@ -10,37 +10,44 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from ..forms.season import SeasonYearsOnly
 from ..common.pdf_renderer import render_to_pdf
 from ..forms.student import StudentForm
 from ..forms.file import UploadForm
+from ..models.season import Season
 from ..models.student import Student
 from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
+    current_season = Season.objects.get(is_active=True)
     return render(
         request,
         'students/all.html',
         context_instance = RequestContext(request,
         {
             'title': u'Ученици',
+            'season': current_season.year,
             'year': datetime.now().year,
             'students': Student.objects.all(),
             'upload_form': UploadForm(),
+            'season_form': SeasonYearsOnly()
         })
     )
 
 def edit(request, id):
     student = Student.objects.filter(id=id)
-
+    current_season = Season.objects.get(is_active=True)
     if not id or not student.exists():
         return HttpResponseRedirect('/students/create')
     else: 
         context_data = {
             'title': u'Промени ръководител',
+            'season': current_season.year,
             'year': datetime.now().year,
-            'id': student[0].id
+            'id': student[0].id,
+            'season_form': SeasonYearsOnly()
         }
         return create_from_form_edit(request, StudentForm, 
                             'all_students', 
@@ -49,9 +56,12 @@ def edit(request, id):
                             student[0])
 
 def create(request):
+    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай ръководител',
+            'season': current_season.year,
             'year': datetime.now().year,
+            'season_form': SeasonYearsOnly()
         }
 
     return create_from_form_post(request, StudentForm, 
