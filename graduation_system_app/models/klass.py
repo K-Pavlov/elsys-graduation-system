@@ -6,8 +6,8 @@ from ..common.uuid_generator import make_uuid_charfield
 
 class Klass(models.Model):
     id = make_uuid_charfield() 
-    letter = models.CharField(verbose_name='?????????', max_length=100)
-    specialization = models.CharField(verbose_name= '???????????', max_length= 100)
+    letter = models.CharField(verbose_name='Паралелка', max_length=100)
+    specialization = models.CharField(verbose_name= 'Специалност', max_length= 100)
 
     def __str__(self):
         string = u"%s %s" % (self.letter, self.specialization)

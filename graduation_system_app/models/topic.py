@@ -5,6 +5,8 @@ from django.db import models
 from django.utils.encoding import smart_bytes
  
 from .referee import Referee
+from .firm import Firm
+from .teacher import Teacher
 from .mentor import Mentor
 from .season import Season
 from ..common.uuid_generator import make_uuid_charfield
@@ -42,12 +44,27 @@ class Topic(models.Model):
 
                     mentor = None
                     try:
-                        mentor = Mentor.objects.get(first_name=first_name, middle_name=middle_name, last_name=last_name)
-                    except Mentor.DoesNotExist:
+                        teacher = Teacher.objects.get(first_name=first_name, middle_name=middle_name, last_name=last_name)
+                        mentor = Mentor.objects.get(teacher=teacher)
+                    except Teacher.DoesNotExist:
+                        teacher = Teacher()
                         mentor = Mentor()
-                        mentor.first_name = first_name
-                        mentor.middle_name = middle_name
-                        mentor.last_name = last_name
+
+                        teacher.first_name = first_name
+                        teacher.middle_name = middle_name
+                        teacher.last_name = last_name
+
+                        if(len(row) > 5):
+                            firm = None
+                            try:
+                                firm = Firm.objects.get(name=row[5])
+                            except Firm.DoesNotExist:
+                                firm = Firm()
+                                firm.name = row[6]
+
+                            teacher.firm = firm
+
+                        mentor.teacher = teacher
                         mentor.save()
 
                     model.mentor = mentor

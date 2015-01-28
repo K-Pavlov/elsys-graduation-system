@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
-from pprint import pprint
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -11,60 +11,59 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
-from ..forms.mentor import MentorForm
+from ..forms.klass import KlassForm
 from ..forms.file import UploadForm
-from ..models.mentor import Mentor
+from ..models.klass import Klass
 from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    #pprint(Mentor.objects.all())
     return render(
         request,
-        'mentors/all.html',
+        'klasses/all.html',
         context_instance = RequestContext(request,
         {
-            'title': u'Ръководители',
+            'title': u'Класове',
             'year': datetime.now().year,
-            'mentors': Mentor.objects.all(),
-            'upload_form': UploadForm(),
+            'klasses': Klass.objects.all(),
         })
     )
 
 def edit(request, id):
-    mentor = Mentor.objects.filter(id=id)
-    if not id or not mentor.exists():
-        return HttpResponseRedirect('/mentors/create')
+    klass = Klass.objects.filter(id=id)
+    if not id or not klass.exists():
+        return HttpResponseRedirect('/klasses/create')
     else: 
         context_data = {
-            'title': u'Промени ръководител',
+            'title': u'Промени клас',
             'year': datetime.now().year,
-            'id': mentor[0].id
+            'id': klass[0].id
         }
+        print(klass[0])
 
-        return create_from_form_edit(request, MentorForm, 
-                            'all_mentors', 
-                            'mentors/edit.html',
+        return create_from_form_edit(request, KlassForm, 
+                            'all_klasses', 
+                            'klasses/edit.html',
                             context_data,
-                            mentor[0])
+                            klass[0])
 
 def create(request):
     context_data = {
-            'title': u'Създай ръководител',
+            'title': u'Създай клас',
             'year': datetime.now().year,
         }
 
-    return create_from_form_post(request, MentorForm, 
-                            'all_mentors', 
-                            'mentors/create.html',
+    return create_from_form_post(request, KlassForm, 
+                            'all_klasses', 
+                            'klasses/create.html',
                             context_data)
 
 def delete(request, id):
     if request.is_ajax():
         if request.method == 'DELETE':
-            mentor = Mentor.objects.filter(id=id)
-            mentor.delete()
+            klass = Klass.objects.filter(id=id)
+            klass.delete()
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
@@ -72,11 +71,5 @@ def delete(request, id):
                                     error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
                                 }), content_type = "application/json")
 
-def upload_csv(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            Mentor.from_csv(form.cleaned_data['file'])
 
-    return HttpResponseRedirect(reverse('all_mentors'))
 

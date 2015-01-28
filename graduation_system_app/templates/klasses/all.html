@@ -1,0 +1,36 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<table id="all-table" class="table table-bordered table-condensed">
+    <tr>
+        <th>Паралелка</th>
+        <th>Специалност</th>
+    </tr>
+    {% for klass in klasses %}
+        <tr id="{{ klass.id }}">
+            <td>{{ klass.letter }}</td>
+            <td>{{ klass.specialization }}</td>
+            <td class="col-md-2">
+                <a class="btn btn-info" style="float:left" href="{% url 'edit_klass' id=klass.id %}">Промени</a>
+                <form class="delete-form" style="float:left" klass-id="{{ klass.id }}" action="{% url 'delete_klass' id=klass.id %}" method="delete">
+                        {% csrf_token %}
+                        <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<a class="btn btn-primary" href="{% url 'create_klass' %}">Създай</a>
+<hr />
+{% endblock %}
+{% block scripts %}
+    <script>
+        var $forms = $('.delete-form');
+        $forms.each(function () {
+            var $this = $(this),
+                $klassToDelete = $('#' + $this.attr('klass-id'));
+
+            ajaxOvverideDelForm($this, $klassToDelete);
+        });
+    </script>
+{% endblock%}

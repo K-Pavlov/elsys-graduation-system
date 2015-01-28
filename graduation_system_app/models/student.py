@@ -46,16 +46,17 @@ class Student(models.Model):
         reader.next()
 
         for row in reader:
-            first_name = row['Име']
-            middle_name = row['Презиме']
-            last_name = row['Фамилия']
+            first_name = row[0]
+            middle_name = row[1]
+            last_name = row[2]
 
             if (Student.objects.filter(first_name= first_name, middle_name= middle_name,
                                        last_name= last_name).count() == 0):
                 model = Student()
                 model.first_name = first_name
                 model.middle_name = middle_name
-                model.last_name = last_name
+                model.last_name = last_nam
+                
                 try:
                     model.klass = Klass.objects.get(row[3])
                 except Klass.DoesNotExist:
