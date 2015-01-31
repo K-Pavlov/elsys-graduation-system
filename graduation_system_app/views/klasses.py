@@ -21,14 +21,13 @@ from . import create_from_form_post, create_from_form_edit
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    current_season = Season.objects.get(is_active=True)
+    #
     return render(
         request,
         'klasses/all.html',
         context_instance = RequestContext(request,
         {
             'title': u'Класове',
-            'season': current_season.year,
             'year': datetime.now().year,
             'klasses': Klass.objects.all(),
             'season_form': SeasonYearsOnly(),
@@ -37,13 +36,11 @@ def all(request):
 
 def edit(request, id):
     klass = Klass.objects.filter(id=id)
-    current_season = Season.objects.get(is_active=True)
     if not id or not klass.exists():
         return HttpResponseRedirect('/klasses/create')
     else: 
         context_data = {
             'title': u'Промени клас',
-            'season': current_season.year,
             'year': datetime.now().year,
             'id': klass[0].id,
             'season_form': SeasonYearsOnly(),
@@ -57,10 +54,8 @@ def edit(request, id):
                             klass[0])
 
 def create(request):
-    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай клас',
-            'season': current_season.year,
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly(),
         }

@@ -19,7 +19,6 @@ def all(request):
     print(Season.objects.all())
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    current_season = Season.objects.get(is_active=True)
     return render(
         request,
         'seasons/all.html',
@@ -27,7 +26,6 @@ def all(request):
         {
             'title': u'Сезони',
             'year': datetime.now().year,
-            'season': current_season.year,
             'seasons': Season.objects.all(),
             'season_form': SeasonYearsOnly(),
         })
@@ -35,13 +33,11 @@ def all(request):
 
 def edit(request, id):
     season = Season.objects.filter(id=id)
-    current_season = Season.objects.get(is_active=True)
     if not id or not season.exists():
         return HttpResponseRedirect('/seasons/create')
     else: 
         context_data = {
             'title': u'Промени сезон',
-            'season': current_season.year,
             'year': datetime.now().year,
             'id': season[0].id,
             'season_form': SeasonYearsOnly(),
@@ -54,10 +50,8 @@ def edit(request, id):
                             season[0])
 
 def create(request):
-    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай сезон',
-            'season': current_season.year,
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly(),
         }

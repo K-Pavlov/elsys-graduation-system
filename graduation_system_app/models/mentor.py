@@ -38,9 +38,15 @@ class Mentor(models.Model):
             middle_name = row[1]
             last_name = row[2]
             model = Mentor()
-            teacher = Teacher.objects.filter(first_name= first_name, middle_name= middle_name,
+            try:
+               teacher = Teacher.objects.get(first_name= first_name, middle_name= middle_name,
                                        last_name= last_name)
-            if (teacher.count() == 0):
+               try:
+                   Mentor.objects.get(teacher=teacher)
+                   continue
+               except Mentor.DoesNotExist:
+                   pass
+            except Teacher.DoesNotExist:
                 teacher = Teacher()
 
                 teacher.first_name = first_name
@@ -63,11 +69,14 @@ class Mentor(models.Model):
                     pass
                 teacher.firm = firm
                 teacher.save()
-                model.teacher = teacher
-                created_model.append(model)
-            else:
-                model.teacher = teacher[0]
- 
+
+            try:
+                teacher.season = Season.objects.get(is_active=True)
+            except Season.DoesNotExist:
+                pass
+
+            model.teacher = teacher
+            created_model.append(model)
             i += 1
             if (i % 50 == 0):
                 Mentor.objects.bulk_create(created_model)

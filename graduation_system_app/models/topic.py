@@ -26,8 +26,10 @@ class Topic(models.Model):
                             on_delete=models.SET_NULL,)
  
     def save(self, *args, **kwargs):
-        current_season = Season.objects.get(is_active=True)
-        self.season = Season.objects.get(is_active=True)
+        try:
+            self.season = Season.objects.get(is_active=True)
+        except Season.DoesNotExist:
+            pass
         super(Topic, self).save(*args, **kwargs)
 
     @staticmethod
@@ -42,6 +44,11 @@ class Topic(models.Model):
                 model = Topic()
                 model.title = row[0]
                 model.description = row[1]
+                try:
+                    model.season = Season.objects.get(is_active=True)
+                except Season.DoesNotExist:
+                    pass
+
                 if (len(row) > 2):
                     first_name = row[2]
                     middle_name = row[3] if row[3] else ''
@@ -50,7 +57,11 @@ class Topic(models.Model):
                     mentor = None
                     try:
                         teacher = Teacher.objects.get(first_name=first_name, middle_name=middle_name, last_name=last_name)
-                        mentor = Mentor.objects.get(teacher=teacher)
+                        try:
+                            mentor = Mentor.objects.get(teacher=teacher)
+                            continue 
+                        except Mentor.DoesNotExist:
+                            pass
                     except Teacher.DoesNotExist:
                         teacher = Teacher()
                         mentor = Mentor()
@@ -69,8 +80,12 @@ class Topic(models.Model):
                                 firm.save()
 
                             teacher.firm = firm
-                        teacher.save()
+                        try:
+                            teacher.season = Season.objects.get(is_active=True)
+                        except Season.DoesNotExist:
+                            pass
 
+                        teacher.save()
                         mentor.teacher = teacher
                         mentor.save()
 

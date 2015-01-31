@@ -18,16 +18,12 @@ from ..models.referee import Referee
 from . import create_from_form_post, create_from_form_edit
 
 def all(request):
-    """Renders the home page."""
-    current_season = Season.objects.get(is_active=True)
-    assert isinstance(request, HttpRequest)
     return render(
         request,
         'referees/all.html',
         context_instance = RequestContext(request,
         {
             'title': u'Рецензенти',
-            'season': current_season.year,
             'year': datetime.now().year,
             'referees': Referee.objects.all(),
             'upload_form': UploadForm(),
@@ -35,20 +31,17 @@ def all(request):
         })
     )
 
-def edit(request, id):
-    current_season = Season.objects.get(is_active=True)
+def edit(request, id): 
     referee = Referee.objects.filter(id=id)
     if not id or not referee.exists():
         return HttpResponseRedirect('/referees/create')
     else: 
         context_data = {
             'title': u'Промени рецензент',
-            'season': current_season.year,
             'year': datetime.now().year,
             'id': referee[0].id,
             'season_form': SeasonYearsOnly()
         }
-        print(referee[0])
 
         return create_from_form_edit(request, RefereeForm, 
                             'all_referees', 
@@ -57,10 +50,8 @@ def edit(request, id):
                             referee[0])
 
 def create(request):
-    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай рецензент',
-            'season': current_season.year,
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly(),
         }

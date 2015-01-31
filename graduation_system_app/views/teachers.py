@@ -21,14 +21,12 @@ from . import create_from_form_post, create_from_form_edit
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    current_season = Season.objects.get(is_active=True)
     return render(
         request,
         'teachers/all.html',
         context_instance = RequestContext(request,
         {
             'title': u'Учители',
-            'season': current_season.year,
             'year': datetime.now().year,
             'teachers': Teacher.objects.all(),
             'upload_form': UploadForm(),
@@ -38,13 +36,11 @@ def all(request):
 
 def edit(request, id):
     teacher = Teacher.objects.filter(id=id)
-    current_season = Season.objects.get(is_active=True)
     if not id or not teacher.exists():
         return HttpResponseRedirect('/teachers/create')
     else: 
         context_data = {
             'title': u'Промени учител',
-            'season': current_season.year,
             'year': datetime.now().year,
             'id': teacher[0].id,
             'season_form': SeasonYearsOnly()
@@ -56,10 +52,8 @@ def edit(request, id):
                             teacher[0])
 
 def create(request):
-    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай учител',
-            'season': current_season.year,
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly()
         }

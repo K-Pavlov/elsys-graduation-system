@@ -18,7 +18,7 @@ class Teacher(models.Model):
     def save(self, *args, **kwargs):
         try:
             self.season = Season.objects.get(is_active=True)
-        except Teacher.DoesNotExist:
+        except Season.DoesNotExist:
             pass
 
         super(Teacher, self).save(*args, **kwargs)
