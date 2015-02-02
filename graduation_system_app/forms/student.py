@@ -8,6 +8,6 @@ class StudentForm(ModelForm):
     class Meta:
         model = Student
         fields = ['first_name','middle_name','last_name', 
-                  'klass', 'topic','mentor', 'referee',
-                  'grade', 'season', ]
+                  'class_letter', 'topic','mentor', 'referee',
+                  'grade', 'season', 'specialization' ]
 

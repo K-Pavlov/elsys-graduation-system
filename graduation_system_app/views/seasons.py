@@ -45,7 +45,7 @@ def edit(request, id):
 
         return create_from_form_edit(request, SeasonForm, 
                             'all_seasons', 
-                            'seasons/edit.html',
+                            'edit.html',
                             context_data,
                             season[0])
 
@@ -58,7 +58,7 @@ def create(request):
 
     return create_from_form_post(request, SeasonForm, 
                             'all_seasons', 
-                            'seasons/create.html',
+                            'create.html',
                             context_data)
 
 def delete(request, id):

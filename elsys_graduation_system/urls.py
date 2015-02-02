@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.conf.urls import patterns, url
  
 from graduation_system_app.forms.login import BootstrapAuthenticationForm
-from graduation_system_app.views import home, students, topics, mentors, seasons, referees, klasses, teachers
+from graduation_system_app.views import home, students, topics, mentors, seasons, referees, specializations, class_letters, teachers
  
 admin.autodiscover()
  
@@ -39,15 +39,19 @@ urlpatterns = patterns('',
     url(r'^referees/edit/(?P<id>\d+)/$', referees.edit, name='edit_referee'),
     url(r'^referees/delete/(?P<id>\d+)/$', referees.delete, name='delete_referee'),
     url(r'^referees/upload/$', referees.upload_csv, name='upload_referees'),
-    url(r'^klasses/$', klasses.all, name='all_klasses'),
-    url(r'^klasses/create/$', klasses.create, name='create_klass'),
-    url(r'^klasses/edit/(?P<id>\d+)/$', klasses.edit, name='edit_klass'),
-    url(r'^klasses/delete/(?P<id>\d+)/$', klasses.delete, name='delete_klass'),
+    url(r'^class_letters/$', class_letters.all, name='all_class_letters'),
+    url(r'^class_letters/create/$', class_letters.create, name='create_class_letter'),
+    url(r'^class_letters/edit/(?P<id>\d+)/$', class_letters.edit, name='edit_class_letter'),
+    url(r'^class_letters/delete/(?P<id>\d+)/$', class_letters.delete, name='delete_class_letter'),
+    url(r'^specializations/$', specializations.all, name='all_specializations'),
+    url(r'^specializations/create/$', specializations.create, name='create_specialization'),
+    url(r'^specializations/edit/(?P<id>\d+)/$', specializations.edit, name='edit_specialization'),
+    url(r'^specializations/delete/(?P<id>\d+)/$', specializations.delete, name='delete_specialization'),
     url(r'^teachers/$', teachers.all, name='all_teachers'),
     url(r'^teachers/create/$', teachers.create, name='create_teacher'),
     url(r'^teachers/edit/(?P<id>\d+)/$', teachers.edit, name='edit_teacher'),
     url(r'^teachers/delete/(?P<id>\d+)/$', teachers.delete, name='delete_teacher'),
-    url(r'^teacherss/upload/$', teachers.upload_csv, name='upload_teachers'),
+    url(r'^teachers/upload/$', teachers.upload_csv, name='upload_teachers'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {

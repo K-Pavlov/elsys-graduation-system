@@ -47,7 +47,7 @@ def edit(request, id):
         }
         return create_from_form_edit(request, TopicForm,
                             'all_topics',
-                            'topics/edit.html',
+                            'edit.html',
                             context_data,
                             topic[0])
  
@@ -61,7 +61,7 @@ def create(request):
  
     return create_from_form_post(request, TopicForm,
                             'all_topics',
-                            'topics/create.html',
+                            'create.html',
                             context_data)
  
 def delete(request, id):

@@ -6,7 +6,8 @@ from django.db import models
 
 from .teacher import Teacher
 from .comission import Comission
-from .klass import Klass
+from .specialization import Specialization
+from .class_letter import ClassLetter
 from .referee import Referee
 from .mentor import Mentor
 from .topic import Topic
@@ -21,7 +22,10 @@ class Student(models.Model):
     last_name = models.CharField(verbose_name='Фамилия', max_length=50)
     grade = models.FloatField(verbose_name='Оценка', blank=True, default=2.0,
                               validators=[MinValueValidator(2.0), MaxValueValidator(6.0)],)
-    klass = models.ForeignKey(Klass, verbose_name='Клас', blank=True, null=True,
+    class_letter = models.ForeignKey(ClassLetter, verbose_name='Паралелка', blank=True, null=True,
+                              related_name='students', default='',
+                              on_delete=models.SET_NULL,)
+    specialization = models.ForeignKey(Specialization, verbose_name='Специалност', blank=True, null=True,
                               related_name='students', default='',
                               on_delete=models.SET_NULL,)
     topic = models.ForeignKey(Topic, verbose_name='Тема', blank=True, null=True,

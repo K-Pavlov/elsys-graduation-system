@@ -1,8 +1,14 @@
 from django.forms import ModelForm
 
-from ..models.klass import Klass
+from ..models.specialization import Specialization
+from ..models.class_letter import ClassLetter
 
-class KlassForm(ModelForm):
+class ClassLetterForm(ModelForm):
     class Meta:
-        model = Klass
-        fields = ['letter', 'specialization']
+        model = ClassLetter
+        fields = ['letter']
+
+class SpecializationForm(ModelForm):
+    class Meta:
+        model = Specialization
+        fields = ['name']

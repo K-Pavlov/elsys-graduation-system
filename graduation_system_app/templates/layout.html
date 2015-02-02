@@ -32,7 +32,13 @@
                     <li><a href="{% url 'all_mentors' %}">Ръководители</a></li>
                     <li><a href="{% url 'all_referees' %}">Рецензенти</a></li>
                     <li><a href="{% url 'all_topics' %}">Теми</a></li>
-                    <li><a href="{% url 'all_klasses' %}">Класове</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Класове <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{% url 'all_class_letters'%}">Паралелки</a></li>
+                            <li><a href="{% url 'all_specializations'%}">Специалности</a></li>
+                        </ul>
+                    </li>
                     {% endif %}
                 </ul>
                 {% include 'loginpartial.html' %}
@@ -42,6 +48,7 @@
 
     <div class="container body-content">
         {% load bootstrap %}
+        {% if season_form %}
         <div class="row">
             <div class="col-md-2">
                 <form id="change-season-frm" class="form-horizontal" style="margin: 0 auto"
@@ -51,6 +58,7 @@
                 </form>
             </div>
         </div>
+        {% endif %}
 
         {% block content %}{% endblock %}
         <hr />
@@ -76,7 +84,7 @@
                 data: $form.serialize()
             }).then(function () {
                 toastr.success('Сезонът бе успешно сменен');
-                
+
             }, function () {
                 toastr.error('Моля опитайте отново');
             });

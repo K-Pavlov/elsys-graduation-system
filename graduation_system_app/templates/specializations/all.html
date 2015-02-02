@@ -1,0 +1,35 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<table id="all-table" class="table table-bordered table-condensed">
+    <tr>
+        <th>Име</th>
+        <th></th>
+    </tr>
+    {% for specialization in specializations %}
+        <tr id="{{ specialization.id }}">
+            <td>{{ specialization.name }}</td>
+            <td class="col-md-2">
+                <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url 'edit_specialization' id=specialization.id %}">Промени</a>
+                <form class="delete-form" style="float:left" specialization-id="{{ specialization.id }}" action="{% url 'delete_specialization' id=specialization.id %}" method="delete">
+                        {% csrf_token %}
+                        <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+<a class="btn btn-primary" href="{% url 'create_specialization' %}">Създай</a>
+<hr />
+{% endblock %}
+{% block scripts %}
+    <script>
+        var $forms = $('.delete-form');
+        $forms.each(function () {
+            var $this = $(this),
+                $specializationToDelete = $('#' + $this.attr('specialization-id'));
+
+            ajaxOvverideDelForm($this, $specializationToDelete);
+        });
+    </script>
+{% endblock%}

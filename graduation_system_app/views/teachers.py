@@ -47,7 +47,7 @@ def edit(request, id):
         }
         return create_from_form_edit(request, TeacherForm, 
                             'all_teachers', 
-                            'teachers/edit.html', 
+                            'edit.html', 
                             context_data,
                             teacher[0])
 
@@ -60,7 +60,7 @@ def create(request):
 
     return create_from_form_post(request, TeacherForm, 
                             'all_teachers', 
-                            'teachers/create.html', 
+                            'create.html', 
                             context_data)
 
 def delete(request, id):

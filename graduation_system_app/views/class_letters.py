@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
-from pprint import pprint
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -12,70 +12,64 @@ from django.shortcuts import render
 from django.template import RequestContext
 
 from ..forms.season import SeasonYearsOnly
-from ..forms.mentor import MentorForm
+from ..forms.klass import ClassLetterForm
 from ..forms.file import UploadForm
 from ..models.season import Season
-from ..models.mentor import Mentor
+from ..models.class_letter import ClassLetter
 from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    #pprint(Mentor.objects.all())
-    current_season = Season.objects.get(is_active=True)
+    #
     return render(
         request,
-        'mentors/all.html',
+        'class_letters/all.html',
         context_instance = RequestContext(request,
         {
-            'title': u'Ръководители',
-            'season': current_season.year,
+            'title': u'Паралелки',
             'year': datetime.now().year,
-            'mentors': Mentor.objects.all(),
-            'upload_form': UploadForm(),
+            'class_letters': ClassLetter.objects.all(),
             'season_form': SeasonYearsOnly(),
         })
     )
 
 def edit(request, id):
-    current_season = Season.objects.get(is_active=True)
-    mentor = Mentor.objects.filter(id=id)
-    if not id or not mentor.exists():
-        return HttpResponseRedirect('/mentors/create')
+    class_letter = ClassLetter.objects.filter(id=id)
+    if not id or not class_letter.exists():
+        return HttpResponseRedirect('/class_letters/create')
     else: 
         context_data = {
-            'title': u'Промени ръководител',
-            'season': current_season.year,
+            'title': u'Промени паралелка',
             'year': datetime.now().year,
-            'id': mentor[0].id,
+            'id': class_letter[0].id,
             'season_form': SeasonYearsOnly(),
         }
+        print(class_letter[0])
 
-        return create_from_form_edit(request, MentorForm, 
-                            'all_mentors', 
+        return create_from_form_edit(request, ClassLetterForm, 
+                            'all_class_letters', 
                             'edit.html',
                             context_data,
-                            mentor[0])
+                            class_letter[0])
 
 def create(request):
-    current_season = Season.objects.get(is_active=True)
     context_data = {
-            'title': u'Създай ръководител',
-            'season': current_season.year,
+            'title': u'Създай паралелка',
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly(),
         }
 
-    return create_from_form_post(request, MentorForm, 
-                            'all_mentors', 
+    return create_from_form_post(request, ClassLetterForm, 
+                            'all_class_letters', 
                             'create.html',
                             context_data)
 
 def delete(request, id):
     if request.is_ajax():
         if request.method == 'DELETE':
-            mentor = Mentor.objects.filter(id=id)
-            mentor.delete()
+            class_letter = ClassLetter.objects.filter(id=id)
+            class_letter.delete()
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
@@ -83,11 +77,5 @@ def delete(request, id):
                                     error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
                                 }), content_type = "application/json")
 
-def upload_csv(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            Mentor.from_csv(form.cleaned_data['file'])
 
-    return HttpResponseRedirect(reverse('all_mentors'))
 

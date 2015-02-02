@@ -45,7 +45,7 @@ def edit(request, id):
 
         return create_from_form_edit(request, RefereeForm, 
                             'all_referees', 
-                            'referees/edit.html',
+                            'edit.html',
                             context_data,
                             referee[0])
 
@@ -58,7 +58,7 @@ def create(request):
 
     return create_from_form_post(request, RefereeForm, 
                             'all_referees', 
-                            'referees/create.html',
+                            'create.html',
                             context_data)
 
 def delete(request, id):
