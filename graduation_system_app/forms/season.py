@@ -13,4 +13,7 @@ class SeasonYearsOnly(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(SeasonYearsOnly, self).__init__(*args, **kwargs)
-        self.initial['years'] = Season.objects.get(is_active=True).year
+        try:
+            self.initial['years'] = Season.objects.get(is_active=True).year
+        except Season.DoesNotExist:
+            pass

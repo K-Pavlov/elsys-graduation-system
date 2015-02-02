@@ -19,17 +19,12 @@ from ..models.mentor import Mentor
 from . import create_from_form_post, create_from_form_edit
 
 def all(request):
-    """Renders the home page."""
-    assert isinstance(request, HttpRequest)
-    #pprint(Mentor.objects.all())
-    current_season = Season.objects.get(is_active=True)
     return render(
         request,
         'mentors/all.html',
         context_instance = RequestContext(request,
         {
             'title': u'Ръководители',
-            'season': current_season.year,
             'year': datetime.now().year,
             'mentors': Mentor.objects.all(),
             'upload_form': UploadForm(),
@@ -38,14 +33,12 @@ def all(request):
     )
 
 def edit(request, id):
-    current_season = Season.objects.get(is_active=True)
     mentor = Mentor.objects.filter(id=id)
     if not id or not mentor.exists():
         return HttpResponseRedirect('/mentors/create')
     else: 
         context_data = {
             'title': u'Промени ръководител',
-            'season': current_season.year,
             'year': datetime.now().year,
             'id': mentor[0].id,
             'season_form': SeasonYearsOnly(),
@@ -58,10 +51,8 @@ def edit(request, id):
                             mentor[0])
 
 def create(request):
-    current_season = Season.objects.get(is_active=True)
     context_data = {
             'title': u'Създай ръководител',
-            'season': current_season.year,
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly(),
         }
