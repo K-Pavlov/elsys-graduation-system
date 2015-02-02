@@ -62,7 +62,11 @@ else:
         }
     }
 
+#Normal login
 LOGIN_URL = '/login'
+
+#Google acc login 
+LOGIN_EXEMPT_URLS = ['complete/google-oauth2/', 'login/google-oauth2/']
 
 # Local time zone for this installation.  Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -139,8 +143,7 @@ MIDDLEWARE_CLASSES = ('corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'elsys_graduation_system.require_login_midware.LoginRequiredMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'elsys_graduation_system.urls'
@@ -149,10 +152,7 @@ ROOT_URLCONF = 'elsys_graduation_system.urls'
 WSGI_APPLICATION = 'elsys_graduation_system.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or
-    # "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    'graduation-system-app/templates/'
 )
 
 INSTALLED_APPS = ('django.contrib.auth',
@@ -166,9 +166,8 @@ INSTALLED_APPS = ('django.contrib.auth',
     'django.contrib.admin',
     'bootstrapform',
     'corsheaders',
+    'social.apps.django_app.default',
     'south',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
 )
 
 # A sample logging configuration.  The only tangible logging
@@ -204,3 +203,28 @@ LOGGING = {
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+   'django.contrib.auth.context_processors.auth',
+   'django.core.context_processors.debug',
+   'django.core.context_processors.i18n',
+   'django.core.context_processors.media',
+   'django.core.context_processors.static',
+   'django.core.context_processors.tz',
+   'django.contrib.messages.context_processors.messages',
+   'social.apps.django_app.context_processors.backends',
+   'social.apps.django_app.context_processors.login_redirect',
+)
+
+AUTHENTICATION_BACKENDS = (
+   'social.backends.google.GoogleOAuth2',
+   'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '682578393808-b2qghbpk7dg70o36h15mpkht4gq34tti.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'r8A08mRZdj8TTyRXcUvjcrRQ'
+
+#People who can login
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = ['kaloian.pavlov@gmail.com', 'you@bar.com']

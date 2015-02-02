@@ -3,7 +3,7 @@
 from datetime import datetime
  
 from django.contrib import admin
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
  
 from graduation_system_app.forms.login import BootstrapAuthenticationForm
 from graduation_system_app.views import home, students, topics, mentors, seasons, referees, specializations, class_letters, teachers
@@ -70,8 +70,7 @@ urlpatterns = patterns('',
             'next_page': '/',
         },
         name='logout'),
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
- 
+    url('', include('django.contrib.auth.urls', namespace='auth')),
+    url('', include('social.apps.django_app.urls', namespace='social')), 
     url(r'^admin/', admin.site.urls),
 )
