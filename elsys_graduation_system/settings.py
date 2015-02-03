@@ -204,6 +204,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+### Python social auth settings ###
 TEMPLATE_CONTEXT_PROCESSORS = (
    'django.contrib.auth.context_processors.auth',
    'django.core.context_processors.debug',
@@ -225,6 +226,18 @@ LOGIN_REDIRECT_URL = '/'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '682578393808-b2qghbpk7dg70o36h15mpkht4gq34tti.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'r8A08mRZdj8TTyRXcUvjcrRQ'
-
 #People who can login
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = ['kaloian.pavlov@gmail.com', 'you@bar.com']
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.social_auth.associate_by_email', 
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
+)

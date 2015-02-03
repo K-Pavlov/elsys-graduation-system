@@ -2,7 +2,7 @@
 <form id="logoutForm" action="/logout" method="post" class="navbar-right">
     {% csrf_token %}
     <ul class="nav navbar-nav navbar-right">
-        <li><span class="navbar-brand">Здравей, {{ user.username }}!</span></li>
+        <li><div class="navbar-brand">Здравейте, {{ user.username }}!</div></li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Излизане</a></li>
     </ul>
 
