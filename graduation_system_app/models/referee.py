@@ -90,11 +90,15 @@ class Referee(models.Model):
     class Meta:
         app_label = "graduation_system_app"
 
-class Referals(models.Model):
+def get_upload_path(instance, filename):
+    return u"referee_%s/%s" % (instance.referee.id, filename)
+
+class Referal(models.Model):
     id = make_uuid_charfield() 
-    file = models.FileField(verbose_name='Рецензия', upload_to='.', blank=True, null=True)
+    file = models.FileField(verbose_name='Рецензия', upload_to=get_upload_path, blank=True, null=True)
     referee = models.ForeignKey(Referee, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='referals',
                             on_delete=models.SET_NULL,)
+
     class Meta:
         app_label = "graduation_system_app"

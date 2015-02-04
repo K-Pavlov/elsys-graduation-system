@@ -3,20 +3,26 @@
 {% block content %}
 <table id="all-table" class="table table-bordered table-condensed table-hover">
     <tr>
-        <th>Име</th>
-        <th>Презиме</th>
-        <th>Фамилия</th>
+        <th>Имена</th>
+        <th>Имейл</th>
         <th>Фирма</th>
         <th>Сезон</th>
+        <th>Рецензии</th>  
         <th></th>
     </tr>
     {% for referee in referees %}
     <tr id="{{ referee.id }}">
-        <td>{{ referee.teacher.first_name }}</td>
-        <td>{{ referee.teacher.middle_name }}</td>
-        <td>{{ referee.teacher.last_name }}</td>
+        <td>{{ referee.teacher.first_name }} {{ referee.teacher.middle_name }} {{ referee.teacher.last_name }}</td>
+        <td>{{ referee.email|default_if_none:'' }}</td>
         <td>{{ referee.teacher.firm|default_if_none:'ТУЕС' }}</td>
         <td>{{ referee.season|default_if_none:'' }}</td>
+        <td>
+            {% if referee.referals.all %}
+            {% for referal in referee.referals.all %}
+            <a href="{{referal.file.url}}">{{referal.file.name}}</a>
+            {% endfor %}
+            {% endif %}
+        </td>
         <td class="col-md-2">
             <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url 'edit_referee' id=referee.id %}">Промени</a>
             <form class="delete-form" style="float:left" referee-id="{{ referee.id }}" action="{% url 'delete_referee' id=referee.id %}" method="delete">

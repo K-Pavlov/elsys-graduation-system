@@ -3,8 +3,10 @@
 from datetime import datetime
  
 from django.contrib import admin
+from django.conf import settings
 from django.conf.urls import patterns, url, include
- 
+from django.conf.urls.static import static
+
 from graduation_system_app.forms.login import BootstrapAuthenticationForm
 from graduation_system_app.views import home, students, topics, mentors, seasons, referees, specializations, class_letters, teachers, comissions
  
@@ -87,4 +89,4 @@ urlpatterns = patterns('',
     url('', include('django.contrib.auth.urls', namespace='auth')),
     url('', include('social.apps.django_app.urls', namespace='social')), 
     url(r'^admin/', admin.site.urls),
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
