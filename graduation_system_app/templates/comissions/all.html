@@ -13,8 +13,20 @@
     {% for comission in comissions %}
     <tr id="{{ comission.id }}">
         <td>{{ comission.head_of_comission|default_if_none:'' }}</td>
-        <td>{{ comission.members_of_comission|default_if_none:'' }}</td>
-        <td>{{ comission.students|default_if_none:'' }}</td>
+        <td>
+            {% if comission.members_of_comission.all %}
+            {% for member in comission.members_of_comission.all %}
+            {{ member }}<br />
+            {% endfor %}
+            {% endif %}
+        </td>
+        <td>
+            {% if comission.students.all %}
+            {% for student in comission.students.all %}
+            {{ student }}<br />
+            {% endfor %}
+            {% endif %}
+        </td>
         <td>{{ comission.start_time|default_if_none:'' }}</td>
         <td>{{ comission.season|default_if_none:'' }}</td>
         <td class="col-md-2">

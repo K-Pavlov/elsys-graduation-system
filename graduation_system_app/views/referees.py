@@ -82,6 +82,8 @@ def upload_csv(request):
     return HttpResponseRedirect(reverse('all_referees'))
 
 def upload_referal(request):
+    if(request.method == 'POST'):
+        form = UploadForm(request.POST, request.FILES)
     return render(
         request,
         'referees/upload_referal.html',

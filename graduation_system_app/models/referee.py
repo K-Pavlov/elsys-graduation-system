@@ -12,7 +12,6 @@ from ..common.uuid_generator import make_uuid_charfield
 
 class Referee(models.Model):
     id = make_uuid_charfield() 
-    referal = models.FileField(verbose_name='Рецензия', upload_to='.', blank=True, null=True)
     teacher = models.ForeignKey(Teacher, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='referees',
                             on_delete=models.SET_NULL,)
@@ -88,5 +87,14 @@ class Referee(models.Model):
     def __str__(self):
         return self.teacher.__str__()
 
+    class Meta:
+        app_label = "graduation_system_app"
+
+class Referals(models.Model):
+    id = make_uuid_charfield() 
+    file = models.FileField(verbose_name='Рецензия', upload_to='.', blank=True, null=True)
+    referee = models.ForeignKey(Referee, verbose_name='Учител', blank=True,
+                            null=True, default='', related_name='referals',
+                            on_delete=models.SET_NULL,)
     class Meta:
         app_label = "graduation_system_app"
