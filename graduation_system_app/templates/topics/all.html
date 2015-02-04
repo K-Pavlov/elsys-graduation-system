@@ -31,12 +31,11 @@
 <hr />
 <form id="upload_file" action="{% url 'upload_topics' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
-    {% load bootstrap %}
 
-    {{ upload_form|bootstrap }}
-    <input class="btn btn-info" type="submit" name="upload" value="Качи" />
+    {% include "file-upload.html" %}
 </form>
 {% endblock %}
+
 {% block scripts %}
 <script>
     var $form = $('.delete-form');
@@ -45,6 +44,6 @@
             $topicToDelete = $('#' + $this.attr('topic-id'));
 
         ajaxOvverideDelForm($this, $topicToDelete);
-    }); 
+    });
 </script>
-{% endblock%}
+{% endblock %}

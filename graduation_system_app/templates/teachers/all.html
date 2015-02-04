@@ -1,5 +1,10 @@
 ﻿{% extends "layout.html" %}
 
+{% load staticfiles %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'content/file-upload.css' %}" />
+{% endblock %}
+
 {% block content %}
 <table id="all-table" class="table table-bordered table-condensed">
     <tr>
@@ -34,8 +39,7 @@
         <form id="upload_file" action="{% url 'upload_teachers' %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
 
-            {{ upload_form }}
-            <input class="btn btn-info" type="submit" name="upload" value="Качи" />
+            {% include "file-upload.html" %}
         </form>
     </div>
 </div>
