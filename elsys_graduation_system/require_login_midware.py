@@ -1,6 +1,8 @@
-from django.http import HttpResponseRedirect
-from django.conf import settings
 from re import compile
+
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
  
 EXEMPT_URLS = [compile(settings.LOGIN_URL.lstrip('/'))]
 if hasattr(settings, 'LOGIN_EXEMPT_URLS'):
@@ -23,7 +25,13 @@ class LoginRequiredMiddleware:
  'django.contrib.auth.middleware.AuthenticationMiddleware'. If that doesn't\
  work, ensure your TEMPLATE_CONTEXT_PROCESSORS setting includes\
  'django.core.context_processors.auth'."
-        if not request.user.is_authenticated():
-            path = request.path_info.lstrip('/')
+        user = request.user
+        path = request.path_info.lstrip('/')
+        if(not user.is_authenticated()):
             if not any(m.match(path) for m in EXEMPT_URLS):
                 return HttpResponseRedirect(settings.LOGIN_URL)
+        elif(not user.is_staff):
+            path = path.replace('/', '')
+            paths_to_compare = [reverse('upload_referal').replace('/', ''), 'logout']
+            if(not path in paths_to_compare):
+                return HttpResponseRedirect(reverse('upload_referal'))

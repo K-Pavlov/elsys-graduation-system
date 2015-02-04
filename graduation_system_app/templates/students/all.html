@@ -45,9 +45,7 @@
     <div class="col-md-2">
         <form id="upload_file" action="{% url 'upload_students' %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
-
-            {{ upload_form }}
-            <input class="btn btn-info" type="submit" name="upload" value="Качи" />
+            {% include "file-upload.html" %}
         </form>
     </div>
     <div class="col-md-2">

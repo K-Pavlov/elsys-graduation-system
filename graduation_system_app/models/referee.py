@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import csv
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import smart_bytes
 
@@ -15,6 +16,7 @@ class Referee(models.Model):
     teacher = models.ForeignKey(Teacher, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='referees',
                             on_delete=models.SET_NULL,)
+    email = models.EmailField(verbose_name='Имейл', max_length=254)
     season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
                             null=True, default='', related_name='referees',
                             on_delete=models.SET_NULL,)

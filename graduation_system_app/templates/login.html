@@ -27,6 +27,8 @@
                         <input type="submit" value="Log in" class="btn btn-default" />
                     </div>
                 </div>
+                {% load staticfiles %}
+                <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}"><img width="50" height="50" src="{% static 'images/google.png' %}" /></a>
                 {% if form.errors %}
                 <p class="validation-summary-errors">Грешно потребителсо име или парола</p>
                 {% endif %}
@@ -44,6 +46,6 @@
 {% block scripts %}
 
     {% load staticfiles %}
-<script src="{% static 'scripts/jquery.validate.min.js' %}"></script>
+<script src="{% static 'libs/jquery.validate.min.js' %}"></script>
 
 {% endblock %}

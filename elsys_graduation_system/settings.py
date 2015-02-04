@@ -10,7 +10,7 @@ DIRNAME = os.path.dirname(__file__)
 if(os.getenv('SETTINGS_MODE') == 'dev'):
     DEBUG = True
 else:
-    DEBUG = True
+    DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -226,8 +226,12 @@ LOGIN_REDIRECT_URL = '/'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '682578393808-b2qghbpk7dg70o36h15mpkht4gq34tti.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'r8A08mRZdj8TTyRXcUvjcrRQ'
-#People who can login
-SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = ['kaloian.pavlov@gmail.com', 'you@bar.com']
+
+## Predefined people can login only
+from django.contrib.auth.models import User
+from graduation_system_app.models.referee import Referee
+all_mails = [x for x in User.objects.values_list('email', flat=True) if x]
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = all_mails
 
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',

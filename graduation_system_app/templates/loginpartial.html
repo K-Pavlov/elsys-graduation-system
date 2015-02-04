@@ -12,9 +12,10 @@
 
 <ul class="nav navbar-nav navbar-right">
     <li>
-        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
+        {% load staticfiles %}
+        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}"><img width="30" height="20" src="{% static 'images/google.png' %}"/></a>
     </li>
-    <li><a href="{% url 'login' %}">Влез</a></li>
+    <li><a href="{% url 'login' %}">Влезте</a></li>
 </ul>
 
 {% endif %}

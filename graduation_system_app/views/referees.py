@@ -81,3 +81,14 @@ def upload_csv(request):
 
     return HttpResponseRedirect(reverse('all_referees'))
 
+def upload_referal(request):
+    return render(
+        request,
+        'referees/upload_referal.html',
+        context_instance = RequestContext(request,
+        {
+            'title': u'Качване на рецензия',
+            'year': datetime.now().year,
+            'upload_form': UploadForm(),
+        })
+    )
