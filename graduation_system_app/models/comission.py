@@ -13,7 +13,7 @@ class Comission(models.Model):
     id = make_uuid_charfield() 
     members_of_comission = models.ManyToManyField(Teacher, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='members_of_comission',)
-    start_time = models.DateTimeField(auto_now_add=False, blank=True)
+    start_time = models.DateTimeField(auto_now_add=False, blank=True, null=True, default='')
     head_of_comission = models.OneToOneField(Teacher, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='head_of_comission',
                             on_delete=models.SET_NULL,)
@@ -24,7 +24,7 @@ class Comission(models.Model):
     def save(self, *args, **kwargs):
         current_season = Season.objects.get(is_active=True)
         self.season = Season.objects.get(is_active=True)
-        super(Mentor, self).save(*args, **kwargs)
+        super(Comission, self).save(*args, **kwargs)
 
     @staticmethod
     def from_csv(csvfile):

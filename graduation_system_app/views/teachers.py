@@ -21,8 +21,7 @@ from . import create_from_form_post, create_from_form_edit
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    return render(
-        request,
+    return render(request,
         'teachers/all.html',
         context_instance = RequestContext(request,
         {
@@ -31,8 +30,7 @@ def all(request):
             'teachers': Teacher.objects.all(),
             'upload_form': UploadForm(),
             'season_form': SeasonYearsOnly()
-        })
-    )
+        }))
 
 def edit(request, id):
     teacher = Teacher.objects.filter(id=id)
@@ -64,24 +62,10 @@ def create(request):
                             context_data)
 
 def delete(request, id):
-    if request.is_ajax():
+    if(request.is_ajax()):
         teacher = Teacher.objects.filter(id=id)
         teacher.delete()
-
         return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
     return HttpResponseNotFound()
-
-def upload_csv(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            Teacher.from_csv(form.cleaned_data['file'])
-    return HttpResponseRedirect(reverse('all_teachers'))
-
-def generate_protocol(request):
-    context = {
-        'teachers': Teacher.objects.all()
-    }
-    return render_to_pdf('teachers/teachers_table.html', context)
    

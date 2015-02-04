@@ -1,10 +1,7 @@
 ﻿{% extends "layout.html" %}
 
-{% block styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'content/file-upload.css' %}" />
-{% endblock %}
 {% block content %}
-<table id="all-table" class="table table-bordered table-condensed">
+<table id="all-table" class="table table-bordered table-condensed table-hover">
     <tr>
         <th>Име</th>
         <th>Презиме</th>
@@ -35,8 +32,7 @@
 <form id="upload_file" action="{% url 'upload_referees' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
 
-    {{ upload_form }}
-    <input class="btn btn-info" type="submit" name="upload" value="Качи" />
+    {% include 'file-upload.html' %}
 </form>
 {% endblock %}
 {% block scripts %}
@@ -49,5 +45,4 @@
         ajaxOvverideDelForm($this, $refereeToDelete);
     });
 </script>
-<script src="{% static 'scripts/fileFeedback.js' %}" type="text/javascript"></script>
 {% endblock%}

@@ -1,0 +1,58 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<table id="all-table" class="table table-bordered table-condensed table-hover">
+    <tr>
+        <th>Председател</th>
+        <th>Членове на комисията</th>
+        <th>Ученици</th>
+        <th>Начален час</th>
+        <th>Сезон</th>
+        <th></th>
+    </tr>
+    {% for comission in comissions %}
+    <tr id="{{ comission.id }}">
+        <td>{{ comission.head_of_comission|default_if_none:'' }}</td>
+        <td>{{ comission.members_of_comission|default_if_none:'' }}</td>
+        <td>{{ comission.students|default_if_none:'' }}</td>
+        <td>{{ comission.start_time|default_if_none:'' }}</td>
+        <td>{{ comission.season|default_if_none:'' }}</td>
+        <td class="col-md-2">
+            <a class="btn btn-info" style="float:left; margin-right: 10px;"
+               href="{% url 'edit_comission' id=comission.id %}">Промени</a>
+            <form class="delete-form form-horizontal" style="float:left" comission-id="{{ comission.id }}"
+                  action="{% url 'delete_comission' id=comission.id %}" method="delete">
+                {% csrf_token %}
+                <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a class="btn btn-primary" href="{% url 'create_comission' %}">Създай</a>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="upload_file" action="{% url 'upload_comissions' %}" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+
+            {% include "file-upload.html" %}
+        </form>
+    </div>
+    <div class="col-md-2" style="margin-top: 20px">
+        <a class="btn btn-info" href="{% url 'generate_individual_protocol' %}">Генериране на индивидулен протокол</a>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    var $forms = $('.delete-form');
+    $forms.each(function () {
+        var $this = $(this),
+            $topicToDelete = $('#' + $this.attr('comission-id'));
+
+        ajaxOvverideDelForm($this, $topicToDelete);
+    });
+</script>
+{% endblock%}

@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<table id="all-table" class="table table-bordered table-condensed">
+<table id="all-table" class="table table-bordered table-condensed table-hover">
     <tr>
         <th>Име</th>
         <th>Презиме</th>
@@ -33,16 +33,6 @@
     {% endfor %}
 </table>
 <a class="btn btn-primary" href="{% url 'create_teacher' %}">Създай</a>
-<hr />
-<div class="row">
-    <div class="col-md-2">
-        <form id="upload_file" action="{% url 'upload_teachers' %}" enctype="multipart/form-data" method="post">
-            {% csrf_token %}
-
-            {% include "file-upload.html" %}
-        </form>
-    </div>
-</div>
 
 {% endblock %}
 {% block scripts %}
