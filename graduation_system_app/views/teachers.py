@@ -10,13 +10,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from common import create_from_form_post, create_from_form_edit
 from ..forms.season import SeasonYearsOnly
 from ..common.pdf_renderer import render_to_pdf
 from ..forms.teacher import TeacherForm
 from ..forms.file import UploadForm
 from ..models.season import Season
 from ..models.teacher import Teacher
-from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""

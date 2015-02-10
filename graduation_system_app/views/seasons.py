@@ -11,9 +11,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from common import create_from_form_post, create_from_form_edit
 from ..forms.season import SeasonForm, SeasonYearsOnly
 from ..models.season import Season
-from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     print(Season.objects.all())

@@ -11,18 +11,17 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
  
+from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv
 from ..forms.season import SeasonYearsOnly
 from ..forms.topic import TopicForm
 from ..forms.file import UploadForm
 from ..models.season import Season
 from ..models.topic import Topic
-from . import create_from_form_post, create_from_form_edit
  
 def all(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    return render(
-        request,
+    return render(request,
         'topics/all.html',
         context_instance = RequestContext(request,
         {
@@ -31,8 +30,7 @@ def all(request):
             'topics': Topic.objects.all(),
             'upload_form': UploadForm(),
             'season_form': SeasonYearsOnly()
-        })
-    )
+        }))
  
 def edit(request, id):
     topic = Topic.objects.filter(id=id)
@@ -81,3 +79,20 @@ def upload_csv(request):
         if form.is_valid():
             Topic.from_csv(form.cleaned_data['file'])
     return HttpResponseRedirect(reverse('all_topics'))
+
+def preview_csv(request):
+    view = {
+        'title': 'Теми',
+        'name': 'topics',
+        'model': Topic,
+    }
+
+    choices = [get_pair('-' * 9, ''),
+               get_pair('Заглавие', 'title'), 
+               get_pair('Описание', 'description'),
+               get_pair('Име на ръководител', 'fname'),
+               get_pair('Презиме на ръководител', 'mname'),
+               get_pair('Фамилия на ръководител', 'lname'),
+               get_pair('Фирма на ръководител', 'firm'),]
+
+    return asbtr_preview_csv(request, view, choices)

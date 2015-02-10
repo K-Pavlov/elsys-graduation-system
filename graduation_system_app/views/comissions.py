@@ -10,13 +10,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv
 from ..forms.season import SeasonYearsOnly
 from ..common.pdf_renderer import render_to_pdf
 from ..forms.comission import ComissionForm
 from ..forms.file import UploadForm
 from ..models.season import Season
 from ..models.comission import Comission
-from . import create_from_form_post, create_from_form_edit
 
 def all(request):
     """Renders the home page."""
@@ -26,7 +26,7 @@ def all(request):
         'comissions/all.html',
         context_instance = RequestContext(request,
         {
-            'title': u'Ученици',
+            'title': u'Комисии',
             'year': datetime.now().year,
             'comissions': Comission.objects.all(),
             'upload_form': UploadForm(),
@@ -40,7 +40,7 @@ def edit(request, id):
         return HttpResponseRedirect('/comissions/create')
     else: 
         context_data = {
-            'title': u'Промени ученик',
+            'title': u'Промени комисия',
             'year': datetime.now().year,
             'id': comission[0].id,
             'season_form': SeasonYearsOnly()
@@ -53,7 +53,7 @@ def edit(request, id):
 
 def create(request):
     context_data = {
-            'title': u'Създай ученик',
+            'title': u'Създай комисия',
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly()
         }
@@ -78,6 +78,18 @@ def upload_csv(request):
         if form.is_valid():
             Comission.from_csv(form.cleaned_data['file'])
     return HttpResponseRedirect(reverse('all_comissions'))
+
+def preview_csv(request):
+    view = {
+        'title': 'Ръководители',
+        'name': 'mentors',
+        'model': Mentor,
+    }
+
+    choices = [get_pair('Фирма', 'firm'), get_pair('Име', 'fname'),
+               get_pair('Презиме', 'mname'), get_pair('Фамилия', 'lname')]
+
+    return asbtr_preview_csv(request, view, choices)
 
 def generate_protocol(request):
     context = {

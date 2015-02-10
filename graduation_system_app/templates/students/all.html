@@ -1,5 +1,10 @@
 ﻿{% extends "layout.html" %}
 
+{% load staticfiles %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'content/file-upload.css' %}" />
+{% endblock %}
+
 {% block content %}
 <table id="all-table" class="table table-bordered table-condensed table-hover">
     <tr>
@@ -43,7 +48,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form id="upload_file" action="{% url 'upload_students' %}" enctype="multipart/form-data" method="post">
+        <form id="upload_file" action="{% url 'preview_students' %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
 
             {% include "file-upload.html" %}
@@ -65,4 +70,5 @@
         ajaxOvverideDelForm($this, $topicToDelete);
     });
 </script>
+<script src="{% static 'scripts/fileFeedback.js' %}" type="text/javascript"></script>
 {% endblock%}

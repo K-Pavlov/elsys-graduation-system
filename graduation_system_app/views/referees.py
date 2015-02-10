@@ -10,16 +10,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv
 from ..forms.season import SeasonYearsOnly
 from ..forms.referee import RefereeForm
 from ..forms.file import UploadForm
 from ..models.season import Season
-from ..models.referee import Referee, Referal
-from . import create_from_form_post, create_from_form_edit
+from ..models.referee import Referee
 
 def all(request):
-    return render(
-        request,
+    return render(request,
         'referees/all.html',
         context_instance = RequestContext(request,
         {
@@ -28,8 +27,7 @@ def all(request):
             'referees': Referee.objects.all(),
             'upload_form': UploadForm(),
             'season_form': SeasonYearsOnly(),
-        })
-    )
+        }))
 
 def edit(request, id): 
     referee = Referee.objects.filter(id=id)
@@ -82,28 +80,27 @@ def upload_csv(request):
     return HttpResponseRedirect(reverse('all_referees'))
 
 def upload_referal(request):
-    form = UploadForm()
-    if(request.method == 'POST'):
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            email = request.user.email
-            try:
-                referee = Referee.objects.get(email=email)
-                referal = Referal()
-                referal.referee = referee
-                referal.file = form.cleaned_data['file']
-                referal.save()
-                form = UploadForm()
-            except Referee.DoesNotExist:
-                pass
-
-    return render(
-        request,
+    return render(request,
         'referees/upload_referal.html',
         context_instance = RequestContext(request,
         {
             'title': u'Качване на рецензия',
             'year': datetime.now().year,
-            'upload_form': form,
-        })
-    )
+            'upload_form': UploadForm(),
+        }))
+
+def preview_csv(request):
+    view = {
+        'title': 'Рецензенти',
+        'name': 'referees',
+        'model': Referee,
+    }
+
+    choices = [get_pair('-' * 9, ''),
+               get_pair('Име', 'fname'),
+               get_pair('Презиме', 'mname'),
+               get_pair('Фамилия', 'lname'),
+               get_pair('Имайл', 'email'),
+               get_pair('Фирма', 'firm'),]
+
+    return asbtr_preview_csv(request, view, choices)

@@ -11,16 +11,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
+from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv
 from ..forms.season import SeasonYearsOnly
 from ..forms.mentor import MentorForm
 from ..forms.file import UploadForm
 from ..models.season import Season
 from ..models.mentor import Mentor
-from . import create_from_form_post, create_from_form_edit
 
 def all(request):
-    return render(
-        request,
+    return render(request,
         'mentors/all.html',
         context_instance = RequestContext(request,
         {
@@ -29,8 +28,7 @@ def all(request):
             'mentors': Mentor.objects.all(),
             'upload_form': UploadForm(),
             'season_form': SeasonYearsOnly(),
-        })
-    )
+        }))
 
 def edit(request, id):
     mentor = Mentor.objects.filter(id=id)
@@ -82,3 +80,17 @@ def upload_csv(request):
 
     return HttpResponseRedirect(reverse('all_mentors'))
 
+def preview_csv(request):
+    view = {
+        'title': 'Ръководители',
+        'name': 'mentors',
+        'model': Mentor,
+    }
+
+    choices = [get_pair('-' * 9, ''),
+               get_pair('Фирма', 'firm'),
+               get_pair('Име', 'fname'),
+               get_pair('Презиме', 'mname'),
+               get_pair('Фамилия', 'lname')]
+
+    return asbtr_preview_csv(request, view, choices)
