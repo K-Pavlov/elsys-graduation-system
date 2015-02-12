@@ -6,26 +6,15 @@ from django.db import models
 from django.utils.encoding import smart_bytes
 
 from common import create_mentor_referee
-from .season import Season
-from .firm import Firm
-from .teacher import Teacher
-from ..common.uuid_generator import make_uuid_charfield
+from season_model import SeasonModelBase
+from season import Season
+from firm import Firm
+from teacher import Teacher
 
-class Referee(models.Model):
-    id = make_uuid_charfield() 
+class Referee(SeasonModelBase):
     teacher = models.ForeignKey(Teacher, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='referees',)
     email = models.EmailField(verbose_name='Имейл', max_length=254)
-    season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
-                            null=True, default='', related_name='referees',
-                            on_delete=models.SET_NULL,)
-
-    def save(self, *args, **kwargs):
-        try:
-            self.season = Season.objects.get(is_active=True)
-        except Season.DoesNotExist:
-            pass
-        super(Referee, self).save(*args, **kwargs)
 
     @staticmethod
     def create_from_upload(objects):
@@ -62,8 +51,7 @@ class Referee(models.Model):
 def get_upload_path(instance, filename):
     return u"referee_%s/%s" % (instance.referee.id, filename)
 
-class Referal(models.Model):
-    id = make_uuid_charfield() 
+class Referal(SeasonModelBase):
     file = models.FileField(verbose_name='Рецензия', upload_to=get_upload_path, blank=True, null=True)
     referee = models.ForeignKey(Referee, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='referals',

@@ -4,15 +4,14 @@ import csv
 from django.db import models
 from django.utils.encoding import smart_bytes
  
-from .referee import Referee
-from .firm import Firm
-from .teacher import Teacher
-from .mentor import Mentor
-from .season import Season
-from ..common.uuid_generator import make_uuid_charfield
+from season_model import SeasonModelBase
+from referee import Referee
+from firm import Firm
+from teacher import Teacher
+from mentor import Mentor
+from season import Season
  
-class Topic(models.Model):
-    id = make_uuid_charfield()
+class Topic(SeasonModelBase):
     title = models.CharField(verbose_name='Заглавие', max_length=100)
     description = models.TextField(verbose_name='Описание',)
     mentor = models.ForeignKey(Mentor, verbose_name='Ръководител', blank=True,
@@ -21,16 +20,6 @@ class Topic(models.Model):
     referee = models.ForeignKey(Referee, verbose_name='Рецензент', blank=True,
                                null=True, default='', related_name='mentors',
                                on_delete=models.SET_NULL,)
-    season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
-                            null=True, default='', related_name='topics',
-                            on_delete=models.SET_NULL,)
- 
-    def save(self, *args, **kwargs):
-        try:
-            self.season = Season.objects.get(is_active=True)
-        except Season.DoesNotExist:
-            pass
-        super(Topic, self).save(*args, **kwargs)
 
     @staticmethod
     def create(objects):

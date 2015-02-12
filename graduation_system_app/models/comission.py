@@ -4,27 +4,18 @@ import csv
 from django.db import models
 from django.utils.encoding import smart_bytes
 
-from .season import Season
-from .firm import Firm
-from .teacher import Teacher
-from ..common.uuid_generator import make_uuid_charfield
+from season_model import SeasonModelBase
+from season import Season
+from firm import Firm
+from teacher import Teacher
 
-class Comission(models.Model):
-    id = make_uuid_charfield() 
+class Comission(SeasonModelBase):
     members_of_comission = models.ManyToManyField(Teacher, verbose_name='Членове на комисията', blank=True,
                             null=True, default='', related_name='members_of_comission',)
     start_time = models.DateTimeField(auto_now_add=False, blank=True, null=True, default='', verbose_name='Начален час')
     head_of_comission = models.OneToOneField(Teacher, verbose_name='Председател на комисията', blank=True,
                             null=True, default='', related_name='head_of_comission',
                             on_delete=models.SET_NULL,)
-    season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
-                            null=True, default='', related_name='comissions',
-                            on_delete=models.SET_NULL,)
-
-    def save(self, *args, **kwargs):
-        current_season = Season.objects.get(is_active=True)
-        self.season = Season.objects.get(is_active=True)
-        super(Comission, self).save(*args, **kwargs)
 
     @staticmethod
     def from_csv(csvfile):

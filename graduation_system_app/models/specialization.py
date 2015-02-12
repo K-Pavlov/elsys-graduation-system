@@ -2,10 +2,9 @@
 from django.db import models
 from django.utils.encoding import smart_bytes
 
-from ..common.uuid_generator import make_uuid_charfield
+from deletable_model import DeletableModelBase
 
-class Specialization(models.Model):
-    id = make_uuid_charfield() 
+class Specialization(DeletableModelBase):
     name = models.CharField(verbose_name= 'Име', max_length= 100)
 
     def __str__(self):

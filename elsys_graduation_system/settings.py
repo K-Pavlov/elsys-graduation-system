@@ -230,7 +230,7 @@ LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '682578393808-b2qghbpk7dg70o36h15mpkht4gq34tti.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'r8A08mRZdj8TTyRXcUvjcrRQ'
 
-## Predefined people can login only
+# Predefined people can login only
 from django.contrib.auth.models import User
 from graduation_system_app.models.referee import Referee
 all_mails = [x for x in User.objects.values_list('email', flat=True) if x]

@@ -4,18 +4,17 @@ import csv
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from .teacher import Teacher
-from .comission import Comission
-from .specialization import Specialization
-from .class_letter import ClassLetter
-from .referee import Referee
-from .mentor import Mentor
-from .topic import Topic
-from .season import Season 
-from ..common.uuid_generator import make_uuid_charfield
+from season_model import SeasonModelBase
+from teacher import Teacher
+from comission import Comission
+from specialization import Specialization
+from class_letter import ClassLetter
+from referee import Referee
+from mentor import Mentor
+from topic import Topic
+from season import Season 
 
-class Student(models.Model):
-    id = make_uuid_charfield()
+class Student(SeasonModelBase):
     first_name = models.CharField(verbose_name='Име', max_length=50)
     middle_name = models.CharField(verbose_name='Презиме', max_length=50,
                                    blank=True, null=True, default='')
@@ -34,22 +33,12 @@ class Student(models.Model):
     mentor = models.ForeignKey(Mentor, verbose_name='Дипломен ръководител', blank=True,
                                null=True, default='', related_name='students',
                                on_delete=models.SET_NULL,)
-    season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
-                            null=True, default='', related_name='students',
-                            on_delete=models.SET_NULL,)
     comission = models.ForeignKey(Comission, verbose_name='Комисия', blank=True,
                             null=True, default='', related_name='students',
                             on_delete=models.SET_NULL,)
     referee = models.ForeignKey(Referee, verbose_name='Рецензент', blank=True, null=True,
                               related_name='students', default='',
                               on_delete=models.SET_NULL,)
-
-    def save(self, *args, **kwargs):
-        try:
-            self.season = Season.objects.get(is_active=True)
-        except Season.DoesNotExist:
-            pass
-        super(Student, self).save(*args, **kwargs)
 
     def __str__(self):
             return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)

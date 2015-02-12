@@ -14,6 +14,9 @@ class SeasonYearsOnly(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SeasonYearsOnly, self).__init__(*args, **kwargs)
         try:
+            print([(x,x) for x in Season.objects.all()])
+            self.fields['years'].choices = [(x,x) for x in Season.objects.all()]
+            self.fields['years'].choices.append(('all', 'Всички'))
             self.initial['years'] = Season.objects.get(is_active=True).year
         except Season.DoesNotExist:
-            pass
+            self.initial['years'] = 'all'

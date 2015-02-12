@@ -6,25 +6,14 @@ from django.db import models
 from django.utils.encoding import smart_bytes
 
 from common import create_mentor_referee
-from .season import Season
-from .firm import Firm
-from .teacher import Teacher
-from ..common.uuid_generator import make_uuid_charfield
+from season_model import SeasonModelBase
+from season import Season
+from firm import Firm
+from teacher import Teacher
 
-class Mentor(models.Model):
-    id = make_uuid_charfield() 
+class Mentor(SeasonModelBase):
     teacher = models.ForeignKey(Teacher, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='mentors',)
-    season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
-                            null=True, default='', related_name='mentors',
-                            on_delete=models.SET_NULL,)
-
-    def save(self, *args, **kwargs):
-        try:
-            self.season = Season.objects.get(is_active=True)
-        except Season.DoesNotExist:
-            pass
-        super(Mentor, self).save(*args, **kwargs)
 
     @staticmethod
     def create_from_upload(objects):

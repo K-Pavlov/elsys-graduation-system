@@ -16,9 +16,6 @@ from ..forms.season import SeasonForm, SeasonYearsOnly
 from ..models.season import Season
 
 def all(request):
-    print(Season.objects.all())
-    """Renders the home page."""
-    assert isinstance(request, HttpRequest)
     return render(
         request,
         'seasons/all.html',
@@ -77,12 +74,10 @@ def change(request):
     if request.is_ajax():
         if request.method == 'POST':
             form = SeasonYearsOnly(request.POST)
-            print (form.errors)
             if form.is_valid():
                 answer = form.cleaned_data['years']
                 try:
                     season = Season.objects.get(year= answer)
-                    print(season)
                     season.is_active = True
                     season.save()
                 except Season.DoesNotExist:

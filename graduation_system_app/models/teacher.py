@@ -2,26 +2,17 @@
 from django.db import models
 from django.utils.encoding import smart_bytes
 
-from .firm import Firm
-from .season import Season
-from ..common.uuid_generator import make_uuid_charfield
+from deletable_model import DeletableModelBase
+from firm import Firm
+from season import Season
 
-class Teacher(models.Model):
-    id = make_uuid_charfield() 
+class Teacher(DeletableModelBase):
     first_name = models.CharField(verbose_name='Име', max_length=50)
     middle_name = models.CharField(verbose_name='Презиме', max_length=50, blank=True, null=True, default='')
     last_name = models.CharField(verbose_name='Фамилия', max_length=50)
     firm = models.ForeignKey(Firm, verbose_name='Фирма', blank=True,
                             null=True, default='', related_name='referees',
                             on_delete=models.SET_NULL,)
-
-    def save(self, *args, **kwargs):
-        try:
-            self.season = Season.objects.get(is_active=True)
-        except Season.DoesNotExist:
-            pass
-
-        super(Teacher, self).save(*args, **kwargs)
 
     def __str__(self):
         string = u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)

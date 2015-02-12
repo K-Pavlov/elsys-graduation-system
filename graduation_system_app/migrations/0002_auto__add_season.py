@@ -10,8 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding model 'Season'
         db.create_table(u'graduation_system_app_season', (
-            ('id', self.gf('django.db.models.fields.CharField')(default='15028751042761724388', max_length=36, primary_key=True)),
-            ('year', self.gf('graduation_system_app.models.season.YearYearField')(max_length=20)),
+            ('id', self.gf('django.db.models.fields.CharField')(default='15028751042761724388', max_length=36, primary_key=True)),          
         ))
         db.send_create_signal('graduation_system_app', ['Season'])
 

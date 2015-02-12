@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from teacher import Teacher
 from season import Season
 from firm import Firm

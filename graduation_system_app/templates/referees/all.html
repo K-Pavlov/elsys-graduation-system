@@ -23,6 +23,7 @@
         <td>{{ referee.teacher.middle_name }}</td>
         <td>{{ referee.teacher.last_name }}</td>
         <td>{{ referee.email }}</td>
+        <td>{{ referee.is_deleted }}</td>
         <td>{{ referee.teacher.firm|default_if_none:'ТУЕС' }}</td>
         <td>
             {% if referee.referals.all %}
