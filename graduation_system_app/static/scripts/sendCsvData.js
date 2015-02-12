@@ -80,7 +80,7 @@ $(document).ready(function () {
 
         var json = JSON.stringify(dataObjects);
         $.post('/' + $('#send-button').attr('view-name') + '/upload/', json).then(function (data) {
-            toastr.success('party');
+            toastr.success('Успешно създадохте записите');
         }, function (err) {
 
         });

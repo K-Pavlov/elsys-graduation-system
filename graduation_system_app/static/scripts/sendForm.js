@@ -16,7 +16,7 @@
 
 
     $form.click(function (event) {
-        if (!confirm('Сигурни ли сте, че искате да изтриете темата?')) {
+        if (!confirm('Сигурни ли сте, че искате да изтриете записа?')) {
             event.preventDefault();
         }
     });
