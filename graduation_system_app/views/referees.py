@@ -15,7 +15,7 @@ from ..forms.season import SeasonYearsOnly
 from ..forms.referee import RefereeForm
 from ..forms.file import UploadForm
 from ..models.season import Season
-from ..models.referee import Referee
+from ..models.referee import Referee, Referal
 
 def all(request):
     return render(request,
@@ -81,14 +81,31 @@ def upload_csv(request):
     return HttpResponseRedirect(reverse('all_mentors'))
 
 def upload_referal(request):
-    return render(request,
+    form = UploadForm()
+    if(request.method == 'POST'):
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            email = request.user.email
+            try:
+                referee = Referee.objects.get(email=email)
+                referal = Referal()
+                referal.referee = referee
+                referal.file = form.cleaned_data['file']
+                referal.save()
+                form = UploadForm()
+            except Referee.DoesNotExist:
+                pass
+
+    return render(
+        request,
         'referees/upload_referal.html',
         context_instance = RequestContext(request,
         {
             'title': u'Качване на рецензия',
             'year': datetime.now().year,
-            'upload_form': UploadForm(),
-        }))
+            'upload_form': form,
+        })
+    )
 
 def preview_csv(request):
     view = {
