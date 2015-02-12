@@ -8,7 +8,9 @@ from django.conf.urls import patterns, url, include
 from django.conf.urls.static import static
 
 from graduation_system_app.forms.login import BootstrapAuthenticationForm
-from graduation_system_app.views import home, students, topics, mentors, seasons, referees, specializations, class_letters, teachers, comissions, firms
+from graduation_system_app.views import home, students, topics,  specializations 
+from graduation_system_app.views import mentors, seasons, referees, referals
+from graduation_system_app.views import class_letters, teachers, comissions, firms
  
 admin.autodiscover()
 
@@ -50,6 +52,11 @@ urlpatterns = patterns('',
     url(r'^referees/upload/$', referees.upload_csv, name='upload_referees'),
     url(r'^referees/preview/$', referees.preview_csv, name='preview_referees'),
     url(r'^referees/refereal_upload/$', referees.upload_referal, name='upload_referal'),
+    # Referals
+    url(r'^referals/$', referals.all, name='all_referals'),
+    url(r'^referals/create/$', referals.create, name='create_referal'),
+    url(r'^referals/edit/(?P<id>\d+)/$', referals.edit, name='edit_referal'),
+    url(r'^referals/delete/(?P<id>\d+)/$', referals.delete, name='delete_referal'),
     # Class letters
     url(r'^class_letters/$', class_letters.all, name='all_class_letters'),
     url(r'^class_letters/create/$', class_letters.create, name='create_class_letter'),

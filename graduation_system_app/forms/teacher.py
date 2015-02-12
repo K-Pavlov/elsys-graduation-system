@@ -7,4 +7,4 @@ from ..models.teacher import Teacher
 class TeacherForm(ModelForm):
     class Meta:
         model = Teacher
-        fields = ['first_name','middle_name','last_name', 'firm']
+        exclude = ('id')

@@ -6,7 +6,7 @@ from ..models.mentor import Season
 class SeasonForm(ModelForm):
     class Meta:
         model = Season
-        fields = ['year', 'is_active']
+        exclude = ('id')
 
 class SeasonYearsOnly(forms.Form):
     years = forms.ChoiceField(choices=[(x,x) for x in Season.objects.all()], label='Сезон:')

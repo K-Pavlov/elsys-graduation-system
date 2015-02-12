@@ -5,4 +5,4 @@ from ..models.mentor import Mentor
 class MentorForm(ModelForm):
     class Meta:
         model = Mentor
-        fields = ['teacher', 'season', ]
+        exclude = ('id')
