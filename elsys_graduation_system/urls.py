@@ -8,10 +8,10 @@ from django.conf.urls import patterns, url, include
 from django.conf.urls.static import static
 
 from graduation_system_app.forms.login import BootstrapAuthenticationForm
-from graduation_system_app.views import home, students, topics, mentors, seasons, referees, specializations, class_letters, teachers, comissions
+from graduation_system_app.views import home, students, topics, mentors, seasons, referees, specializations, class_letters, teachers, comissions, firms
  
 admin.autodiscover()
- 
+
 urlpatterns = patterns('',
     # Students
     url(r'^$', home.index, name='home'),
@@ -60,6 +60,11 @@ urlpatterns = patterns('',
     url(r'^specializations/create/$', specializations.create, name='create_specialization'),
     url(r'^specializations/edit/(?P<id>\d+)/$', specializations.edit, name='edit_specialization'),
     url(r'^specializations/delete/(?P<id>\d+)/$', specializations.delete, name='delete_specialization'),
+    # Firms
+    url(r'^firms/$', firms.all, name='all_firms'),
+    url(r'^firms/create/$', firms.create, name='create_firm'),
+    url(r'^firms/edit/(?P<id>\d+)/$', firms.edit, name='edit_firm'),
+    url(r'^firms/delete/(?P<id>\d+)/$', firms.delete, name='delete_firm'),
     # Teachers
     url(r'^teachers/$', teachers.all, name='all_teachers'),
     url(r'^teachers/create/$', teachers.create, name='create_teacher'),
