@@ -1,8 +1,11 @@
 """
 Django settings for elsys_graduation_system project.
 """
+import codecs
 import os
 from os import path
+
+codecs.register(lambda name: codecs.lookup('utf-8') if name == 'cp65001' else None)
 
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 DIRNAME = os.path.dirname(__file__)

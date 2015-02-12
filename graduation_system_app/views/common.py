@@ -56,6 +56,7 @@ def asbtr_preview_csv(request, view, choices):
                     'year': datetime.now().year,
                     'choices': choices,
                     'headers': headers,
+                    'view_name': view['name'],
                     'rows': reader,
                     'season_form': SeasonYearsOnly()
                 }))

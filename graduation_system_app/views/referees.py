@@ -72,12 +72,13 @@ def delete(request, id):
                                 }), content_type = "application/json")
 
 def upload_csv(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            Referee.from_csv(form.cleaned_data['file'])
+    if(request.is_ajax()):
+        if(request.method == 'POST'):
+            stuff = list(request.POST.iterlists())
+            objects = json.loads(stuff[0][0].encode('utf-8'))
+            Referee.create_from_upload(objects)
 
-    return HttpResponseRedirect(reverse('all_referees'))
+    return HttpResponseRedirect(reverse('all_mentors'))
 
 def upload_referal(request):
     return render(request,

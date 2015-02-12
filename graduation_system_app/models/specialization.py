@@ -6,7 +6,7 @@ from ..common.uuid_generator import make_uuid_charfield
 
 class Specialization(models.Model):
     id = make_uuid_charfield() 
-    name = models.CharField(verbose_name= '???????????', max_length= 100)
+    name = models.CharField(verbose_name= 'Име', max_length= 100)
 
     def __str__(self):
         string = u"%s" % (self.name)

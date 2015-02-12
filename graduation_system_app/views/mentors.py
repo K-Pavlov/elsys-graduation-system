@@ -61,8 +61,8 @@ def create(request):
                             context_data)
 
 def delete(request, id):
-    if request.is_ajax():
-        if request.method == 'DELETE':
+    if(request.is_ajax()):
+        if(request.method == 'DELETE'):
             mentor = Mentor.objects.filter(id=id)
             mentor.delete()
 
@@ -73,10 +73,11 @@ def delete(request, id):
                                 }), content_type = "application/json")
 
 def upload_csv(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            Mentor.from_csv(form.cleaned_data['file'])
+    if(request.is_ajax()):
+        if(request.method == 'POST'):
+            stuff = list(request.POST.iterlists())
+            objects = json.loads(stuff[0][0].encode('utf-8'))
+            Mentor.create_from_upload(objects)
 
     return HttpResponseRedirect(reverse('all_mentors'))
 

@@ -3,14 +3,54 @@ $(document).ready(function () {
     var $button = $('#send-button');
     $button.click(function () {
         markData();
-        getData();
+        sendData();
+    });
+
+    var $selects = $('.choosen-data-type');
+    $selects.each(function () {
+        var $this = $(this),
+            previous;
+
+        $this.focus(function () {
+            previous = $(this).children(':selected');
+        }).change(function () {
+            var selectValue = $this.val(),
+                $selectsToRemove;
+
+            $selectsToRemove = $($.grep($('.choosen-data-type'), function (item) {
+                var $item = $(item);
+                if ($item.val() === selectValue) {
+                    return false;
+                }
+                return true;
+            }));
+
+            $selectsToRemove.each(function () {
+                var $self = $(this),
+                    $itemToDetach;
+
+                $self.children().each(function () {
+                    var $this = $(this);
+                    if ($this.val() === selectValue) {
+                        $this.detach();
+                        return;
+                    }
+                });
+
+                //console.log($self);
+                //if (!$.contains($self, previous)) {
+                //    $self.append(previous);
+                //}
+            });
+
+            previous = $this.children(':selected');
+        });
     });
 
     function markData() {
         var $selects = $('.choosen-data-type');
         $selects.each(function () {
             var $this = $(this);
-            //console.log($this.val());
             var $dataForType = $('.' + $this.attr('id').replace('select-', ''));
             $dataForType.each(function () {
                 var $self = $(this);
@@ -19,7 +59,7 @@ $(document).ready(function () {
         });
     }
 
-    function getData() {
+    function sendData() {
         var $dataRows = $('.row-data'),
             dataObjects = [];
 
@@ -38,8 +78,15 @@ $(document).ready(function () {
             dataObjects.push(cleanData);
         });
 
-        $.each(dataObjects, function () {
-            console.log(this);
+        var json = JSON.stringify(dataObjects);
+        $.post('/' + $('#send-button').attr('view-name') + '/upload/', json).then(function (data) {
+            toastr.success('party');
+        }, function (err) {
+
         });
+        console.log(json);
+        //$.each(dataObjects, function () {
+        //    console.log(this);
+        //});
     }
 });

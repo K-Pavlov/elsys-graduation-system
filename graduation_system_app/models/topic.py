@@ -14,7 +14,7 @@ from ..common.uuid_generator import make_uuid_charfield
 class Topic(models.Model):
     id = make_uuid_charfield()
     title = models.CharField(verbose_name='Заглавие', max_length=100)
-    description = models.TextField(verbose_name='Описание', )
+    description = models.TextField(verbose_name='Описание',)
     mentor = models.ForeignKey(Mentor, verbose_name='Ръководител', blank=True,
                                null=True, default='', related_name='mentors',
                                on_delete=models.SET_NULL,)
@@ -33,63 +33,52 @@ class Topic(models.Model):
         super(Topic, self).save(*args, **kwargs)
 
     @staticmethod
-    def from_csv(csvfile):
+    def create(objects):
         i = 0
         created_model = []
-        reader = csv.reader(csvfile)
-        reader.next()
 
-        for row in reader:
-            if (Topic.objects.filter(title= row[0]).count() == 0):
+        for topic in objects:
+            if (Topic.objects.filter(title= topic['title']).count() == 0):
                 model = Topic()
-                model.title = row[0]
-                model.description = row[1]
+                try:
+                    model.title = topic['title']
+                except KeyError:
+                    model.title = ''
+                try:
+                    model.description = topic['description']
+                except KeyError:
+                    model.description = ''
+
                 try:
                     model.season = Season.objects.get(is_active=True)
                 except Season.DoesNotExist:
                     pass
 
-                if (len(row) > 2):
-                    first_name = row[2]
-                    middle_name = row[3] if row[3] else ''
-                    last_name = row[4]
-
-                    mentor = None
+                try:
+                    fname = topic['fname']
+                    lname = topic['lname']
+                    mname = None
+                    firm = None
                     try:
-                        teacher = Teacher.objects.get(first_name=first_name, middle_name=middle_name, last_name=last_name)
-                        try:
-                            mentor = Mentor.objects.get(teacher=teacher)
-                            continue 
-                        except Mentor.DoesNotExist:
-                            pass
-                    except Teacher.DoesNotExist:
-                        teacher = Teacher()
-                        mentor = Mentor()
+                        mname = topic['mname']
+                        firm = topic['firm']
+                    except KeyError:
+                        pass
+  
+                    mentor_dict = {
+                        'fname': fname,
+                        'mname': mname,
+                        'lname': lname
+                    }
 
-                        teacher.first_name = first_name
-                        teacher.middle_name = middle_name
-                        teacher.last_name = last_name
+                    if(firm):
+                        mentor_dict['firm'] = firm
 
-                        if(len(row) > 5):
-                            firm = None
-                            try:
-                                firm = Firm.objects.get(name=row[5])
-                            except Firm.DoesNotExist:
-                                firm = Firm()
-                                firm.name = row[6]
-                                firm.save()
-
-                            teacher.firm = firm
-                        try:
-                            teacher.season = Season.objects.get(is_active=True)
-                        except Season.DoesNotExist:
-                            pass
-
-                        teacher.save()
-                        mentor.teacher = teacher
-                        mentor.save()
-
+                    mentor = Mentor.create(mentor_dict)
+                    mentor.save()
                     model.mentor = mentor
+                except KeyError:
+                    pass
 
                 try:
                     model.season = Season.objects.get(is_active=True)

@@ -74,11 +74,13 @@ def delete(request, id):
                                 }), content_type = "application/json")
  
 def upload_csv(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            Topic.from_csv(form.cleaned_data['file'])
-    return HttpResponseRedirect(reverse('all_topics'))
+    if(request.is_ajax()):
+        if(request.method == 'POST'):
+            stuff = list(request.POST.iterlists())
+            objects = json.loads(stuff[0][0].encode('utf-8'))
+            Topic.create(objects)
+
+    return HttpResponseRedirect(reverse('all_mentors'))
 
 def preview_csv(request):
     view = {

@@ -69,11 +69,13 @@ def delete(request, id):
     return HttpResponseNotFound()
 
 def upload_csv(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            Student.from_csv(form.cleaned_data['file'])
-    return HttpResponseRedirect(reverse('all_students'))
+    if(request.is_ajax()):
+        if(request.method == 'POST'):
+            stuff = list(request.POST.iterlists())
+            objects = json.loads(stuff[0][0].encode('utf-8'))
+            Student.create_from_upload(objects)
+
+    return HttpResponseRedirect(reverse('all_mentors'))
 
 def preview_csv(request):
     view = {
@@ -87,7 +89,7 @@ def preview_csv(request):
                get_pair('Презиме', 'mname'),
                get_pair('Фамилия', 'lname'), 
                get_pair('Паралелка', 'class-letter'),
-               get_pair('Специалност', 'specialization'),
+               get_pair('Специалност', 'spec'),
                get_pair('Тема', 'topic'),
                get_pair('Име на ръководител', 'fname-mentor'),
                get_pair('Презиме на ръководител', 'mname-mentor'),

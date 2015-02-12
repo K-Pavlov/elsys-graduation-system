@@ -9,8 +9,8 @@ class Firm(models.Model):
     name = models.CharField(verbose_name='Име', max_length=100)
 
     def __str__(self):
-        string = u"%s" % (self.name)
-        return smart_bytes(string)
+        #string = u"%s" % (self.name)
+        return smart_bytes(self.name)
 
     class Meta:
         app_label = "graduation_system_app"
