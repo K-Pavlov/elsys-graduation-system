@@ -9,7 +9,7 @@
     </tr>
     {% for referal in referals %}
     <tr id="{{ referal.id }}">
-        <td>{{ referal.file }}</td>
+        <td><a href="{{ referal.file.url }}">{{ referal.file.name }}</a></td>
         <td>{{ referal.referee }}</td>
         <td class="col-md-2">
             <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url 'edit_referal' id=referal.id %}">Промени</a>

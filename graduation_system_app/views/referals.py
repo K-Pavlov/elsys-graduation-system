@@ -73,4 +73,3 @@ def delete(request, id):
     return HttpResponseNotFound(json.dumps({
                                     error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
                                 }), content_type = "application/json")
-
