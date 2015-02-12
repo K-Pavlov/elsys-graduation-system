@@ -11,10 +11,10 @@ from ..common.uuid_generator import make_uuid_charfield
 
 class Comission(models.Model):
     id = make_uuid_charfield() 
-    members_of_comission = models.ManyToManyField(Teacher, verbose_name='Учител', blank=True,
+    members_of_comission = models.ManyToManyField(Teacher, verbose_name='Членове на комисията', blank=True,
                             null=True, default='', related_name='members_of_comission',)
-    start_time = models.DateTimeField(auto_now_add=False, blank=True, null=True, default='')
-    head_of_comission = models.OneToOneField(Teacher, verbose_name='Учител', blank=True,
+    start_time = models.DateTimeField(auto_now_add=False, blank=True, null=True, default='', verbose_name='Начален час')
+    head_of_comission = models.OneToOneField(Teacher, verbose_name='Председател на комисията', blank=True,
                             null=True, default='', related_name='head_of_comission',
                             on_delete=models.SET_NULL,)
     season = models.ForeignKey(Season, verbose_name='Сезон', blank=True,
