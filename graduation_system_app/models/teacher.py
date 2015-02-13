@@ -11,8 +11,16 @@ class Teacher(DeletableModelBase):
     middle_name = models.CharField(verbose_name='Презиме', max_length=50, blank=True, null=True, default='')
     last_name = models.CharField(verbose_name='Фамилия', max_length=50)
     firm = models.ForeignKey(Firm, verbose_name='Фирма', blank=True,
-                            null=True, default='', related_name='referees',
+                            null=True, default='', related_name='teachers',
                             on_delete=models.SET_NULL,)
+    def soft_delete(self):
+        self.firm = None
+        self.head_of_comission = None
+        self.mentors.clear()
+        self.referees.clear()
+        self.members_of_comission.clear()
+
+        return super(Teacher, self).delete()
 
     def __str__(self):
         string = u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)

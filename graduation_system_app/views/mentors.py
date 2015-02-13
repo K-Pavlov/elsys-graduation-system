@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import json
-from pprint import pprint
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -63,8 +62,13 @@ def create(request):
 def delete(request, id):
     if(request.is_ajax()):
         if(request.method == 'DELETE'):
-            mentor = Mentor.objects.filter(id=id)
-            mentor.delete()
+            try:
+                mentor = Mentor.objects.get(id=id)
+                mentor.soft_delete()
+            except Mentor.DoesNotExist:
+                return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 

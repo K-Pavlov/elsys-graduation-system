@@ -15,11 +15,18 @@ class Topic(SeasonModelBase):
     title = models.CharField(verbose_name='Заглавие', max_length=100)
     description = models.TextField(verbose_name='Описание',)
     mentor = models.ForeignKey(Mentor, verbose_name='Ръководител', blank=True,
-                               null=True, default='', related_name='mentors',
+                               null=True, default='', related_name='topics',
                                on_delete=models.SET_NULL,)
     referee = models.ForeignKey(Referee, verbose_name='Рецензент', blank=True,
-                               null=True, default='', related_name='mentors',
+                               null=True, default='', related_name='topics',
                                on_delete=models.SET_NULL,)
+
+    def soft_delete(self):
+        self.students.clear()
+        self.mentor = None
+        self.referee = None
+
+        return super(Topic, self).delete()
 
     @staticmethod
     def create(objects):

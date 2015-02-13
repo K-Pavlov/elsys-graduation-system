@@ -61,8 +61,13 @@ def create(request):
 
 def delete(request, id):
     if request.is_ajax():
-        student = Student.objects.filter(id=id)
-        student.delete()
+        try:
+            student = Student.objects.get(id=id)
+            student.soft_delete()
+        except Student.DoesNotExist:
+            return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
         return HttpResponse(json.dumps('Success'), content_type = "application/json")
 

@@ -16,7 +16,7 @@ class DeletableModelBase(models.Model):
     is_deleted = models.BooleanField(verbose_name='Изтрит', default=False)
     objects = DeletableManager()
 
-    def delete(self):
+    def soft_delete(self):
         self.is_deleted = True
         self.save()
 

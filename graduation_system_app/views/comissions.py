@@ -65,8 +65,13 @@ def create(request):
 
 def delete(request, id):
     if request.is_ajax():
-        comission = Comission.objects.filter(id=id)
-        comission.delete()
+        try:
+            comission = Comission.objects.get(id=id)
+            comission.soft_delete()
+        except Comission.DoesNotExist:
+            return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
         return HttpResponse(json.dumps('Success'), content_type = "application/json")
 

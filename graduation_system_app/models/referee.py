@@ -16,6 +16,12 @@ class Referee(SeasonModelBase):
                             null=True, default='', related_name='referees',)
     email = models.EmailField(verbose_name='Имейл', max_length=254)
 
+    def soft_delete(self):
+        self.topics.clear()
+        self.students.clear()
+
+        return super(Referee, self).clean()
+
     @staticmethod
     def create_from_upload(objects):
         i = 0

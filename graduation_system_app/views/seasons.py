@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 from datetime import datetime
-from pprint import pprint
 
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
@@ -61,8 +60,13 @@ def create(request):
 def delete(request, id):
     if request.is_ajax():
         if request.method == 'DELETE':
-            season = Season.objects.filter(id=id)
-            season.delete()
+            try:
+                season = Season.objects.get(id=id)
+                season.soft_delete()
+            except Season.DoesNotExist:
+                return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
@@ -77,11 +81,15 @@ def change(request):
             if form.is_valid():
                 answer = form.cleaned_data['years']
                 try:
+                    print Season.objects.select_related()
                     season = Season.objects.get(year= answer)
                     season.is_active = True
                     season.save()
                 except Season.DoesNotExist:
-                    pass
+                    for season in Season.objects.all():
+                        season.is_active = False
+                        season.save()
+
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
     return HttpResponseNotFound(json.dumps({

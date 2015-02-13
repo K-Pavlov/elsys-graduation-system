@@ -12,6 +12,15 @@ class Season(DeletableModelBase):
     year = models.CharField(verbose_name='Година', max_length= 20)
     is_active = models.NullBooleanField(verbose_name='Активен', default=False)
 
+    def soft_delete(self):
+        self.student_set.clear()
+        self.referee_set.clear()
+        self.topic_set.clear()
+        self.mentor_set.clear()
+        self.comission_set.clear()
+
+        return super(Season, self).delete()
+
     def save(self, *args, **kwargs):
         if self.is_active:
             try:

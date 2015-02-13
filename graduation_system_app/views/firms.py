@@ -42,7 +42,6 @@ def edit(request, id):
             'id': firm[0].id,
             'season_form': SeasonYearsOnly(),
         }
-        print(firm[0])
 
         return create_from_form_edit(request, FirmForm, 
                             'all_firms', 
@@ -65,8 +64,13 @@ def create(request):
 def delete(request, id):
     if request.is_ajax():
         if request.method == 'DELETE':
-            firm = Firm.objects.filter(id=id)
-            firm.delete()
+            try:
+                firm = Firm.objects.get(id=id)
+                firm.soft_delete()
+            except Firm.DoesNotExist:
+                return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 

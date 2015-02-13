@@ -62,8 +62,13 @@ def create(request):
 def delete(request, id):
     if request.is_ajax():
         if request.method == 'DELETE':
-            referee = Referee.objects.filter(id=id)
-            referee.delete()
+            try:
+                referee = Referee.objects.get(id=id)
+                referee.soft_delete()
+            except Referee.DoesNotExist:
+                return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 

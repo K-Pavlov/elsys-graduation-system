@@ -19,8 +19,6 @@ from ..models.season import Season
 from ..models.topic import Topic
  
 def all(request):
-    """Renders the home page."""
-    assert isinstance(request, HttpRequest)
     return render(request,
         'topics/all.html',
         context_instance = RequestContext(request,
@@ -64,8 +62,13 @@ def create(request):
  
 def delete(request, id):
     if request.is_ajax():
-        topic = Topic.objects.filter(id=id)
-        topic.delete()
+        try:
+            topic = Topic.objects.get(id=id)
+            topic.soft_delete()
+        except Topic.DoesNotExist:
+            return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
  
         return HttpResponse(json.dumps('Success'), content_type = "application/json")
  

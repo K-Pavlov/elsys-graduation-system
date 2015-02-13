@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import csv
-from pprint import pprint
 
 from django.db import models
 from django.utils.encoding import smart_bytes
@@ -14,6 +13,12 @@ from teacher import Teacher
 class Mentor(SeasonModelBase):
     teacher = models.ForeignKey(Teacher, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='mentors',)
+
+    def soft_delete(self):
+        self.students.clear()
+        self.topics.clear()
+
+        return super(Mentor, self).delete()
 
     @staticmethod
     def create_from_upload(objects):

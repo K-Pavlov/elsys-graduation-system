@@ -18,9 +18,6 @@ from ..models.season import Season
 from ..models.specialization import Specialization
 
 def all(request):
-    """Renders the home page."""
-    assert isinstance(request, HttpRequest)
-    #
     return render(
         request,
         'specializations/all.html',
@@ -66,8 +63,13 @@ def create(request):
 def delete(request, id):
     if request.is_ajax():
         if request.method == 'DELETE':
-            specialization = Specialization.objects.filter(id=id)
-            specialization.delete()
+            try:
+                specialization = Specialization.objects.get(id=id)
+                specialization.soft_delete()
+            except Specialization.DoesNotExist:
+                return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 

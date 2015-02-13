@@ -13,7 +13,6 @@ from cgi import escape
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
     context_dict['path'] = os.path.abspath("graduation_system_app/static/fonts/DejaVuSansMono.ttf")
-    print(context_dict['path'])
     context = Context(context_dict)
     html  = template.render(context)
     result = StringIO.StringIO()

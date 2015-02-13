@@ -40,6 +40,16 @@ class Student(SeasonModelBase):
                               related_name='students', default='',
                               on_delete=models.SET_NULL,)
 
+    def soft_delete(self):
+        self.referee = None
+        self.mentor = None
+        self.comission = None
+        self.topic = None
+        self.specialization = None
+        self.class_letter = None
+
+        return super(Student, self).delete()
+
     def __str__(self):
             return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
 
@@ -50,7 +60,6 @@ class Student(SeasonModelBase):
 
         for student_dict in objects:
             student_names = check_names(student_dict, 'fname', 'mname', 'lname')
-            print(student_names)
             if(student_names):
                 first_name = student_names['fname']
                 middle_name = student_names['mname']

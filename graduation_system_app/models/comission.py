@@ -17,6 +17,13 @@ class Comission(SeasonModelBase):
                             null=True, default='', related_name='head_of_comission',
                             on_delete=models.SET_NULL,)
 
+    def soft_delete(self):
+        self.head_of_comission = None
+        self.students.clear()
+        self.members_of_comission.clear()
+
+        return super(Comission, self).delete()
+
     @staticmethod
     def from_csv(csvfile):
         DEFAULT = 'ТУЕС'
@@ -63,7 +70,7 @@ class Comission(SeasonModelBase):
             Mentor.objects.bulk_create(created_model)
 
     def __str__(self):
-        return self.teacher.__str__()
+        return smart_bytes('Председател ' + self.head_of_comission.__str__())
 
     class Meta:
         app_label = "graduation_system_app"

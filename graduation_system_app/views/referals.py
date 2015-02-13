@@ -42,7 +42,6 @@ def edit(request, id):
             'id': referal[0].id,
             'season_form': SeasonYearsOnly(),
         }
-        print(referal[0])
 
         return create_from_form_edit(request, ReferalForm, 
                             'all_referals', 
@@ -65,8 +64,13 @@ def create(request):
 def delete(request, id):
     if request.is_ajax():
         if request.method == 'DELETE':
-            referal = Referal.objects.filter(id=id)
-            referal.delete()
+            try:
+                referal = Referal.objects.get(id=id)
+                referal.soft_delete()
+            except Referal.DoesNotExist:
+                return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 

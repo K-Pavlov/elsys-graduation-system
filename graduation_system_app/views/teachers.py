@@ -19,8 +19,6 @@ from ..models.season import Season
 from ..models.teacher import Teacher
 
 def all(request):
-    """Renders the home page."""
-    assert isinstance(request, HttpRequest)
     return render(request,
         'teachers/all.html',
         context_instance = RequestContext(request,
@@ -63,8 +61,14 @@ def create(request):
 
 def delete(request, id):
     if(request.is_ajax()):
-        teacher = Teacher.objects.filter(id=id)
-        teacher.delete()
+        try:
+            teacher = Teacher.objects.get(id=id)
+            teacher.soft_delete()
+        except Teacher.DoesNotExist:
+            return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
+
         return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
     return HttpResponseNotFound()

@@ -19,9 +19,6 @@ from ..models.season import Season
 from ..models.class_letter import ClassLetter
 
 def all(request):
-    """Renders the home page."""
-    assert isinstance(request, HttpRequest)
-    #
     return render(
         request,
         'class_letters/all.html',
@@ -45,7 +42,6 @@ def edit(request, id):
             'id': class_letter[0].id,
             'season_form': SeasonYearsOnly(),
         }
-        print(class_letter[0])
 
         return create_from_form_edit(request, ClassLetterForm, 
                             'all_class_letters', 
@@ -68,8 +64,13 @@ def create(request):
 def delete(request, id):
     if request.is_ajax():
         if request.method == 'DELETE':
-            class_letter = ClassLetter.objects.filter(id=id)
-            class_letter.delete()
+            try:
+                class_letter = ClassLetter.objects.get(id=id)
+                class_letter.soft_delete()
+            except ClassLetter.DoesNotExist:
+                return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
