@@ -3,6 +3,7 @@ import csv
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.encoding import smart_bytes
 
 from season_model import SeasonModelBase
 from teacher import Teacher
@@ -51,7 +52,7 @@ class Student(SeasonModelBase):
         return super(Student, self).delete()
 
     def __str__(self):
-            return u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
+            return smart_bytes(u"%s %s %s" % (self.first_name, self.middle_name, self.last_name))
 
     @staticmethod
     def create_from_upload(objects):

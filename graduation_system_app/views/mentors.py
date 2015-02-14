@@ -9,8 +9,9 @@ from django.http import HttpResponseNotFound
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
-from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv
+from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
 from ..forms.season import SeasonYearsOnly
 from ..forms.mentor import MentorForm
 from ..forms.file import UploadForm
@@ -18,16 +19,33 @@ from ..models.season import Season
 from ..models.mentor import Mentor
 
 def all(request):
-    return render(request,
-        'mentors/all.html',
-        context_instance = RequestContext(request,
-        {
-            'title': u'Ръководители',
-            'year': datetime.now().year,
-            'mentors': Mentor.objects.all(),
-            'upload_form': UploadForm(),
-            'season_form': SeasonYearsOnly(),
-        }))
+    view_info = {
+        'model': Mentor,
+        'title': u'Ръководители',
+        'table_template': 'mentors/table.html',
+    }
+
+    urls = {
+        'create': 'create_mentor',
+        'edit': 'edit_mentor',
+        'delete': 'delete_mentor',
+        'preview': 'preview_mentors',
+    }
+
+    return abstr_all(request, urls, view_info)
+
+def get_page(request, page_num):
+    if(request.is_ajax()):
+        page = paginate(page_num, Mentor)
+        html = render_to_string('mentors/table.html', {
+            'objects': page,
+            'urls': {
+                'edit': 'edit_mentor',
+                'delete': 'delete_mentor',
+            },
+        })
+
+        return HttpResponse(html)
 
 def edit(request, id):
     mentor = Mentor.objects.filter(id=id)
@@ -49,10 +67,10 @@ def edit(request, id):
 
 def create(request):
     context_data = {
-            'title': u'Създай ръководител',
-            'year': datetime.now().year,
-            'season_form': SeasonYearsOnly(),
-        }
+        'title': u'Създай ръководител',
+        'year': datetime.now().year,
+        'season_form': SeasonYearsOnly(),
+    }
 
     return create_from_form_post(request, MentorForm, 
                             'all_mentors', 

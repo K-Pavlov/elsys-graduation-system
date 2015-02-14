@@ -19,8 +19,6 @@ from ..models.season import Season
 from ..models.comission import Comission
 
 def all(request):
-    """Renders the home page."""
-    assert isinstance(request, HttpRequest)
     return render(
         request,
         'comissions/all.html',

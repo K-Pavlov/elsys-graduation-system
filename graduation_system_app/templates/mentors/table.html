@@ -1,0 +1,124 @@
+﻿<div id="table-replace">
+    <table id="all-table" class="table table-bordered table-condensed table-hover sortable">
+        <thead>
+            <tr>
+                <th>Име</th>
+                <th>Презиме</th>
+                <th>Фамилия</th>
+                <th>Фирма</th>
+                <th>Сезон</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in objects %}
+            <tr id="{{ object.id }}">
+                <td>{{ object.teacher.first_name }}</td>
+                <td>{{ object.teacher.middle_name }}</td>
+                <td>{{ object.teacher.last_name }}</td>
+                <td>{{ object.teacher.firm|default_if_none:'' }}</td>
+                <td>{{ object.season|default_if_none:'' }}</td>
+                <td class="col-md-2">
+                    <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url urls.edit id=object.id %}">Промени</a>
+                    <form class="delete-form" style="float:left" object-id="{{ object.id }}" action="{% url urls.delete id=object.id %}" method="delete">
+                        {% csrf_token %}
+                        <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    <ul style="display: table; margin: 0 auto;" class="pagination">
+        {% if objects.has_previous %}
+        <li style="cursor: pointer;" id="first-page" page-number="1">
+            <span aria-hidden="true">&laquo;&laquo;</span>
+        </li>
+        <li style="cursor: pointer;" id="previous-page" page-number="{{ objects.previous_page_number }}">
+            <span aria-hidden="true">&laquo;</span>
+        </li>
+        {% else %}
+        <li class="disabled"><span aria-hidden="true">&laquo;</span></li>
+        {% endif %}
+        {% for page in objects.pages %}
+        <li style="cursor: pointer;" class="page-link" page-number="{{ page }}"><a>{{ page }}</a></li>
+        {% endfor%}
+        {% if objects.has_next %}
+        <li style="cursor: pointer;" id="next-page" page-number="{{ objects.next_page_number }}">
+            <span aria-hidden="true">&raquo;</span>
+        </li>
+        <li style="cursor: pointer;" id="last-page" page-number="{{ objects.paginator.num_pages }}">
+            <span aria-hidden="true">&raquo;&raquo;</span>
+        </li>
+        {% else %}
+        <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+        {% endif %}
+    </ul>
+</div>
+{% load staticfiles %}
+{% block scripts %}
+<script type="text/javascript" src="{% static 'libs/jquery.sort.js' %}"></script>
+ 
+<script type="text/javascript">
+    $(document).ready(function () {
+        var $replaceDiv = $('#table-replace'),
+        $prevPage = $('#previous-page'),
+        $nextPage = $('#next-page'),
+        $firstPage = $('#first-page'),
+        $lastPage = $('#last-page'),
+        $pageLinks = $('.page-link');
+
+        addClick($firstPage);
+        addClick($prevPage);
+        $pageLinks.each(function () {
+            var $this = $(this);
+            addClick($this);
+        });
+        addClick($nextPage);
+        addClick($lastPage);
+
+        function addClick($target) {
+            $target.click(function () {
+                $.get('/mentors/page/' + $target.attr('page-number') + '/')
+                    .then(function (data) {
+                        $replaceDiv.html(data);
+                    });
+            });
+        }
+
+        var th = jQuery('th'),
+        li = jQuery('li'),
+        inverse = false;
+
+        th.click(function () {
+
+            var header = $(this),
+                index = header.index();
+            header
+                .closest('table')
+                .find('td')
+                .filter(function () {
+                    return $(this).index() === index;
+                })
+                .sort(function (a, b) {
+
+                    a = $(a).text();
+                    b = $(b).text();
+                    return (
+                       isNaN(a) || isNaN(b) ?
+                           a > b : +a > +b
+                       ) ?
+                           inverse ? -1 : 1 :
+                           inverse ? 1 : -1;
+
+                }, function () {
+                    return this.parentNode;
+                });
+
+            inverse = !inverse;
+
+        });
+       // sorttable.makeSortable($("#all-table")[0]);
+    });
+</script>
+{% endblock %}
