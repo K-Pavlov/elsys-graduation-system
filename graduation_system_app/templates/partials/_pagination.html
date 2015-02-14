@@ -1,0 +1,25 @@
+﻿<ul style="display: table; margin: 0 auto;" class="pagination">
+    {% if objects.has_previous %}
+    <li class="pointer-item" id="first-page" page-number="1">
+        <span aria-hidden="true">&laquo;&laquo;</span>
+    </li>
+    <li class="pointer-item" id="previous-page" page-number="{{ objects.previous_page_number }}">
+        <span aria-hidden="true">&laquo;</span>
+    </li>
+    {% else %}
+    <li class="disabled"><span aria-hidden="true">&laquo;</span></li>
+    {% endif %}
+    {% for page in objects.pages %}
+    <li class="page-link pointer-item {% if page == objects.number %} active {% endif %}" page-number="{{ page }}"><a>{{ page }}</a></li>
+    {% endfor%}
+    {% if objects.has_next %}
+    <li class="pointer-item" id=" next-page" page-number="{{ objects.next_page_number }}">
+        <span aria-hidden="true">&raquo;</span>
+    </li>
+    <li class="pointer-item" id="last-page" page-number="{{ objects.paginator.num_pages }}">
+        <span aria-hidden="true">&raquo;&raquo;</span>
+    </li>
+    {% else %}
+    <li class="disabled"><span aria-hidden="true">&raquo;</span></li>
+    {% endif %}
+</ul>

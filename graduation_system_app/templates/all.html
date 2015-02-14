@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'content/file-upload.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'content/table.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -13,20 +14,13 @@
 <form id="upload_file" action="{% url urls.preview %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
 
-    {% include "file-upload.html" %}
+    {% include "partials/_file-upload.html" %}
 </form>
 {% endif %}
 {% endblock %}
 
 {% block scripts %}
-<script>
-    var $form = $('.delete-form');
-    $form.each(function () {
-        var $this = $(this),
-            $objectToDelete = $('#' + $this.attr('object-id'));
-
-        ajaxOvverideDelForm($this, $objectToDelete);
-    });
-</script>
+<script type="text/javascript" src="{% static 'libs/jquery.sort.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/table.js' %}"></script>
 <script src="{% static 'scripts/fileFeedback.js' %}" type="text/javascript"></script>
 {% endblock %}

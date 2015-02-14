@@ -36,7 +36,7 @@ def abstr_all(request, urls, view_info):
 
 def paginate(page, model):
     model_list = model.objects.all()
-    paginator = Paginator(model_list, 10) # Show 25 contacts per page
+    paginator = Paginator(model_list, 4) # Show 25 contacts per page
     
     try: 
         page = int(page)

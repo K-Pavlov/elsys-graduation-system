@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.http import HttpResponseNotFound
@@ -22,7 +23,7 @@ def all(request):
     view_info = {
         'model': Mentor,
         'title': u'Ръководители',
-        'table_template': 'mentors/table.html',
+        'table_template': 'mentors/_table.html',
     }
 
     urls = {
@@ -37,7 +38,7 @@ def all(request):
 def get_page(request, page_num):
     if(request.is_ajax()):
         page = paginate(page_num, Mentor)
-        html = render_to_string('mentors/table.html', {
+        html = render_to_string('mentors/_table.html', {
             'objects': page,
             'urls': {
                 'edit': 'edit_mentor',
@@ -90,9 +91,7 @@ def delete(request, id):
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
+    raise Http404
 
 def upload_csv(request):
     if(request.is_ajax()):
