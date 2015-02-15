@@ -3,11 +3,7 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import Http404
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.http import HttpResponseNotFound
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 from django.template.loader import render_to_string

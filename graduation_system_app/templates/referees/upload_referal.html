@@ -25,7 +25,7 @@
                 <a href="/" class="navbar-brand">Дипломиране - ТУЕС</a>
             </div>
             <div class="navbar-collapse collapse">
-                {% include 'loginpartial.html' %}
+                {% include 'partials/_loginpartial.html' %}
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
         <h2>Качване на рецензия</h2>
         <form id="upload_file" action="{% url 'upload_referal' %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
-            {% include "file-upload.html" %}
+            {% include "partials/_file-upload.html" %}
         </form>
         <hr />
         <footer>

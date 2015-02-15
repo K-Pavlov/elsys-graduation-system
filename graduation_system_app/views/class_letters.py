@@ -4,14 +4,12 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.http import HttpResponseNotFound
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
-from common import create_from_form_post, create_from_form_edit
+
+from common import create_from_form_post, create_from_form_edit, paginate, abstr_all
 from ..forms.season import SeasonYearsOnly
 from ..forms.klass import ClassLetterForm
 from ..forms.file import UploadForm
@@ -19,17 +17,32 @@ from ..models.season import Season
 from ..models.class_letter import ClassLetter
 
 def all(request):
-    return render(
-        request,
-        'class_letters/all.html',
-        context_instance = RequestContext(request,
-        {
-            'title': u'Паралелки',
-            'year': datetime.now().year,
-            'class_letters': ClassLetter.objects.all(),
-            'season_form': SeasonYearsOnly(),
+    view_info = {
+        'model': ClassLetter,
+        'title': u'Ръководители',
+        'table_template': 'class_letters/_table.html',
+    }
+
+    urls = {
+        'create': 'create_class_letter',
+        'edit': 'edit_class_letter',
+        'delete': 'delete_class_letter',
+    }
+
+    return abstr_all(request, urls, view_info)
+
+def get_page(request, page_num):
+    if(request.is_ajax()):
+        page = paginate(page_num, ClassLetter)
+        html = render_to_string('class_letters/_table.html', {
+            'objects': page,
+            'urls': {
+                'edit': 'edit_class_letter',
+                'delete': 'delete_class_letter',
+            },
         })
-    )
+
+        return HttpResponse(html)
 
 def edit(request, id):
     class_letter = ClassLetter.objects.filter(id=id)
@@ -74,9 +87,7 @@ def delete(request, id):
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
+    raise Http404
 
 
 

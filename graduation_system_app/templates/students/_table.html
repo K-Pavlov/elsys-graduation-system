@@ -1,0 +1,42 @@
+﻿{% load staticfiles %}
+<div id="table-replace">
+    <table id="all-table" class="table table-bordered table-condensed table-hover">
+        <tr>
+            <th class="pointer-item">Име</th>
+            <th class="pointer-item">Презиме</th>
+            <th class="pointer-item">Фамилия</th>
+            <th class="pointer-item">Клас</th>
+            <th class="pointer-item">Тема</th>
+            <th class="pointer-item">Ръководител</th>
+            <th class="pointer-item">Рецензент</th>
+            <th class="pointer-item">Комисия</th>
+            <th class="pointer-item">Оценка</th>
+            <th class="pointer-item">Сезон</th>
+            <th class="ignore"></th>
+        </tr>
+        {% for object in objects %}
+        <tr id="{{ object.id }}">
+            <td>{{ object.first_name }}</td>
+            <td>{{ object.middle_name }}</td>
+            <td>{{ object.last_name }}</td>
+            <td>{{ object.klass|default_if_none:'' }}</td>
+            <td>{{ object.topic|default_if_none:'' }}</td>
+            <td>{{ object.mentor|default_if_none:'' }}</td>
+            <td>{{ object.referee|default_if_none:'' }}</td>
+            <td>{{ object.comission|default_if_none:'' }}</td>
+            <td>{{ object.grade }}</td>
+            <td>{{ object.season|default_if_none:'' }}</td>
+            <td class="col-md-2">
+                <a class="btn btn-info" style="float:left; margin-right: 10px;"
+                   href="{% url urls.edit id=object.id %}">Промени</a>
+                <form class="delete-form form-horizontal" style="float:left" object-id="{{ object.id }}"
+                      action="{% url urls.delete id=object.id %}" method="delete">
+                    {% csrf_token %}
+                    <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% include 'partials/_pagination.html' %}
+</div>

@@ -3,14 +3,12 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.http import HttpResponseNotFound
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
-from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv
+
+from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
 from ..forms.season import SeasonYearsOnly
 from ..common.pdf_renderer import render_to_pdf
 from ..forms.comission import ComissionForm
@@ -19,18 +17,33 @@ from ..models.season import Season
 from ..models.comission import Comission
 
 def all(request):
-    return render(
-        request,
-        'comissions/all.html',
-        context_instance = RequestContext(request,
-        {
-            'title': u'Комисии',
-            'year': datetime.now().year,
-            'comissions': Comission.objects.all(),
-            'upload_form': UploadForm(),
-            'season_form': SeasonYearsOnly()
+    view_info = {
+        'model': Comission,
+        'title': u'Ръководители',
+        'table_template': 'comissions/_table.html',
+    }
+
+    urls = {
+        'create': 'create_comission',
+        'edit': 'edit_comission',
+        'delete': 'delete_comission',
+        'preview': 'preview_comissions',
+    }
+
+    return abstr_all(request, urls, view_info)
+
+def get_page(request, page_num):
+    if(request.is_ajax()):
+        page = paginate(page_num, Comission)
+        html = render_to_string('comissions/_table.html', {
+            'objects': page,
+            'urls': {
+                'edit': 'edit_comission',
+                'delete': 'delete_comission',
+            },
         })
-    )
+
+        return HttpResponse(html)
 
 def edit(request, id):
     comission = Comission.objects.filter(id=id)
@@ -73,7 +86,7 @@ def delete(request, id):
 
         return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound()
+    raise Http404
 
 def upload_csv(request):
     if request.method == 'POST':

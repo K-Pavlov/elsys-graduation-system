@@ -1,0 +1,44 @@
+﻿{% load staticfiles %}
+<div id="table-replace">
+    <table id="all-table" class="table table-bordered table-condensed table-hover">
+        <tr>
+            <th class="pointer-item">Председател</th>
+            <th class="pointer-item">Членове на комисията</th>
+            <th class="pointer-item">Ученици</th>
+            <th class="pointer-item">Начален час</th>
+            <th class="pointer-item">Сезон</th>
+            <th class="ignore"></th>
+        </tr>
+        {% for object in objects %}
+        <tr id="{{ object.id }}">
+            <td>{{ object.head_of_object|default_if_none:'' }}</td>
+            <td>
+                {% if object.members_of_object.all %}
+                {% for member in object.members_of_object.all %}
+                {{ member }}<br />
+                {% endfor %}
+                {% endif %}
+            </td>
+            <td>
+                {% if object.students.all %}
+                {% for student in object.students.all %}
+                {{ student }}<br />
+                {% endfor %}
+                {% endif %}
+            </td>
+            <td>{{ object.start_time|default_if_none:'' }}</td>
+            <td>{{ object.season|default_if_none:'' }}</td>
+            <td class="col-md-2">
+                <a class="btn btn-info" style="float:left; margin-right: 10px;"
+                   href="{% url urls.edit id=object.id %}">Промени</a>
+                <form class="delete-form form-horizontal" style="float:left" object-id="{{ object.id }}"
+                      action="{% url urls.delete id=object.id %}" method="delete">
+                    {% csrf_token %}
+                    <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% include 'partials/_pagination.html' %}
+</div>

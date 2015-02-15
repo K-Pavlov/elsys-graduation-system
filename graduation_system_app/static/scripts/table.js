@@ -18,9 +18,11 @@
     }
 
     function addClick($target) {
-        var $replaceDiv = $('#table-replace');
+        var $replaceDiv = $('#table-replace'),
+            viewName = $('#create-link').attr('href').split('/')[1];
+
         $target.click(function () {
-            $.get('/mentors/page/' + $target.attr('page-number') + '/')
+            $.get('/' + viewName + '/page/' + $target.attr('page-number') + '/')
                 .then(function (data) {
                     $replaceDiv.html(data);
                     makeSortable();

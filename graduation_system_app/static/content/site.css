@@ -1,10 +1,15 @@
-﻿html, body {
+﻿html,
+body {
+    margin: 0;
+    padding: 0;
     height: 100%;
 }
 
-body {
+#wrapper {
+    min-height: 100%;
     padding-top: 50px;
     padding-bottom: 20px;
+    position: relative;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -18,6 +23,19 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.navbar.center .navbar-inner {
+    text-align: center;
+}
+
+.navbar.center .navbar-inner .nav {
+    display:inline-block;
+    float: none;
+}
+
+.navbar .dropdown-menu {
+    text-align: initial;
 }
 
 /* styles for validation helpers */

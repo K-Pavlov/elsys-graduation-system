@@ -3,29 +3,42 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.http import HttpResponseNotFound
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
-from common import create_from_form_post, create_from_form_edit
+
+from common import create_from_form_post, create_from_form_edit, paginate, abstr_all
 from ..forms.season import SeasonForm, SeasonYearsOnly
 from ..models.season import Season
 
 def all(request):
-    return render(
-        request,
-        'seasons/all.html',
-        context_instance = RequestContext(request,
-        {
-            'title': u'Сезони',
-            'year': datetime.now().year,
-            'seasons': Season.objects.all(),
-            'season_form': SeasonYearsOnly(),
+    view_info = {
+        'model': Season,
+        'title': u'Сезони',
+        'table_template': 'seasons/_table.html',
+    }
+
+    urls = {
+        'create': 'create_season',
+        'edit': 'edit_season',
+        'delete': 'delete_season',
+    }
+
+    return abstr_all(request, urls, view_info)
+
+def get_page(request, page_num):
+    if(request.is_ajax()):
+        page = paginate(page_num, Season)
+        html = render_to_string('seasons/_table.html', {
+            'objects': page,
+            'urls': {
+                'edit': 'edit_season',
+                'delete': 'delete_season',
+            },
         })
-    )
+
+        return HttpResponse(html)
 
 def edit(request, id):
     season = Season.objects.filter(id=id)
@@ -70,9 +83,7 @@ def delete(request, id):
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
+    raise Http404
 
 def change(request):
     if request.is_ajax():
@@ -92,6 +103,4 @@ def change(request):
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
+    raise Http404

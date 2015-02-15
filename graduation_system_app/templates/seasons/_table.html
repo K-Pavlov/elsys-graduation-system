@@ -1,0 +1,24 @@
+﻿{% load staticfiles %}
+<div id="table-replace">
+    <table id="all-table" class="table table-bordered table-condensed table-hover">
+        <tr>
+            <th class="pointer-item">Година</th>
+            <th class="pointer-item">Активен</th>
+            <th class="ignore"></th>
+        </tr>
+        {% for object in objects %}
+        <tr id="{{ object.id }}">
+            <td>{{ object.year }}</td>
+            <td>{{ object.is_active }}</td>
+            <td class="col-md-2">
+                <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url urls.edit id=object.id %}">Промени</a>
+                <form class="delete-form" style="float:left" object-id="{{ object.id }}" action="{% url urls.delete id=object.id %}" method="delete">
+                    {% csrf_token %}
+                    <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% include 'partials/_pagination.html' %}
+</div>

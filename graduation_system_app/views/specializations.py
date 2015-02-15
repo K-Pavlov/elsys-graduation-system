@@ -3,14 +3,11 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.http import HttpResponseNotFound
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
-from common import create_from_form_post, create_from_form_edit
+from common import create_from_form_post, create_from_form_edit, paginate, abstr_all
 from ..forms.season import SeasonYearsOnly
 from ..forms.klass import SpecializationForm
 from ..forms.file import UploadForm
@@ -18,17 +15,32 @@ from ..models.season import Season
 from ..models.specialization import Specialization
 
 def all(request):
-    return render(
-        request,
-        'specializations/all.html',
-        context_instance = RequestContext(request,
-        {
-            'title': u'Специалности',
-            'year': datetime.now().year,
-            'specializations': Specialization.objects.all(),
-            'season_form': SeasonYearsOnly(),
+    view_info = {
+        'model': Specialization,
+        'title': u'Специалности',
+        'table_template': 'specializations/_table.html',
+    }
+
+    urls = {
+        'create': 'create_specialization',
+        'edit': 'edit_specialization',
+        'delete': 'delete_specialization',
+    }
+
+    return abstr_all(request, urls, view_info)
+
+def get_page(request, page_num):
+    if(request.is_ajax()):
+        page = paginate(page_num, Specialization)
+        html = render_to_string('specializations/_table.html', {
+            'objects': page,
+            'urls': {
+                'edit': 'edit_specialization',
+                'delete': 'delete_specialization',
+            },
         })
-    )
+
+        return HttpResponse(html)
 
 def edit(request, id):
     specialization = Specialization.objects.filter(id=id)
@@ -73,6 +85,4 @@ def delete(request, id):
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
+    raise Http404

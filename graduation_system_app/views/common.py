@@ -14,12 +14,6 @@ from ..forms.season import SeasonYearsOnly
 
 def abstr_all(request, urls, view_info):
     page = paginate(1, view_info['model'])
-    urls = {
-        'create': 'create_mentor',
-        'edit': 'edit_mentor',
-        'delete': 'delete_mentor',
-        'preview': 'preview_mentors',
-    }
 
     return render(request,
         'all.html',

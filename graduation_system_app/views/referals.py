@@ -4,14 +4,11 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.http import HttpResponseNotFound
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.template import RequestContext
+from django.template.loader import render_to_string
 
-from common import create_from_form_post, create_from_form_edit
+from common import create_from_form_post, create_from_form_edit, paginate, abstr_all
 from ..forms.season import SeasonYearsOnly
 from ..forms.referal import ReferalForm
 from ..forms.file import UploadForm
@@ -19,17 +16,32 @@ from ..models.season import Season
 from ..models.referee import Referal
 
 def all(request):
-    return render(
-        request,
-        'referals/all.html',
-        context_instance = RequestContext(request,
-        {
-            'title': u'Рецензии',
-            'year': datetime.now().year,
-            'referals': Referal.objects.all(),
-            'season_form': SeasonYearsOnly(),
+    view_info = {
+        'model': Referal,
+        'title': u'Рецензии',
+        'table_template': 'referals/_table.html',
+    }
+
+    urls = {
+        'create': 'create_referal',
+        'edit': 'edit_referal',
+        'delete': 'delete_referal',
+    }
+
+    return abstr_all(request, urls, view_info)
+
+def get_page(request, page_num):
+    if(request.is_ajax()):
+        page = paginate(page_num, Referal)
+        html = render_to_string('referals/_table.html', {
+            'objects': page,
+            'urls': {
+                'edit': 'edit_referal',
+                'delete': 'delete_referal',
+            },
         })
-    )
+
+        return HttpResponse(html)
 
 def edit(request, id):
     referal = Referal.objects.filter(id=id)
@@ -74,6 +86,4 @@ def delete(request, id):
 
             return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
-    return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
+    raise Http404
