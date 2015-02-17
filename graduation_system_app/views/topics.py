@@ -9,9 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
  
 from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
-from ..forms.season import SeasonYearsOnly
-from ..forms.topic import TopicForm
-from ..forms.file import UploadForm
+from ..forms import SeasonYearsOnly, TopicForm, UploadForm
 from ..models.season import Season
 from ..models.topic import Topic
  
@@ -34,13 +32,13 @@ def all(request):
 def get_page(request, page_num):
     if(request.is_ajax()):
         page = paginate(page_num, Topic)
-        html = render_to_string('topics/_table.html', {
+        html = render_to_string('topics/_table.html',RequestContext(request, {
             'objects': page,
             'urls': {
                 'edit': 'edit_topic',
                 'delete': 'delete_topic',
             },
-        })
+        }))
 
         return HttpResponse(html)
  

@@ -8,10 +8,8 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
-from ..forms.season import SeasonYearsOnly
 from ..common.pdf_renderer import render_to_pdf
-from ..forms.student import StudentForm
-from ..forms.file import UploadForm
+from ..forms import StudentForm, UploadForm, SeasonYearsOnly
 from ..models.season import Season
 from ..models.student import Student
 
@@ -34,13 +32,13 @@ def all(request):
 def get_page(request, page_num):
     if(request.is_ajax()):
         page = paginate(page_num, Student)
-        html = render_to_string('students/_table.html', {
+        html = render_to_string('students/_table.html', RequestContext(request, {
             'objects': page,
             'urls': {
                 'edit': 'edit_student',
                 'delete': 'delete_student',
             },
-        })
+        }))
 
         return HttpResponse(html)
 

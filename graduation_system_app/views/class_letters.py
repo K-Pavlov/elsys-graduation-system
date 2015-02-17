@@ -10,9 +10,7 @@ from django.template.loader import render_to_string
 
 
 from common import create_from_form_post, create_from_form_edit, paginate, abstr_all
-from ..forms.season import SeasonYearsOnly
-from ..forms.klass import ClassLetterForm
-from ..forms.file import UploadForm
+from ..forms import SeasonYearsOnly, ClassLetterForm, UploadForm
 from ..models.season import Season
 from ..models.class_letter import ClassLetter
 

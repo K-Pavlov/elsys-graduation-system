@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 
 
 from common import create_from_form_post, create_from_form_edit, paginate, abstr_all
-from ..forms.season import SeasonForm, SeasonYearsOnly
+from ..forms import SeasonForm, SeasonYearsOnly
 from ..models.season import Season
 
 def all(request):

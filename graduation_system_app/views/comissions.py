@@ -9,10 +9,8 @@ from django.template.loader import render_to_string
 
 
 from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
-from ..forms.season import SeasonYearsOnly
+from ..forms import SeasonYearsOnly, ComissionForm, UploadForm
 from ..common.pdf_renderer import render_to_pdf
-from ..forms.comission import ComissionForm
-from ..forms.file import UploadForm
 from ..models.season import Season
 from ..models.comission import Comission
 

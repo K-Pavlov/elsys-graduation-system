@@ -9,8 +9,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
-from ..forms.file import UploadForm
-from ..forms.season import SeasonYearsOnly
+from ..forms import UploadForm, SeasonYearsOnly
 
 def abstr_all(request, urls, view_info):
     page = paginate(1, view_info['model'])
@@ -30,7 +29,7 @@ def abstr_all(request, urls, view_info):
 
 def paginate(page, model):
     model_list = model.objects.all()
-    paginator = Paginator(model_list, 4) # Show 25 contacts per page
+    paginator = Paginator(model_list, 10) # Show 25 contacts per page
     
     try: 
         page = int(page)

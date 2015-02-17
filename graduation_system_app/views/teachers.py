@@ -8,10 +8,8 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 from common import create_from_form_post, create_from_form_edit, paginate, abstr_all
-from ..forms.season import SeasonYearsOnly
 from ..common.pdf_renderer import render_to_pdf
-from ..forms.teacher import TeacherForm
-from ..forms.file import UploadForm
+from ..forms import TeacherForm, UploadForm, SeasonYearsOnly
 from ..models.season import Season
 from ..models.teacher import Teacher
 

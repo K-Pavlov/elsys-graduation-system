@@ -9,9 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
-from ..forms.season import SeasonYearsOnly
-from ..forms.mentor import MentorForm
-from ..forms.file import UploadForm
+from ..forms import SeasonYearsOnly, MentorForm, UploadForm
 from ..models.season import Season
 from ..models.mentor import Mentor
 
