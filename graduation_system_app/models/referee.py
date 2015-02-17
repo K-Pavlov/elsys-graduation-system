@@ -7,6 +7,7 @@ from django.utils.encoding import smart_bytes
 
 from common import create_mentor_referee
 from season_model import SeasonModelBase
+from deletable_model import DeletableModelBase
 from season import Season
 from firm import Firm
 from teacher import Teacher
@@ -57,7 +58,7 @@ class Referee(SeasonModelBase):
 def get_upload_path(instance, filename):
     return u"referee_%s/%s" % (instance.referee.id, filename)
 
-class Referal(SeasonModelBase):
+class Referal(DeletableModelBase):
     file = models.FileField(verbose_name='Рецензия', upload_to=get_upload_path, blank=True, null=True)
     referee = models.ForeignKey(Referee, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='referals',

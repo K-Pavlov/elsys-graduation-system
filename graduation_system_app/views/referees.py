@@ -106,11 +106,12 @@ def upload_referal(request):
                 referee = Referee.objects.get(email=email)
                 referal = Referal()
                 referal.referee = referee
+                print('Not err')
                 referal.file = form.cleaned_data['file']
                 referal.save()
                 form = UploadForm()
             except Referee.DoesNotExist:
-                pass
+                print('Err')
 
     return render(
         request,
