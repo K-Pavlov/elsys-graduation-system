@@ -2,9 +2,9 @@
 
 {% block content %}
 {% if form.is_multipart %}
-<form enctype="multipart/form-data" method="post" action="#">
+<form enctype="multipart/form-data" method="post" action="">
 {% else %}
-<form method="post" action="/{{ id }}">
+<form method="post" action="">
 {% endif %}
     {% csrf_token %}
     {% load bootstrap %}

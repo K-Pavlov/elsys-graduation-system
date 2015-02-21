@@ -16,6 +16,7 @@ from models.firm import Firm
 from models.referee import Referal
 from models.mentor import Season
 from models.topic import Topic
+from pprint import pprint
 
 STANDARD_EXCLUDE = ('id', 'is_deleted')
 
@@ -83,6 +84,7 @@ class FirmForm(ModelForm):
         exclude = STANDARD_EXCLUDE
 
 class ComissionForm(ModelForm):
+    students = forms.ModelMultipleChoiceField(Student.objects.all(), required=False)
     class Meta:
         model = Comission
         exclude = STANDARD_EXCLUDE
@@ -91,6 +93,20 @@ class ComissionForm(ModelForm):
                 'id':"date-picker"
              }, usel10n = True, bootstrap_version=3,)
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ComissionForm, self).__init__(*args, **kwargs)
+        self.fields['students'].initial = self.instance.students.all()
+        members_field = self.fields['members_of_comission']
+        members_field.widget.attrs['size'] = members_field.queryset.count()
+        pass
+
+    def save(self, commit=True):
+        instance = super(ComissionForm, self).save(commit=commit)
+        instance.students = self.cleaned_data['students'] 
+        if commit:
+            instance.save()
+        return instance
 
 class UploadForm(forms.Form):
     file  = forms.FileField()

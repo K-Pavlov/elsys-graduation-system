@@ -11,18 +11,28 @@
         </tr>
         {% for object in objects %}
         <tr id="{{ object.id }}">
-            <td>{{ object.head_of_object|default_if_none:'' }}</td>
             <td>
-                {% if object.members_of_object.all %}
-                {% for member in object.members_of_object.all %}
-                {{ member }}<br />
+                <a href="{% url 'edit_teacher' object.head_of_comission.id %}">
+                    {{ object.head_of_comission|default_if_none:'' }}
+                </a>
+            </td>
+            <td>
+                {% if object.members_of_comission.all %}
+                {% for member in object.members_of_comission.all %}
+                <a href="{% url 'edit_teacher' member.id %}">
+                    {{ member }}
+                </a>
+                <br />
                 {% endfor %}
                 {% endif %}
             </td>
             <td>
                 {% if object.students.all %}
                 {% for student in object.students.all %}
-                {{ student }}<br />
+                <a href="{% url 'edit_student' student.id %}">
+                    {{ student }}
+                </a>
+                <br />
                 {% endfor %}
                 {% endif %}
             </td>

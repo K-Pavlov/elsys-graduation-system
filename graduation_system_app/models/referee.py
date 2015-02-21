@@ -7,7 +7,7 @@ from django.utils.encoding import smart_bytes
 
 from common import create_mentor_referee
 from season_model import SeasonModelBase
-from deletable_model import DeletableModelBase
+from deletable_model import DeletableModelBase, DeletableManager
 from season import Season
 from firm import Firm
 from teacher import Teacher
