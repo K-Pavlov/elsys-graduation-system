@@ -91,7 +91,12 @@ def upload_csv(request):
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             Comission.from_csv(form.cleaned_data['file'])
-    return HttpResponseRedirect(reverse('all_comissions'))
+
+            return HttpResponse(json.dumps({
+                                    'redir': '/comissions'
+                                }))
+
+    raise Http404
 
 def preview_csv(request):
     view = {

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import smart_bytes
 
-from common import create_mentor_referee
+from mentor_referee_creator import create_mentor_referee
 from season_model import SeasonModelBase
 from deletable_model import DeletableModelBase, DeletableManager
 from season import Season

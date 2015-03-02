@@ -90,9 +90,11 @@ def upload_csv(request):
         if(request.method == 'POST'):
             stuff = list(request.POST.iterlists())
             objects = json.loads(stuff[0][0].encode('utf-8'))
-            Student.create_from_upload(objects)
+            return HttpResponse(json.dumps({
+                                    'redir': '/students'
+                                }))
 
-    return HttpResponseRedirect(reverse('all_mentors'))
+    raise Http404
 
 def preview_csv(request):
     view = {

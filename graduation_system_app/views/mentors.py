@@ -94,7 +94,11 @@ def upload_csv(request):
             objects = json.loads(stuff[0][0].encode('utf-8'))
             Mentor.create_from_upload(objects)
 
-    return HttpResponseRedirect(reverse('all_mentors'))
+            return HttpResponse(json.dumps({
+                                    'redir': '/mentors'
+                                }))
+
+    raise Http404
 
 def preview_csv(request):
     view = {

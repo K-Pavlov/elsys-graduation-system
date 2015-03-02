@@ -50,31 +50,9 @@ class Topic(SeasonModelBase):
                 except Season.DoesNotExist:
                     pass
 
-                try:
-                    fname = topic['fname']
-                    lname = topic['lname']
-                    mname = None
-                    firm = None
-                    try:
-                        mname = topic['mname']
-                        firm = topic['firm']
-                    except KeyError:
-                        pass
-  
-                    mentor_dict = {
-                        'fname': fname,
-                        'mname': mname,
-                        'lname': lname
-                    }
-
-                    if(firm):
-                        mentor_dict['firm'] = firm
-
-                    mentor = Mentor.create(mentor_dict)
-                    mentor.save()
-                    model.mentor = mentor
-                except KeyError:
-                    pass
+                mentor = Mentor.create(topic)
+                mentor.save()
+                model.mentor = mentor
 
                 try:
                     model.season = Season.objects.get(is_active=True)
