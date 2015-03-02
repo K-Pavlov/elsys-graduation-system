@@ -8,6 +8,7 @@
             <th class="pointer-item">Начален час</th>
             <th class="pointer-item">Сезон</th>
             <th class="ignore"></th>
+            <th class="ignore"></th>
         </tr>
         {% for object in objects %}
         <tr id="{{ object.id }}">
@@ -41,12 +42,15 @@
             <td class="col-md-2">
                 <a class="btn btn-info" style="float:left; margin-right: 10px;"
                    href="{% url urls.edit id=object.id %}">Промени</a>
-                <form class="delete-form form-horizontal" style="float:left; margin-right:10px" object-id="{{ object.id }}"
+                <form class="delete-form form-horizontal" style="float:left" object-id="{{ object.id }}"
                       action="{% url urls.delete id=object.id %}" method="delete">
                     {% csrf_token %}
                     <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
                 </form>
-                <a class="btn btn-info" style="float:left;" href="{% url 'comission_with_students_protocol' id=object.id %}">Протокол</a>
+            </td>
+            <td class="col-md-2">
+                <a class="btn btn-info" style="float:left; margin-bottom: 10px" href="{% url 'comission_with_students_protocol' id=object.id %}">Кратък протокол</a>
+                <a class="btn btn-info" style="float:left;" href="{% url 'comission_students_indepth_protocol' id=object.id %}">Подробен протокол</a>
             </td>
         </tr>
         {% endfor %}

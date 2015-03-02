@@ -97,6 +97,7 @@ urlpatterns = patterns('',
     # Protocols
     url(r'^protocols/all_students/$', protocols.all_students, name='all_students_protocol'),
     url(r'^protocols/comission_with_students/(?P<id>[-\w]+)/$', protocols.comission_with_students, name='comission_with_students_protocol'),
+    url(r'^protocols/comission_students_indepth/(?P<id>[-\w]+)/$', protocols.comission_students_indepth, name='comission_students_indepth_protocol'),
     # Google auth and normal login
     url(r'^login/$',
         'django.contrib.auth.views.login',
@@ -116,7 +117,10 @@ urlpatterns = patterns('',
             'next_page': '/',
         },
         name='logout'),
+    # Django auth urls
     url('', include('django.contrib.auth.urls', namespace='auth')),
-    url('', include('social.apps.django_app.urls', namespace='social')), 
+    # Python social app django urls
+    url('', include('social.apps.django_app.urls', namespace='social')),
+    # Django admin urls 
     url(r'^admin/', admin.site.urls),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

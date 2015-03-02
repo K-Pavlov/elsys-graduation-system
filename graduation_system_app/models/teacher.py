@@ -13,6 +13,7 @@ class Teacher(DeletableModelBase):
     firm = models.ForeignKey(Firm, verbose_name='Фирма', blank=True,
                             null=True, default='', related_name='teachers',
                             on_delete=models.SET_NULL,)
+
     def soft_delete(self):
         self.firm = None
         self.head_of_comission = None

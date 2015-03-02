@@ -1,0 +1,24 @@
+﻿{% extends 'protocols/comission-base.html' %}
+
+{% block content %}
+    <div id="centered-frame">
+        <p>СПИСЪК</p>
+        <p>на дипломантите, защитаващи дипломна работа на {{ date }} г.</p>
+        <div class="item-list">
+        {% for student in comission.students.all %}
+            {{ forloop.counter }}. {{ student }}
+            {% block indepth %}
+            {% endblock %}
+            <br />
+        {% endfor %}
+        </div>
+        <p>КВАЛИФИКАЦИОННА ИЗПИТНА КОМИСИЯ</p>
+        <div class="item-list">
+        {% for member in comission.members_of_comission.all %}
+            {{ forloop.counter }}. {{ member }}
+            <br />
+        {% endfor %}
+        </div>
+        <p>Защитите ще се проведат от {{ time }} в {{ comission.cabinet }} кабинет.</p>
+    </div>
+{% endblock %}

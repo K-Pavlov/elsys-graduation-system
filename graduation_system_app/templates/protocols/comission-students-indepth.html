@@ -1,0 +1,7 @@
+﻿{% extends 'protocols/comission-students.html' %}
+
+{% block indepth %}
+    <div>Тема: "{{ student.topic }}"</div>
+    <div>Научен ръководител: "{{ student.mentor }}"</div>
+    <div>Резензент: "{{ student.referee }}"</div>
+{% endblock %}
