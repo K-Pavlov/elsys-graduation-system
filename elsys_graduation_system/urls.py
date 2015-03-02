@@ -92,8 +92,6 @@ urlpatterns = patterns('',
     url(r'^comissions/edit/(?P<id>[-\w]+)/$', comissions.edit, name='edit_comission'),
     url(r'^comissions/page/(?P<page_num>[-\w]+)/$', comissions.get_page, name='get_comission_page'),
     url(r'^comissions/delete/(?P<id>[-\w]+)/$', comissions.delete, name='delete_comission'),
-    url(r'^comissions/preview/$', comissions.preview_csv, name='preview_comissions'),
-    url(r'^comissions/upload/$', comissions.upload_csv, name='upload_comissions'),
     # Protocols
     url(r'^protocols/all_students/$', protocols.all_students, name='all_students_protocol'),
     url(r'^protocols/comission_with_students/(?P<id>[-\w]+)/$', protocols.comission_with_students, name='comission_with_students_protocol'),

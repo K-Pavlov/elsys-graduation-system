@@ -13,14 +13,28 @@
         <tr id="{{ object.id }}">
             <td>{{ object.title }}</td>
             <td>{{ object.description }}</td>
-            <td>{{ object.mentor|default_if_none:'' }}</td>
-            <td>{{ object.referee|default_if_none:'' }}</td>
-            <td>{{ object.season|default_if_none:'' }}</td>
-            <td class="col-md-2">
-                <a class="btn btn-info" style="float:left; margin-right: 10px;" href="{% url urls.edit id=object.id %}">Промени</a>
+            <td>
+                {% if object.mentor %}
+                <a href="{% url 'edit_mentor' object.mentor.id %}">
+                {{ object.mentor }}
+                </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if object.referee %}
+                <a href="{% url 'edit_referee' object.referee.id %}">
+                {{ object.referee }}
+                </a>
+                {% endif %}
+            </td>
+            <td>
+                {{ object.season|default_if_none:'' }}
+            </td>
+            <td class="col-md-1">
+                <a class="btn btn-info" style="float:left; margin-bottom: 10px;" href="{% url urls.edit id=object.id %}">Променете</a>
                 <form class="delete-form" style="float:left" object-id="{{ object.id }}" action="{% url urls.delete id=object.id %}" method="delete">
                     {% csrf_token %}
-                    <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                    <input class="btn btn-info" type="submit" name="delete" value="Изтрийте" />
                 </form>
             </td>
         </tr>

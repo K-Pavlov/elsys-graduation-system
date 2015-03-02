@@ -8,7 +8,7 @@
 
 {% block content %}
 {% include table_template %}
-<a id="create-link" class="btn btn-primary" href="{% url urls.create %}">Създай</a>
+<a id="create-link" class="btn btn-primary" href="{% url urls.create %}">Създайте</a>
 {% if urls.preview %}
 <hr />
 <form id="upload_file" action="{% url urls.preview %}" enctype="multipart/form-data" method="post">

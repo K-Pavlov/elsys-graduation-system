@@ -47,7 +47,7 @@ def edit(request, id):
         return HttpResponseRedirect('/teachers/create')
     else: 
         context_data = {
-            'title': u'Промени учител',
+            'title': u'Променете учител',
             'year': datetime.now().year,
             'id': teacher[0].id,
             'season_form': SeasonYearsOnly()
@@ -60,7 +60,7 @@ def edit(request, id):
 
 def create(request):
     context_data = {
-            'title': u'Създай учител',
+            'title': u'Създайте учител',
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly()
         }

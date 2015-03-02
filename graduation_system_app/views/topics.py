@@ -48,7 +48,7 @@ def edit(request, id):
         return HttpResponseRedirect('/topics/create')
     else:
         context_data = {
-            'title': u'Промени тема',
+            'title': u'Променете тема',
             'year': datetime.now().year,
             'id': topic[0].id,
             'season_form': SeasonYearsOnly()
@@ -62,7 +62,7 @@ def edit(request, id):
 def create(request):
 
     context_data = {
-            'title': u'Създай тема',
+            'title': u'Създайте тема',
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly(),
         }

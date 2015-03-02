@@ -39,16 +39,16 @@
             </td>
             <td>{{ object.start_time|default_if_none:'' }}</td>
             <td>{{ object.season|default_if_none:'' }}</td>
-            <td class="col-md-2">
-                <a class="btn btn-info" style="float:left; margin-right: 10px;"
-                   href="{% url urls.edit id=object.id %}">Промени</a>
+            <td class="col-md-1">
+                <a class="btn btn-info" style="float:left; margin-bottom: 10px;"
+                   href="{% url urls.edit id=object.id %}">Променете</a>
                 <form class="delete-form form-horizontal" style="float:left" object-id="{{ object.id }}"
                       action="{% url urls.delete id=object.id %}" method="delete">
                     {% csrf_token %}
-                    <input class="btn btn-info" type="submit" name="delete" value="Изтрий" />
+                    <input class="btn btn-info" type="submit" name="delete" value="Изтрийте" />
                 </form>
             </td>
-            <td class="col-md-2">
+            <td class="col-md-1">
                 <a class="btn btn-info" style="float:left; margin-bottom: 10px" href="{% url 'comission_with_students_protocol' id=object.id %}">Кратък протокол</a>
                 <a class="btn btn-info" style="float:left;" href="{% url 'comission_students_indepth_protocol' id=object.id %}">Подробен протокол</a>
             </td>

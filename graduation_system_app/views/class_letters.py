@@ -17,7 +17,7 @@ from ..models.class_letter import ClassLetter
 def all(request):
     view_info = {
         'model': ClassLetter,
-        'title': u'Ръководители',
+        'title': u'Паралелки',
         'table_template': 'class_letters/_table.html',
     }
 
@@ -48,7 +48,7 @@ def edit(request, id):
         return HttpResponseRedirect('/class_letters/create')
     else: 
         context_data = {
-            'title': u'Промени паралелка',
+            'title': u'Променете паралелка',
             'year': datetime.now().year,
             'id': class_letter[0].id,
             'season_form': SeasonYearsOnly(),
@@ -62,7 +62,7 @@ def edit(request, id):
 
 def create(request):
     context_data = {
-            'title': u'Създай паралелка',
+            'title': u'Създайте паралелка',
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly(),
         }

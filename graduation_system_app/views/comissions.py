@@ -17,7 +17,7 @@ from ..models.comission import Comission
 def all(request):
     view_info = {
         'model': Comission,
-        'title': u'Ръководители',
+        'title': u'Комисии',
         'table_template': 'comissions/_table.html',
     }
 
@@ -25,7 +25,6 @@ def all(request):
         'create': 'create_comission',
         'edit': 'edit_comission',
         'delete': 'delete_comission',
-        'preview': 'preview_comissions',
     }
 
     return abstr_all(request, urls, view_info)
@@ -49,7 +48,7 @@ def edit(request, id):
         return HttpResponseRedirect('/comissions/create')
     else: 
         context_data = {
-            'title': u'Промени комисия',
+            'title': u'Променете комисия',
             'year': datetime.now().year,
             'id': comission[0].id,
             'season_form': SeasonYearsOnly()
@@ -62,7 +61,7 @@ def edit(request, id):
 
 def create(request):
     context_data = {
-            'title': u'Създай комисия',
+            'title': u'Създайте комисия',
             'year': datetime.now().year,
             'season_form': SeasonYearsOnly()
         }
@@ -85,34 +84,4 @@ def delete(request, id):
         return HttpResponse(json.dumps('Success'), content_type = "application/json")
 
     raise Http404
-
-def upload_csv(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            Comission.from_csv(form.cleaned_data['file'])
-
-            return HttpResponse(json.dumps({
-                                    'redir': '/comissions'
-                                }))
-
-    raise Http404
-
-def preview_csv(request):
-    view = {
-        'title': 'Ръководители',
-        'name': 'mentors',
-        'model': Mentor,
-    }
-
-    choices = [get_pair('Фирма', 'firm'), get_pair('Име', 'fname'),
-               get_pair('Презиме', 'mname'), get_pair('Фамилия', 'lname')]
-
-    return asbtr_preview_csv(request, view, choices)
-
-def generate_protocol(request):
-    context = {
-        'comissions': Comission.objects.all()
-    }
-    return render_to_pdf('comissions/comissions_table.html', context)
    
