@@ -1,0 +1,80 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title></title>
+    <style>
+        @page {
+            size: a4 portrait;
+            margin-top:7%;
+            @frame year-frame {
+                margin-top: 5%;
+                -pdf-frame-content: year-frame;
+            }
+        }
+
+        #year-frame{
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        @font-face {
+            font-family: 'DejaVuSansMono';
+            src: url('{{ path }}');
+        }
+
+        html, body {
+            font-size: 12pt;
+            font-family: 'DejaVuSansMono';
+        }
+
+        table {
+            border: 1px solid #666666;
+            border-collapse: collapse;
+            border-color: #ccc;
+        }
+
+        td, th {
+            border: 1px solid #666666;
+            font-size: 11px;
+            line-height: 13px;
+            border-bottom: 1px solid #666666;
+            vertical-align: top;
+            padding: 5px;
+            font-family: "DejaVuSansMono";
+        }
+    </style>
+</head>
+{% load staticfiles %}
+<body style="margin:0; padding:0;">
+    <div id="year-frame">
+        Дипломанти випуск {{ year }} г.
+    </div>
+    <table id="student-table">
+        <tr>
+            <th><b>Клас</b></th>
+            <th><b>Проф</b></th>
+            <th><b>Име</b></th>
+            <th><b>Тема</b></th>
+            <th><b>Научен ръководител</b></th>
+            <th><b>Рецензент</b></th>
+            <th><b>Дата</b></th>
+            <th><b>Пр №</b></th>
+            <th><b>Оценка</b></th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td width="5%">XII{{ student.class_letter|default_if_none:'' }}</td>
+            <td width="5%">{{ student.specialization|default_if_none:'' }}</td>
+            <td width="15%">{{ student }}</td>
+            <td width="25%">{{ student.topic|default_if_none:'' }}</td>
+            <td width="15%">{{ student.mentor|default_if_none:'' }}</td>
+            <td width="15%">{{ student.referee|default_if_none:'' }}</td>
+            <td width="10%">{{ student.comission.start_time|default_if_none:''|date:'Y-m-d' }}</td>
+            <td width="5%">0</td>
+            <td width="5%">{{ student.grade }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {#<div id="footerContent"><pdf:pagenumber></div>#}
+</body>
+</html>

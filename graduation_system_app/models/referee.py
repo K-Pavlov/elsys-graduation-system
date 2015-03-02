@@ -54,6 +54,7 @@ class Referee(SeasonModelBase):
 
     class Meta:
         app_label = "graduation_system_app"
+        db_table = "referee"
 
 def get_upload_path(instance, filename):
     return u"referee_%s/%s" % (instance.referee.id, filename)
@@ -66,3 +67,4 @@ class Referal(DeletableModelBase):
 
     class Meta:
         app_label = "graduation_system_app"
+        db_table = "referal"

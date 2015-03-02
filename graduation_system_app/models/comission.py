@@ -74,3 +74,4 @@ class Comission(SeasonModelBase):
 
     class Meta:
         app_label = "graduation_system_app"
+        db_table = "comission"

@@ -9,7 +9,7 @@ from django.conf.urls.static import static
 
 from graduation_system_app.forms import BootstrapAuthenticationForm
 from graduation_system_app.views import home, students, topics,  specializations 
-from graduation_system_app.views import mentors, seasons, referees, referals
+from graduation_system_app.views import mentors, seasons, referees, referals, protocols
 from graduation_system_app.views import class_letters, teachers, comissions, firms
  
 admin.autodiscover()
@@ -24,7 +24,6 @@ urlpatterns = patterns('',
     url(r'^students/delete/(?P<id>[-\w]+)/$', students.delete, name='delete_student'),
     url(r'^students/upload/$', students.upload_csv, name='upload_students'),
     url(r'^students/preview/$', students.preview_csv, name='preview_students'),
-    url(r'^students/generate_protocol/$', students.generate_protocol, name='generate_individual_protocol'),
     # Topics
     url(r'^topics/$', topics.all, name='all_topics'),
     url(r'^topics/create/$', topics.create, name='create_topic'),
@@ -95,6 +94,9 @@ urlpatterns = patterns('',
     url(r'^comissions/delete/(?P<id>[-\w]+)/$', comissions.delete, name='delete_comission'),
     url(r'^comissions/preview/$', comissions.preview_csv, name='preview_comissions'),
     url(r'^comissions/upload/$', comissions.upload_csv, name='upload_comissions'),
+    # Protocols
+    url(r'^protocols/all_students/$', protocols.all_students, name='all_students_protocol'),
+    url(r'^protocols/comission_with_students/(?P<id>[-\w]+)/$', protocols.comission_with_students, name='comission_with_students_protocol'),
     # Google auth and normal login
     url(r'^login/$',
         'django.contrib.auth.views.login',

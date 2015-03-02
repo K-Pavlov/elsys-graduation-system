@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#coding: utf-8
+
 import os 
 import cStringIO as StringIO
 import ho.pisa as pisa

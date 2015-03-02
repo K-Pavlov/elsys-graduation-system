@@ -18,3 +18,4 @@ class Firm(DeletableModelBase):
 
     class Meta:
         app_label = "graduation_system_app"
+        db_table = "firm"

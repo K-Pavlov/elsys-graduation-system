@@ -156,6 +156,7 @@ class Student(SeasonModelBase):
 
     class Meta:
         app_label = "graduation_system_app"
+        db_table = "student"
 
 def check_names(item_dict, fname, mname, lname):
     try:

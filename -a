@@ -1,0 +1,30 @@
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Bold Not-Rotated 8", falling back to "Sans Bold Not-Rotated 8", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Italic Not-Rotated 8", falling back to "Sans Italic Not-Rotated 8", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Not-Rotated 8", falling back to "Sans Not-Rotated 8", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Bold Not-Rotated 6.666015625", falling back to "Sans Bold Not-Rotated 6.666015625", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Italic Not-Rotated 6.666015625", falling back to "Sans Italic Not-Rotated 6.666015625", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica ItalicBold Not-Rotated 6.666015625", falling back to "Sans Not-Rotated 6.666015625", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Not-Rotated 6.666015625", falling back to "Sans Not-Rotated 6.666015625", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica ItalicBold Not-Rotated 8", falling back to "Sans Not-Rotated 8", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Bold Not-Rotated 5.5546875", falling back to "Sans Bold Not-Rotated 5.5546875", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Italic Not-Rotated 5.5546875", falling back to "Sans Italic Not-Rotated 5.5546875", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica ItalicBold Not-Rotated 5.5546875", falling back to "Sans Not-Rotated 5.5546875", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Not-Rotated 5.5546875", falling back to "Sans Not-Rotated 5.5546875", expect ugly output.
+
+(dot.exe:7344): Pango-WARNING **: couldn't load font "Helvetica Bold Not-Rotated 12", falling back to "Sans Bold Not-Rotated 12", expect ugly output.
+Error - pango_parse_markup: Error on line 1 char 23: '<' is not a valid name 
+Error - pango_parse_markup: Error on line 1 char 28: '<' is not a valid name 
+Error - pango_parse_markup: Error on line 1 char 28: '<' is not a valid name 
+

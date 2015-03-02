@@ -18,3 +18,4 @@ class ClassLetter(DeletableModelBase):
     
     class Meta:
         app_label = "graduation_system_app"
+        db_table = "class_letter"

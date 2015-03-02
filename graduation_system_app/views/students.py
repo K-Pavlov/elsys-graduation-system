@@ -114,9 +114,3 @@ def preview_csv(request):
                get_pair('Фирма на ръководител', 'firm'),]
 
     return asbtr_preview_csv(request, view, choices)
-
-def generate_protocol(request):
-    context = {
-        'students': Student.objects.all()
-    }
-    return render_to_pdf('students/students_table.html', context)

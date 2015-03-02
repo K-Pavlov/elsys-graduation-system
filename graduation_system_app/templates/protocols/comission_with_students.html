@@ -1,0 +1,73 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title></title>
+        <style>
+            @page {
+                size: a4 portrait;
+                margin-top:7%;
+                @frame year-frame {
+                    margin-top: 5%;
+                    -pdf-frame-content: year-frame;
+                }
+            }
+
+            #centered-frame {
+                text-align: center;
+            }
+
+            .item-list {
+                text-align: justify;
+                position: absolute;
+                margin-left: 250px;
+            }
+        
+            @font-face {
+                font-family: 'DejaVuSansMono';
+                src: url('{{ path }}');
+            }
+
+            html, body {
+                font-size: 12pt;
+                font-family: 'DejaVuSansMono';
+            }
+
+            table {
+                border: 1px solid #666666;
+                border-collapse: collapse;
+                border-color: #ccc;
+            }
+
+            td, th {
+                border: 1px solid #666666;
+                font-size: 11px;
+                line-height: 13px;
+                border-bottom: 1px solid #666666;
+                vertical-align: top;
+                padding: 5px;
+                font-family: "DejaVuSansMono";
+            }
+        </style>
+    </head>
+    {% load staticfiles %}
+    <body style="margin:0; padding:0;">
+        <div id="centered-frame">
+            <p>СПИСЪК</p>
+            <p>на дипломантите, защитаващи дипломна работа на {{ date }} г.</p>
+            <div class="item-list">
+            {% for student in comission.students.all %}
+                {{ forloop.counter }}. {{ student }}
+                <br />
+            {% endfor %}
+            </div>
+            <p>КВАЛИФИКАЦИОННА ИЗПИТНА КОМИСИЯ</p>
+            <div class="item-list">
+            {% for member in comission.members_of_comission.all %}
+                {{ forloop.counter }}. {{ member }}
+                <br />
+            {% endfor %}
+            </div>
+            <p>Защитите ще се проведат от {{ time }} в {{ comission.cabinet }} кабинет.</p>
+        </div>
+    </body>
+</html>

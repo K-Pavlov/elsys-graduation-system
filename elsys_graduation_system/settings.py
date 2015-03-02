@@ -92,7 +92,9 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+USE_L10N = False
+DATE_FORMAT = 'd.m.Y'
+DATETIME_FORMAT = 'd.m.Y H:i'
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -139,8 +141,7 @@ TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
 
-MIDDLEWARE_CLASSES = ('corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE_CLASSES = ('django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -162,15 +163,13 @@ INSTALLED_APPS = ('django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'dajaxice',
-    'dajax',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'graduation_system_app',
     'django_admin_bootstrapped',
     'django.contrib.admin',
     'bootstrapform',
-    'corsheaders',
     'social.apps.django_app.default',
     'south',
 )
@@ -240,7 +239,7 @@ from graduation_system_app.models.referee import Referee
 all_mails = [x for x in User.objects.values_list('email', flat=True) if x]
 all_mails += [x for x in Referee.objects.values_list('email', flat=True) if x]
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = list(OrderedDict.fromkeys(all_mails))
-print SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS
+
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',

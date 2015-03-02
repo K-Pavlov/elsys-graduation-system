@@ -96,3 +96,4 @@ class Topic(SeasonModelBase):
  
     class Meta:
         app_label = "graduation_system_app"
+        db_table = "topic"
