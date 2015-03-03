@@ -177,7 +177,7 @@ def preview_csv(request):
                get_pair('Име', 'fname'),
                get_pair('Презиме', 'mname'),
                get_pair('Фамилия', 'lname'),
-               get_pair('Имайл', 'email'),
-               get_pair('Фирма', 'firm'),]
+               get_pair('Фирма', 'firm'),
+               get_pair('Имейл', 'email'),]
 
     return asbtr_preview_csv(request, view, choices)

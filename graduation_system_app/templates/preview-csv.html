@@ -21,7 +21,7 @@
     <tr>
         {% for header in headers %}
         <td>
-            <select class="choosen-data-type" id="select-{{ forloop.counter0 }}">
+            <select class="choosen-data-type form-control" id="select-{{ forloop.counter0 }}">
             {% for choice in choices %}
                 <option value="{{ choice.value }}"> {{ choice.name }}</option>
             {% endfor %}
@@ -30,7 +30,7 @@
         {% endfor %}
     </tr>
 </table>
-<button id="send-button" view-name="{{ view_name }}"class="btn btn-success"></button>
+<button id="send-button" view-name="{{ view_name }}"class="btn btn-success">Запишете</button>
 {% endblock %}
 
 {% load staticfiles %}
