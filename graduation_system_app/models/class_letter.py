@@ -10,7 +10,7 @@ class ClassLetter(DeletableModelBase):
     def soft_delete(self):
         self.students.clear()
 
-        return super(ClassLetter, self).delete()
+        return super(ClassLetter, self).soft_delete()
 
     def __str__(self):
         string = u"%s" % (self.letter)

@@ -21,7 +21,7 @@ class Referee(SeasonModelBase):
         self.topics.clear()
         self.students.clear()
 
-        return super(Referee, self).clean()
+        return super(Referee, self).soft_delete
 
     @staticmethod
     def create_from_upload(objects):
@@ -61,7 +61,7 @@ def get_upload_path(instance, filename):
 
 class Referal(DeletableModelBase):
     file = models.FileField(verbose_name='Рецензия', upload_to=get_upload_path, blank=True, null=True)
-    referee = models.ForeignKey(Referee, verbose_name='Учител', blank=True,
+    referee = models.ForeignKey(Referee, verbose_name='Рецензент', blank=True,
                             null=True, default='', related_name='referals',
                             on_delete=models.SET_NULL,)
 

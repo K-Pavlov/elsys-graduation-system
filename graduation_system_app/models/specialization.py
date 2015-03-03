@@ -10,7 +10,7 @@ class Specialization(DeletableModelBase):
     def soft_delete(self):
         self.students.clear()
 
-        return super(Specialization, self).delete()
+        return super(Specialization, self).soft_delete()
 
     def __str__(self):
         string = u"%s" % (self.name)

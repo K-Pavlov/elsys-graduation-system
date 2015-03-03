@@ -49,7 +49,7 @@ class Student(SeasonModelBase):
         self.specialization = None
         self.class_letter = None
 
-        return super(Student, self).delete()
+        return super(Student, self).soft_delete()
 
     def __str__(self):
             return smart_bytes(u"%s %s %s" % (self.first_name, self.middle_name, self.last_name))

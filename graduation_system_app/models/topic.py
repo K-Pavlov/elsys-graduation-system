@@ -26,7 +26,7 @@ class Topic(SeasonModelBase):
         self.mentor = None
         self.referee = None
 
-        return super(Topic, self).delete()
+        return super(Topic, self).soft_delete()
 
     @staticmethod
     def create(objects):

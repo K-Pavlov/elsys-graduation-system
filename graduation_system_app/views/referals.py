@@ -43,6 +43,7 @@ def get_page(request, page_num):
 
 def edit(request, id):
     referal = Referal.objects.filter(id=id)
+
     if not id or not referal.exists():
         return HttpResponseRedirect('/referals/create')
     else: 

@@ -6,6 +6,7 @@
             <th class="pointer-item">Презиме</th>
             <th class="pointer-item">Фамилия</th>
             <th class="pointer-item">Клас</th>
+            <th class="pointer-item">Проф</th>
             <th class="pointer-item">Тема</th>
             <th class="pointer-item">Ръководител</th>
             <th class="pointer-item">Рецензент</th>
@@ -19,7 +20,8 @@
             <td>{{ object.first_name }}</td>
             <td>{{ object.middle_name }}</td>
             <td>{{ object.last_name }}</td>
-            <td>{{ object.klass|default_if_none:'' }}</td>
+            <td>{{ object.class_letter|default_if_none:'' }}</td>
+            <td>{{ object.specialization|default_if_none:'' }}</td>
             <td>{{ object.topic|default_if_none:'' }}</td>
             <td>{{ object.mentor|default_if_none:'' }}</td>
             <td>{{ object.referee|default_if_none:'' }}</td>
@@ -39,5 +41,5 @@
         {% endfor %}
     </table>
     {% include 'partials/_pagination.html' %}
-    <a class="btn btn-info" href="{% url 'all_students_protocol' %}">Генериране протокол за всички ученици</a>
+    <a style="margin-bottom: 15px"class="btn btn-info" href="{% url 'all_students_protocol' %}">Генериране протокол за всички ученици</a>
 </div>

@@ -16,12 +16,9 @@ class Teacher(DeletableModelBase):
 
     def soft_delete(self):
         self.firm = None
-        self.head_of_comission = None
-        self.mentors.clear()
-        self.referees.clear()
         self.members_of_comission.clear()
 
-        return super(Teacher, self).delete()
+        return super(Teacher, self).soft_delete()
 
     def __str__(self):
         string = u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)

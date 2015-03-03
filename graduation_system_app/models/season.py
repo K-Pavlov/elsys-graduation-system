@@ -19,7 +19,7 @@ class Season(DeletableModelBase):
         self.mentor_set.clear()
         self.comission_set.clear()
 
-        return super(Season, self).delete()
+        return super(Season, self).soft_delete()
 
     def save(self, *args, **kwargs):
         if self.is_active:

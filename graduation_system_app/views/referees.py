@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
-from ..forms import SeasonYearsOnly, RefereeForm, UploadForm
+from ..forms import SeasonYearsOnly, RefereeForm, UploadForm, TeacherForm
 from ..models.season import Season
 from ..models.referee import Referee, Referal
 
@@ -42,35 +42,63 @@ def get_page(request, page_num):
 
         return HttpResponse(html)
 
-def edit(request, id): 
+def edit(request, id):
     referee = Referee.objects.filter(id=id)
-    if not id or not referee.exists():
+    if(not id or not referee.exists()):
         return HttpResponseRedirect('/referees/create')
     else: 
         context_data = {
-            'title': u'Променете рецензент',
+            'title': u'Променете ръководител',
             'year': datetime.now().year,
             'id': referee[0].id,
-            'season_form': SeasonYearsOnly()
-        }
-
-        return create_from_form_edit(request, RefereeForm, 
-                            'all_referees', 
-                            'edit.html',
-                            context_data,
-                            referee[0])
-
-def create(request):
-    context_data = {
-            'title': u'Създайте рецензент',
-            'year': datetime.now().year,
             'season_form': SeasonYearsOnly(),
         }
 
-    return create_from_form_post(request, RefereeForm, 
-                            'all_referees', 
-                            'create.html',
-                            context_data)
+    referee = referee[0]
+    if(request.method == 'POST'):
+        referee_form = RefereeForm(request.POST, instance=referee)
+        teacher_form = TeacherForm(request.POST, instance=referee.teacher)
+        if(referee_form.is_valid() and teacher_form.is_valid()):
+            referee = referee_form.save()
+            teacher = teacher_form.save()
+            return HttpResponseRedirect(reverse('all_referees'))
+    else:
+        referee_form = RefereeForm(instance=referee)
+        teacher_form = TeacherForm(instance=referee.teacher)
+
+    context_data['referee_form'] = referee_form
+    context_data['teacher_form'] = teacher_form
+    return render(request,
+        'referees/edit.html',
+        context_instance = RequestContext(request, context_data))
+
+def create(request):
+    context_data = {
+        'title': u'Създайте рецензент',
+        'year': datetime.now().year,
+        'season_form': SeasonYearsOnly(),
+    }
+
+    if request.method == 'POST':
+        referee_form = RefereeForm(request.POST)
+        teacher_form = TeacherForm(request.POST)
+        if(referee_form.is_valid() and teacher_form.is_valid()):
+            referee = referee_form.save(commit=False)
+            teacher = teacher_form.save()
+            referee.teacher = teacher
+            referee.save()
+
+            return HttpResponseRedirect(reverse('all_referees'))
+    else:
+        referee_form = RefereeForm()
+        teacher_form = TeacherForm()
+
+    context_data['referee_form'] = referee_form
+    context_data['teacher_form'] = teacher_form
+
+    return render(request,
+        'referees/create.html',
+        context_instance = RequestContext(request, context_data))
 
 def delete(request, id):
     if request.is_ajax():
@@ -107,9 +135,12 @@ def upload_referal(request):
             email = request.user.email
             try:
                 referee = Referee.objects.get(email=email)
-                referal = Referal()
-                referal.referee = referee
-                print('Not err')
+                try:
+                    referal = Referal.objects.get(referee=referee)
+                except Referal.DoesNotExist:
+                    referal = Referal()
+                    referal.referee = referee
+
                 referal.file = form.cleaned_data['file']
                 referal.save()
                 form = UploadForm()

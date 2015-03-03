@@ -1,0 +1,12 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+    <form method="post" action="">
+        {% csrf_token %}
+        {% load bootstrap %}
+
+        {{ mentor_form|bootstrap }}
+        {{ teacher_form|bootstrap }}
+        <input class="btn btn-info" type="submit" value="Създайте"/>
+    </form>
+{% endblock %}

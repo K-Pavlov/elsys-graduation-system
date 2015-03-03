@@ -16,7 +16,6 @@ from models.firm import Firm
 from models.referee import Referal
 from models.mentor import Season
 from models.topic import Topic
-from pprint import pprint
 
 STANDARD_EXCLUDE = ('id', 'is_deleted')
 
@@ -24,7 +23,6 @@ class TopicForm(ModelForm):
     class Meta:
         model = Topic
         exclude = STANDARD_EXCLUDE
-
 
 class TeacherForm(ModelForm):
     class Meta:
@@ -56,7 +54,7 @@ class SeasonYearsOnly(forms.Form):
 class RefereeForm(ModelForm):
     class Meta:
         model = Referee
-        exclude = STANDARD_EXCLUDE
+        exclude = ('id', 'is_deleted', 'teacher')
 
 class ReferalForm(ModelForm):
     class Meta:
@@ -66,7 +64,7 @@ class ReferalForm(ModelForm):
 class MentorForm(ModelForm):
     class Meta:
         model = Mentor
-        exclude = STANDARD_EXCLUDE
+        exclude = ('id', 'is_deleted', 'teacher')
 
 class ClassLetterForm(ModelForm):
     class Meta:

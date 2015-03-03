@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 from common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
-from ..forms import SeasonYearsOnly, MentorForm, UploadForm
+from ..forms import SeasonYearsOnly, MentorForm, UploadForm, TeacherForm
 from ..models.season import Season
 from ..models.mentor import Mentor
 
@@ -44,7 +44,7 @@ def get_page(request, page_num):
 
 def edit(request, id):
     mentor = Mentor.objects.filter(id=id)
-    if not id or not mentor.exists():
+    if(not id or not mentor.exists()):
         return HttpResponseRedirect('/mentors/create')
     else: 
         context_data = {
@@ -54,11 +54,24 @@ def edit(request, id):
             'season_form': SeasonYearsOnly(),
         }
 
-        return create_from_form_edit(request, MentorForm, 
-                            'all_mentors', 
-                            'edit.html',
-                            context_data,
-                            mentor[0])
+    mentor = mentor[0]
+    if(request.method == 'POST'):
+        mentor_form = MentorForm(request.POST, instance=mentor)
+        teacher_form = TeacherForm(request.POST, instance=mentor.teacher)
+        if(mentor_form.is_valid() and teacher_form.is_valid()):
+            mentor = mentor_form.save()
+            teacher = teacher_form.save()
+            return HttpResponseRedirect(reverse('all_mentors'))
+    else:
+        mentor_form = MentorForm(instance=mentor)
+        teacher_form = TeacherForm(instance=mentor.teacher)
+
+    context_data['mentor_form'] = mentor_form
+    context_data['teacher_form'] = teacher_form
+
+    return render(request,
+        'mentors/edit.html',
+        context_instance = RequestContext(request, context_data))
 
 def create(request):
     context_data = {
@@ -67,10 +80,26 @@ def create(request):
         'season_form': SeasonYearsOnly(),
     }
 
-    return create_from_form_post(request, MentorForm, 
-                            'all_mentors', 
-                            'create.html',
-                            context_data)
+    if request.method == 'POST':
+        mentor_form = MentorForm(request.POST)
+        teacher_form = TeacherForm(request.POST)
+        if(mentor_form.is_valid() and teacher_form.is_valid()):
+            mentor = mentor_form.save(commit=False)
+            teacher = teacher_form.save()
+            mentor.teacher = teacher
+            mentor.save()
+
+            return HttpResponseRedirect(reverse('all_mentors'))
+    else:
+        mentor_form = MentorForm()
+        teacher_form = TeacherForm()
+
+    context_data['mentor_form'] = mentor_form
+    context_data['teacher_form'] = teacher_form
+
+    return render(request,
+        'mentors/create.html',
+        context_instance = RequestContext(request, context_data))
 
 def delete(request, id):
     if(request.is_ajax()):

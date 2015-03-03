@@ -22,7 +22,7 @@ class Comission(SeasonModelBase):
         self.students.clear()
         self.members_of_comission.clear()
 
-        return super(Comission, self).delete()
+        return super(Comission, self).soft_delete()
 
     @staticmethod
     def from_csv(csvfile):

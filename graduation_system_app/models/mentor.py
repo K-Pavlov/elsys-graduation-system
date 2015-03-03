@@ -18,7 +18,7 @@ class Mentor(SeasonModelBase):
         self.students.clear()
         self.topics.clear()
 
-        return super(Mentor, self).delete()
+        return super(Mentor, self).soft_delete()
 
     @staticmethod
     def create_from_upload(objects):

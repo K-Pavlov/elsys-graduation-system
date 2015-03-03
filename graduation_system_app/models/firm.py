@@ -11,7 +11,7 @@ class Firm(DeletableModelBase):
         self.mentors.clear()
         self.referees.clear()
 
-        return super(Firm, self).delete()
+        return super(Firm, self).soft_delete()
 
     def __str__(self):
         return smart_bytes(self.name)
