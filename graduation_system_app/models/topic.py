@@ -29,7 +29,7 @@ class Topic(SeasonModelBase):
         return super(Topic, self).soft_delete()
 
     @staticmethod
-    def create(objects):
+    def create_from_upload(objects):
         i = 0
         created_model = []
 
@@ -51,8 +51,10 @@ class Topic(SeasonModelBase):
                     pass
 
                 mentor = Mentor.create(topic)
-                mentor.save()
-                model.mentor = mentor
+
+                if(mentor):
+                    mentor.save()
+                    model.mentor = mentor
 
                 try:
                     model.season = Season.objects.get(is_active=True)

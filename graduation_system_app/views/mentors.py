@@ -119,8 +119,15 @@ def delete(request, id):
 def upload_csv(request):
     if(request.is_ajax()):
         if(request.method == 'POST'):
-            stuff = list(request.POST.iterlists())
-            objects = json.loads(stuff[0][0].encode('utf-8'))
+            post_as_list = list(request.POST.iterlists())
+            # Elements in the list are tuples 
+            mentor_tuple = post_as_list[0]
+
+            # So we need need the first argument of the tuple
+            # which holds our json data
+            mentor_data = mentor_tuple[0]
+
+            objects = json.loads(mentor_data.encode('utf-8'))
             Mentor.create_from_upload(objects)
 
             return HttpResponse(json.dumps({

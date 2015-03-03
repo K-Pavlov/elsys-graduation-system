@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import smart_bytes
 
-from mentor_referee_creator import create_mentor_referee
+from model_creator import create_mentor_referee
 from season_model import SeasonModelBase
 from deletable_model import DeletableModelBase, DeletableManager
 from season import Season
@@ -21,7 +21,7 @@ class Referee(SeasonModelBase):
         self.topics.clear()
         self.students.clear()
 
-        return super(Referee, self).soft_delete
+        return super(Referee, self).soft_delete()
 
     @staticmethod
     def create_from_upload(objects):
@@ -56,14 +56,18 @@ class Referee(SeasonModelBase):
         app_label = "graduation_system_app"
         db_table = "referee"
 
-def get_upload_path(instance, filename):
+def _get_upload_path(instance, filename):
     return u"referee_%s/%s" % (instance.referee.id, filename)
 
 class Referal(DeletableModelBase):
-    file = models.FileField(verbose_name='Рецензия', upload_to=get_upload_path, blank=True, null=True)
+    file = models.FileField(verbose_name='Рецензия', upload_to=_get_upload_path, blank=True, null=True)
     referee = models.ForeignKey(Referee, verbose_name='Рецензент', blank=True,
                             null=True, default='', related_name='referals',
                             on_delete=models.SET_NULL,)
+    def soft_delete(self):
+        self.referee = None
+
+        return super(Referal, self).soft_delete()
 
     class Meta:
         app_label = "graduation_system_app"

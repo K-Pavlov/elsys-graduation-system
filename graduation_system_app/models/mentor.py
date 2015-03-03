@@ -4,7 +4,7 @@ import csv
 from django.db import models
 from django.utils.encoding import smart_bytes
 
-from mentor_referee_creator import create_mentor_referee
+from model_creator import create_mentor_referee
 from season_model import SeasonModelBase
 from season import Season
 from firm import Firm

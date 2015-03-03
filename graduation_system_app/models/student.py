@@ -55,12 +55,107 @@ class Student(SeasonModelBase):
             return smart_bytes(u"%s %s %s" % (self.first_name, self.middle_name, self.last_name))
 
     @staticmethod
+    def __check_names(item_dict, fname, mname, lname):
+        try:
+            first_name = item_dict[fname]
+            if(not first_name): 
+                return False
+        except KeyError:
+            return False
+        try:
+            middle_name = item_dict[mname]
+        except KeyError:
+            middle_name = ''
+        try: 
+            last_name = item_dict[lname]
+            if(not last_name):
+                return False
+        except KeyError:
+            return False
+
+        return {
+            'fname': first_name,
+            'mname': middle_name,
+            'lname': last_name,
+        }
+
+    @staticmethod
+    def __get_class_letter_spec(model, student_dict):
+        try:
+            letter = student_dict['class-letter']
+            try:
+                model.class_letter = ClassLetter.objects.get(letter=letter)
+            except ClassLetter.DoesNotExist:
+                class_letter = ClassLetter()
+                class_letter.letter = letter
+                class_letter.save()
+                model.class_letter = class_letter
+        except KeyError:
+            pass
+        
+        try:
+            spec = student_dict['spec']
+            try:
+                model.specialization = Specialization.objects.get(name=spec)
+            except Specialization.DoesNotExist:
+                specialization = Specialization()
+                specialization.name = spec
+                specialization.save()
+                model.specialization = specialization
+        except KeyError:
+            pass
+
+    @staticmethod
+    def __get_mentor(model, student_dict):
+        try:
+            fname = student_dict['fname-mentor']
+            lname = student_dict['lname-mentor']
+            mname = None
+            firm = None
+            try:
+                mname = student_dict['mname-mentor']
+                firm = student_dict['firm']
+            except KeyError:
+                pass
+        
+            mentor_dict = {
+                'fname': fname,
+                'mname': mname,
+                'lname': lname
+            }
+        
+            if(firm):
+                mentor_dict['firm'] = firm
+        
+            mentor = Mentor.create(mentor_dict)
+            mentor.save()
+            model.mentor = mentor
+        except KeyError:
+            pass
+
+    @staticmethod
+    def __get_topic(model, student_dict):
+        try:
+            topic = student_dict['topic']
+            try:
+                model.topic = Topic.objects.get(title=topic)
+                try:
+                    model.topic.mentor = model.mentor
+                    model.topic.save()
+                except Mentor.DoesNotExist:
+                    pass
+            except Topic.DoesNotExist:
+                pass
+        except KeyError:
+            pass
+
+    @staticmethod
     def create_from_upload(objects):
         i = 0
         created_model = []
-
+        print 'wtf'
         for student_dict in objects:
-            student_names = check_names(student_dict, 'fname', 'mname', 'lname')
+            student_names = Student.__check_names(student_dict, 'fname', 'mname', 'lname')
             if(student_names):
                 first_name = student_names['fname']
                 middle_name = student_names['mname']
@@ -75,69 +170,9 @@ class Student(SeasonModelBase):
                 model.middle_name = middle_name
                 model.last_name = last_name
                 
-                try:
-                    letter = student_dict['class-letter']
-                    try:
-                        model.class_letter = ClassLetter.objects.get(letter=letter)
-                    except ClassLetter.DoesNotExist:
-                        class_letter = ClassLetter()
-                        class_letter.letter = letter
-                        class_letter.save()
-                        model.class_letter = class_letter
-                except KeyError:
-                    pass
-
-                try:
-                    spec = student_dict['spec']
-                    try:
-                        model.specialization = Specialization.objects.get(name=spec)
-                    except Specialization.DoesNotExist:
-                        specialization = Specialization()
-                        specialization.name = spec
-                        specialization.save()
-                        model.specialization = specialization
-                except KeyError:
-                    pass
-
-                try:
-                    fname = student_dict['fname-mentor']
-                    lname = student_dict['lname-mentor']
-                    mname = None
-                    firm = None
-                    try:
-                        mname = student_dict['mname-mentor']
-                        firm = student_dict['firm']
-                    except KeyError:
-                        pass
-  
-                    mentor_dict = {
-                        'fname': fname,
-                        'mname': mname,
-                        'lname': lname
-                    }
-
-                    if(firm):
-                        mentor_dict['firm'] = firm
-
-                    mentor = Mentor.create(mentor_dict)
-                    mentor.save()
-                    model.mentor = mentor
-                except KeyError:
-                    pass
-
-                try:
-                    topic = student_dict['topic']
-                    try:
-                        model.topic = Topic.objects.get(title=topic)
-                        try:
-                            model.topic.mentor = model.mentor
-                            model.topic.save()
-                        except Mentor.DoesNotExist:
-                            pass
-                    except Topic.DoesNotExist:
-                        pass
-                except KeyError:
-                    pass
+                Student.__get_class_letter_spec(model, student_dict)
+                Student.__get_mentor(model, student_dict)
+                Student.__get_topic(model, student_dict)
 
                 try:
                     model.season = Season.objects.get(is_active=True)
@@ -157,27 +192,3 @@ class Student(SeasonModelBase):
     class Meta:
         app_label = "graduation_system_app"
         db_table = "student"
-
-def check_names(item_dict, fname, mname, lname):
-    try:
-        first_name = item_dict[fname]
-        if(not first_name): 
-            return False
-    except KeyError:
-        return False
-    try:
-        middle_name = item_dict[mname]
-    except KeyError:
-        middle_name = ''
-    try: 
-        last_name = item_dict[lname]
-        if(not last_name):
-            return False
-    except KeyError:
-        return False
-
-    return {
-        'fname': first_name,
-        'mname': middle_name,
-        'lname': last_name,
-    }
