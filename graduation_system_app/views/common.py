@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import csv
 from datetime import datetime
 
@@ -29,7 +29,7 @@ def abstr_all(request, urls, view_info):
 
 def paginate(page, model):
     model_list = model.objects.all()
-    paginator = Paginator(model_list, 10) # Show 25 contacts per page
+    paginator = Paginator(model_list, 20) # Show 20 items per page
     
     try: 
         page = int(page)
@@ -47,12 +47,15 @@ def paginate(page, model):
     else:
         start = 1
 
-    if page < paginator.num_pages - range_gap:
-        end = page + range_gap + 1
+    if start == 1:
+        end = 5 if 5 < paginator.num_pages else paginator.num_pages
+    elif page < paginator.num_pages - range_gap:
+        end = page + range_gap
     else:
-        end = paginator.num_pages + 1
+        end = paginator.num_pages
+        start = end - 4
 
-    models.pages = range(start, end)
+    models.pages = range(start, end + 1)
 
     return models
 
