@@ -43,14 +43,14 @@ def paginate(page, model):
         models = paginator.page(paginator.num_pages)
 
     range_gap = 2
-    if page > range_gap:
+    if(page > range_gap):
         start = page - range_gap
     else:
         start = 1
 
-    if start == 1:
+    if(start == 1):
         end = 5 if 5 < paginator.num_pages else paginator.num_pages
-    elif page < paginator.num_pages - range_gap:
+    elif(page < paginator.num_pages - range_gap):
         end = page + range_gap
     else:
         end = paginator.num_pages
@@ -61,9 +61,9 @@ def paginate(page, model):
     return models
 
 def create_from_form_post(request, model_form, redir_view_name, template, context_data):
-    if request.method == 'POST':
+    if(request.method == 'POST'):
         form = model_form(request.POST)
-        if form.is_valid():
+        if(form.is_valid()):
             form.save()
             return HttpResponseRedirect(reverse(redir_view_name))
     else:
@@ -72,10 +72,10 @@ def create_from_form_post(request, model_form, redir_view_name, template, contex
     return handle_invalid_model(form, context_data, request, template)
 
 def create_from_form_edit(request, model_form, redir_view_name, template, context_data, instance):
-    if request.method == 'POST':
+    if(request.method == 'POST'):
         form = model_form(request.POST, instance=instance)
 
-        if form.is_valid():
+        if(form.is_valid()):
             form.save()
             return HttpResponseRedirect(reverse(redir_view_name))
     else:
@@ -128,7 +128,7 @@ def get_pair(name, value):
     }
 
 def abstr_delete(request, id, model):
-    if request.is_ajax():
+    if(request.is_ajax()):
         try:
             instance = model.objects.get(id=id)
             instance.soft_delete()

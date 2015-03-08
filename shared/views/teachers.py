@@ -70,5 +70,4 @@ def create(request):
                             context_data)
 
 def delete(request, id):
-    return abstr_delete(request, id, Teacher)
-   
+    return abstr_delete(request, id, Teacher)   

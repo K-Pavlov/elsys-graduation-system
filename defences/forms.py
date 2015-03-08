@@ -14,7 +14,7 @@ class ComissionForm(ModelForm):
         exclude = STANDARD_EXCLUDE_FORMS
         widgets = {
             'start_time': DateTimeWidget(attrs={
-                'id':"date-picker"
+                'id': 'date-picker'
              }, usel10n = True, bootstrap_version=3,)
         }
 

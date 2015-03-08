@@ -28,7 +28,7 @@ class LoginRequiredMiddleware:
         user = request.user
         path = request.path_info.lstrip('/')
         if(not user.is_authenticated()):
-            if not any(m.match(path) for m in EXEMPT_URLS):
+            if(not any(m.match(path) for m in EXEMPT_URLS)):
                 return HttpResponseRedirect(settings.LOGIN_URL)
         elif(not user.is_staff):
             path = path.replace('/', '')

@@ -73,13 +73,12 @@ def delete(request, id):
     return abstr_delete(request, id, Season)
 
 def change(request):
-    if request.is_ajax():
-        if request.method == 'POST':
+    if(request.is_ajax()):
+        if(request.method == 'POST'):
             form = SeasonYearsOnly(request.POST)
-            if form.is_valid():
+            if(form.is_valid()):
                 answer = form.cleaned_data['years']
                 try:
-                    print Season.objects.select_related()
                     season = Season.objects.get(year= answer)
                     season.is_active = True
                     season.save()
