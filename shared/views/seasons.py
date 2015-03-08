@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 
 from shared.forms import SeasonForm, SeasonYearsOnly
 from shared.models.season import Season
-from views_common import create_from_form_post, create_from_form_edit, paginate, abstr_all
+from common.views import create_from_form_post, create_from_form_edit, paginate, abstr_all
 
 def all(request):
     view_info = {

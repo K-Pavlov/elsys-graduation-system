@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from shared.forms import SeasonYearsOnly, FirmForm
 from shared.models.season import Season
 from shared.models.firm import Firm
-from views_common import create_from_form_post, create_from_form_edit, paginate, abstr_all
+from common.views import create_from_form_post, create_from_form_edit, paginate, abstr_all
 
 def all(request):
     view_info = {

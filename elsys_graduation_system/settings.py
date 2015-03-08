@@ -156,11 +156,11 @@ ROOT_URLCONF = 'elsys_graduation_system.urls'
 WSGI_APPLICATION = 'elsys_graduation_system.wsgi.application'
 
 TEMPLATE_DIRS = (
+    'common/templates',
     'defences/templates/',
     'division/templates/',
     'reviewing/templates/',
     'shared/templates/',
-    'shared-templates',
 )
 
 INSTALLED_APPS = ('django.contrib.auth',

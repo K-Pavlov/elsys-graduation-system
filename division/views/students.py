@@ -11,7 +11,7 @@ from division.forms import StudentForm
 from division.models.student import Student
 from shared.forms import SeasonYearsOnly, UploadForm
 from shared.models.season import Season
-from views_common import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
+from common.views import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
 
 def all(request):
     view_info = {

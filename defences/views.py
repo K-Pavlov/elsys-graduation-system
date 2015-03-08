@@ -14,7 +14,7 @@ from pdf_renderer import render_to_pdf
 from division.models.student import Student
 from shared.forms import SeasonYearsOnly, UploadForm
 from shared.models.season import Season
-from views_common import create_from_form_post, create_from_form_edit, paginate, abstr_all
+from common.views import create_from_form_post, create_from_form_edit, paginate, abstr_all
 
 # Comissions
 def all(request):
