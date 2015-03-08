@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -12,7 +12,8 @@ from reviewing.forms import RefereeForm
 from reviewing.models import Referee, Referal
 from shared.forms import SeasonYearsOnly, UploadForm, TeacherForm
 from shared.models.season import Season
-from common.views import create_from_form_post, create_from_form_edit, get_pair, asbtr_preview_csv, paginate, abstr_all
+from common.views import create_from_form_post, create_from_form_edit, get_pair, paginate
+from common.views import abstr_all, abstr_delete, asbtr_preview_csv
 
 def all(request):
     view_info = {
@@ -102,19 +103,7 @@ def create(request):
         context_instance = RequestContext(request, context_data))
 
 def delete(request, id):
-    if request.is_ajax():
-        if request.method == 'DELETE':
-            try:
-                referee = Referee.objects.get(id=id)
-                referee.soft_delete()
-            except Referee.DoesNotExist:
-                return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
-
-            return HttpResponse(json.dumps('Success'), content_type = "application/json")
-
-    raise Http404
+    return abstr_delete(request, id, Referee)
 
 def upload_csv(request):
     if(request.is_ajax()):

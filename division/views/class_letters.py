@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -11,7 +11,7 @@ from division.forms import ClassLetterForm
 from division.models.class_letter import ClassLetter
 from shared.forms import SeasonYearsOnly, UploadForm
 from shared.models.season import Season
-from common.views import create_from_form_post, create_from_form_edit, paginate, abstr_all
+from common.views import create_from_form_post, create_from_form_edit, paginate, abstr_all, abstr_delete
 
 def all(request):
     view_info = {
@@ -72,16 +72,4 @@ def create(request):
                             context_data)
 
 def delete(request, id):
-    if request.is_ajax():
-        if request.method == 'DELETE':
-            try:
-                class_letter = ClassLetter.objects.get(id=id)
-                class_letter.soft_delete()
-            except ClassLetter.DoesNotExist:
-                return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
-
-            return HttpResponse(json.dumps('Success'), content_type = "application/json")
-
-    raise Http404
+    return abstr_delete(request, id, ClassLetter)

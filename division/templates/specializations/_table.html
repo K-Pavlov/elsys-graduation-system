@@ -10,7 +10,7 @@
             <td>{{ object.name }}</td>
             <td class="col-md-1">
                 <a class="btn btn-info" style="float:left; margin-bottom: 10px;" href="{% url urls.edit id=object.id %}">Променете</a>
-                <form class="delete-form" style="float:left" object-id="{{ object.id }}" action="{% url urls.edit id=object.id %}" method="delete">
+                <form class="delete-form" style="float:left" object-id="{{ object.id }}" action="{% url urls.delete id=object.id %}" method="delete">
                     {% csrf_token %}
                     <input class="btn btn-info" type="submit" name="delete" value="Изтрийте" />
                 </form>

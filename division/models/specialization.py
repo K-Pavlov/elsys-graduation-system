@@ -9,7 +9,7 @@ class Specialization(DeletableModelBase):
 
     def soft_delete(self):
         self.students.clear()
-
+        print 'hi'
         return super(Specialization, self).soft_delete()
 
     def __str__(self):

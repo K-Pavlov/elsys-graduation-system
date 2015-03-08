@@ -8,8 +8,7 @@ class Firm(DeletableModelBase):
     name = models.CharField(verbose_name='Име', max_length=100)
 
     def soft_delete(self):
-        self.mentors.clear()
-        self.referees.clear()
+        self.teachers.clear()
 
         return super(Firm, self).soft_delete()
 

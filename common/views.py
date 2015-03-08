@@ -1,11 +1,12 @@
 ﻿# -*- coding: utf-8 -*-
+import json
 import csv
 from datetime import datetime
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
 
@@ -70,15 +71,15 @@ def create_from_form_post(request, model_form, redir_view_name, template, contex
 
     return handle_invalid_model(form, context_data, request, template)
 
-def create_from_form_edit(request, model_form, redir_view_name, template, context_data, model):
+def create_from_form_edit(request, model_form, redir_view_name, template, context_data, instance):
     if request.method == 'POST':
-        form = model_form(request.POST, instance= model)
+        form = model_form(request.POST, instance=instance)
 
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse(redir_view_name))
     else:
-        form = model_form(instance=model)
+        form = model_form(instance=instance)
 
     return handle_invalid_model(form, context_data, request, template)
 
@@ -125,3 +126,17 @@ def get_pair(name, value):
         'name': name,
         'value': value,
     }
+
+def abstr_delete(request, id, model):
+    if request.is_ajax():
+        try:
+            instance = model.objects.get(id=id)
+            instance.soft_delete()
+        except model.DoesNotExist:
+            return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
+
+        return HttpResponse(json.dumps('Success'), content_type = "application/json")
+
+    raise Http404
