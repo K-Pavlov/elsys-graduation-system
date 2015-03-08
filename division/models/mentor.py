@@ -45,5 +45,6 @@ class Mentor(SeasonModelBase):
         return self.teacher.__str__()
 
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "mentor"
+        app_label = 'division'
+        db_table = 'mentor'
+        ordering = ['teacher']

@@ -53,11 +53,12 @@ class Referee(SeasonModelBase):
         return self.teacher.__str__()
 
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "referee"
+        app_label = 'reviewing'
+        db_table = 'referee'
+        ordering = ['teacher']
 
 def _get_upload_path(instance, filename):
-    return u"referee_%s/%s" % (instance.referee.id, filename)
+    return u'referee_%s/%s' % (instance.referee.id, filename)
 
 class Referal(DeletableModelBase):
     file = models.FileField(verbose_name='Рецензия', upload_to=_get_upload_path, blank=True, null=True)
@@ -70,5 +71,6 @@ class Referal(DeletableModelBase):
         return super(Referal, self).soft_delete()
 
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "referal"
+        app_label = 'reviewing'
+        db_table = 'referal'
+        ordering = ['referee']

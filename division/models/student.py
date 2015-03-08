@@ -190,5 +190,6 @@ class Student(SeasonModelBase):
             Student.objects.bulk_create(created_model)
 
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "student"
+        app_label = 'division'
+        db_table = 'student'
+        ordering = ['first_name', 'middle_name', 'last_name']

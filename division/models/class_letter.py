@@ -17,5 +17,6 @@ class ClassLetter(DeletableModelBase):
         return smart_bytes(string)
     
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "class_letter"
+        app_label = 'division'
+        db_table = 'class_letter'
+        ordering = ['letter']

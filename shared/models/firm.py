@@ -16,5 +16,6 @@ class Firm(DeletableModelBase):
         return smart_bytes(self.name)
 
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "firm"
+        app_label = 'shared'
+        db_table = 'firm'
+        ordering = ['name']

@@ -73,5 +73,6 @@ class Comission(SeasonModelBase):
         return smart_bytes('Председател ' + self.head_of_comission.__str__())
 
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "comission"
+        app_label = 'defences'
+        db_table = 'comission'
+        ordering = ['start_time']

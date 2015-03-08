@@ -75,5 +75,6 @@ class Topic(SeasonModelBase):
         return smart_bytes(string)
  
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "topic"
+        app_label = 'division'
+        db_table = 'topic'
+        ordering = ['title']

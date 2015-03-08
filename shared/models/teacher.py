@@ -21,9 +21,10 @@ class Teacher(DeletableModelBase):
         return super(Teacher, self).soft_delete()
 
     def __str__(self):
-        string = u"%s %s %s" % (self.first_name, self.middle_name, self.last_name)
+        string = u'%s %s %s' % (self.first_name, self.middle_name, self.last_name)
         return smart_bytes(string)
 
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "teacher"
+        app_label = 'shared'
+        db_table = 'teacher'
+        ordering = ['first_name', 'middle_name', 'last_name']

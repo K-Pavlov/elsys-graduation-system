@@ -37,5 +37,6 @@ class Season(DeletableModelBase):
         return smart_bytes(string)
 
     class Meta:
-        app_label = "graduation_system_app"
-        db_table = "season"
+        app_label = 'shared'
+        db_table = 'season'
+        ordering = ['year']
