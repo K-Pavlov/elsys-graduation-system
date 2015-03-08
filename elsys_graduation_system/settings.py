@@ -1,5 +1,5 @@
 """
-Django settings for elsys_graduation_system project.
+Django settings for elsys-graduation-system project.
 """
 import codecs
 import os
@@ -156,7 +156,11 @@ ROOT_URLCONF = 'elsys_graduation_system.urls'
 WSGI_APPLICATION = 'elsys_graduation_system.wsgi.application'
 
 TEMPLATE_DIRS = (
-    'graduation-system-app/templates/'
+    'defences/templates/',
+    'division/templates/',
+    'reviewing/templates/',
+    'shared/templates/',
+    'shared-templates',
 )
 
 INSTALLED_APPS = ('django.contrib.auth',
