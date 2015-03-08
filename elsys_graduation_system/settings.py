@@ -166,6 +166,10 @@ INSTALLED_APPS = ('django.contrib.auth',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'shared',
+    'division',
+    'reviewing',
+    'defences',
     'graduation_system_app',
     'django_admin_bootstrapped',
     'django.contrib.admin',
@@ -234,7 +238,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'r8A08mRZdj8TTyRXcUvjcrRQ'
 # Predefined people can login only
 from collections import OrderedDict
 from django.contrib.auth.models import User
-from graduation_system_app.models.referee import Referee
+from reviewing.models import Referee
 
 all_mails = [x for x in User.objects.values_list('email', flat=True) if x]
 all_mails += [x for x in Referee.objects.values_list('email', flat=True) if x]
