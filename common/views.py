@@ -6,7 +6,7 @@ from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm
-from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import render
 from django.template import RequestContext
 
@@ -141,18 +141,9 @@ def abstr_delete(request, id, model):
 
     raise Http404
 
-from django.shortcuts import render_to_response
-
-
 def handler404(request):
-    response = render_to_response('404.html', {},
-                                  context_instance=RequestContext(request))
-    response.status_code = 404
-    return response
+    return HttpResponseNotFound('404.html', context_instance=RequestContext(request))
 
 
 def handler500(request):
-    response = render_to_response('500.html', {},
-                                  context_instance=RequestContext(request))
-    response.status_code = 500
-    return response
+    return HttpResponseServerError('500.html', context_instance=RequestContext(request))

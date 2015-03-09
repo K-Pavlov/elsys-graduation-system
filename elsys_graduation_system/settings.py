@@ -11,7 +11,7 @@ PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 DIRNAME = os.path.dirname(__file__)
 
 if(os.getenv('SETTINGS_MODE') == 'dev'):
-    DEBUG = True
+    DEBUG = False
 else:
     DEBUG = False
 
