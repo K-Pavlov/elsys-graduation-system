@@ -12,7 +12,7 @@ from division.models.student import Student
 from shared.forms import SeasonYearsOnly, UploadForm
 from shared.models.season import Season
 from common.views import create_from_form_post, create_from_form_edit, get_pair, paginate
-from common.views import abstr_all, abstr_delete, asbtr_preview_csv, abstr_upload_data
+from common.views import abstr_all, abstr_delete, abstr_preview_csv, abstr_upload_data
 
 def all(request):
     view_info = {
@@ -97,4 +97,4 @@ def preview_csv(request):
                get_pair('Фамилия на ръководител', 'lname-mentor'),
                get_pair('Фирма на ръководител', 'firm'),]
 
-    return asbtr_preview_csv(request, view, choices)
+    return abstr_preview_csv(request, view, choices)

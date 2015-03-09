@@ -89,7 +89,7 @@ def handle_invalid_model(form, context_data, request, template) :
         template,
         context_instance = RequestContext(request, context_data))
 
-def asbtr_preview_csv(request, view, choices):
+def abstr_preview_csv(request, view, choices):
     form = UploadForm()
     if(request.method == 'POST'):
         form = UploadForm(request.POST, request.FILES)
