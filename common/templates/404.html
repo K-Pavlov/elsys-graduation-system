@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿{% extends "layout.html" %}
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+{% block content %}
+<div class="row">
+    <div style="text-align: center" class="col-md-12">
+        <h1 id="error-code">404</h1>
+        <h2 id="error-header">Грешка при намирането на страницата</h2>
+        <p>Старницата, която търсите, не беше намерена или не съществува</p>
+    </div>
+</div>
+{% endblock %}
