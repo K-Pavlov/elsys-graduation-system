@@ -13,7 +13,7 @@ from division.models.topic import Topic
 from shared.forms import SeasonYearsOnly, UploadForm
 from shared.models.season import Season
 from common.views import create_from_form_post, create_from_form_edit, get_pair, paginate
-from common.views import abstr_all, abstr_delete, asbtr_preview_csv
+from common.views import abstr_all, abstr_delete, asbtr_preview_csv, abstr_upload_data
  
 def all(request):
     view_info = {
@@ -78,24 +78,7 @@ def delete(request, id):
     return abstr_delete(request, id, Topic)
  
 def upload_csv(request):
-    if(request.is_ajax()):
-        if(request.method == 'POST'):
-            post_as_list = list(request.POST.iterlists())
-            # Elements in the list are tuples 
-            topic_tuple = post_as_list[0]
-
-            # So we need need the first argument of the tuple
-            # which holds our json data
-            topic_data = topic_tuple[0]
-
-            objects = json.loads(topic_data.encode('utf-8'))
-            Topic.create_from_upload(objects)
-
-            return HttpResponse(json.dumps({
-                                    'redir': '/topics'
-                                }))
-
-    raise Http404
+    return abstr_upload_data(request, Topic, '/topics')
 
 def preview_csv(request):
     view = {

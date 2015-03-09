@@ -13,7 +13,7 @@ from division.models.mentor import Mentor
 from shared.forms import SeasonYearsOnly, UploadForm, TeacherForm
 from shared.models.season import Season
 from common.views import get_pair, paginate
-from common.views import abstr_all, abstr_delete, asbtr_preview_csv
+from common.views import abstr_all, abstr_delete, asbtr_preview_csv, abstr_upload_data
 
 def all(request):
     view_info = {
@@ -107,24 +107,7 @@ def delete(request, id):
     return abstr_delete(request, id, Mentor)
 
 def upload_csv(request):
-    if(request.is_ajax()):
-        if(request.method == 'POST'):
-            post_as_list = list(request.POST.iterlists())
-            # Elements in the list are tuples 
-            mentor_tuple = post_as_list[0]
-
-            # So we need need the first argument of the tuple
-            # which holds our json data
-            mentor_data = mentor_tuple[0]
-
-            objects = json.loads(mentor_data.encode('utf-8'))
-            Mentor.create_from_upload(objects)
-
-            return HttpResponse(json.dumps({
-                                    'redir': '/mentors'
-                                }))
-
-    raise Http404
+    return abstr_upload_data(request, Mentor, '/mentors')
 
 def preview_csv(request):
     view = {

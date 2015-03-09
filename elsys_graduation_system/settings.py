@@ -10,10 +10,7 @@ codecs.register(lambda name: codecs.lookup('utf-8') if name == 'cp65001' else No
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 DIRNAME = os.path.dirname(__file__)
 
-if(os.getenv('SETTINGS_MODE') == 'dev'):
-    DEBUG = False
-else:
-    DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 

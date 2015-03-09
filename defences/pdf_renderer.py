@@ -6,7 +6,7 @@ import ho.pisa as pisa
 
 from django.template.loader import get_template
 from django.template import Context
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from cgi import escape
 
 
@@ -20,4 +20,5 @@ def render_to_pdf(template_src, context_dict):
 
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return HttpResponse('<pre>%s</pre>' % escape(html))
+
+    return HttpResponseServerError()

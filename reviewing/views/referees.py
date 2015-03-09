@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import render
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -13,7 +13,7 @@ from reviewing.models import Referee, Referal
 from shared.forms import SeasonYearsOnly, UploadForm, TeacherForm
 from shared.models.season import Season
 from common.views import get_pair, paginate
-from common.views import abstr_all, abstr_delete, asbtr_preview_csv
+from common.views import abstr_all, abstr_delete, asbtr_preview_csv, abstr_upload_data
 
 def all(request):
     view_info = {
@@ -106,30 +106,13 @@ def delete(request, id):
     return abstr_delete(request, id, Referee)
 
 def upload_csv(request):
-    if(request.is_ajax()):
-        if(request.method == 'POST'):
-            post_as_list = list(request.POST.iterlists())
-            # Elements in the list are tuples 
-            referee_tuple = post_as_list[0]
-
-            # So we need need the first argument of the tuple
-            # which holds our json data
-            referee_data = referee_tuple[0]
-
-            objects = json.loads(referee_data.encode('utf-8'))
-            Referee.create_from_upload(objects)
-
-            return HttpResponse(json.dumps({
-                                    'redir': '/referees'
-                                }))
-
-    raise Http404
+    return abstr_upload_data(request, Referee, '/referees')
 
 def upload_referal(request):
     form = UploadForm()
     if(request.method == 'POST'):
         form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
+        if(form.is_valid()):
             email = request.user.email
             try:
                 referee = Referee.objects.get(email=email)
@@ -143,7 +126,7 @@ def upload_referal(request):
                 referal.save()
                 form = UploadForm()
             except Referee.DoesNotExist:
-                print('Err')
+                return HttpResponseServerError(request)
 
     return render(
         request,
