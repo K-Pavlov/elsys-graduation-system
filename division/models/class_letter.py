@@ -5,7 +5,7 @@ from django.utils.encoding import smart_bytes
 from shared.models.deletable_model import DeletableModelBase
 
 class ClassLetter(DeletableModelBase):
-    letter = models.CharField(verbose_name='Паралелка', max_length=100)
+    letter = models.CharField(verbose_name='Паралелка', max_length=100, unique=True)
 
     def soft_delete(self):
         self.students.clear()

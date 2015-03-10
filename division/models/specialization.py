@@ -5,7 +5,7 @@ from django.utils.encoding import smart_bytes
 from shared.models.deletable_model import DeletableModelBase
 
 class Specialization(DeletableModelBase):
-    name = models.CharField(verbose_name= 'Име', max_length= 100)
+    name = models.CharField(verbose_name= 'Име', max_length= 100, unique=True)
 
     def soft_delete(self):
         self.students.clear()

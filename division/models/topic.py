@@ -12,7 +12,7 @@ from shared.models.teacher import Teacher
 from reviewing.models import Referee
  
 class Topic(SeasonModelBase):
-    title = models.CharField(verbose_name='Заглавие', max_length=100)
+    title = models.CharField(verbose_name='Заглавие', max_length=100, unique=True)
     description = models.TextField(verbose_name='Описание',)
     mentor = models.ForeignKey(Mentor, verbose_name='Ръководител', blank=True,
                                null=True, default='', related_name='topics',
