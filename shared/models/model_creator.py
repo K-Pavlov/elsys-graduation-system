@@ -22,6 +22,9 @@ def create_mentor_referee(type, item_dict):
         return
 
     model = type()
+    """
+    TODO: refactor
+    """
     try:
        teacher = Teacher.objects.get(first_name= first_name, middle_name= middle_name,
                                last_name= last_name)

@@ -38,11 +38,11 @@ class Referee(SeasonModelBase):
                 created_model.append(model)
                 i += 1
 
-            if (i % 50 == 0):
+            if(i % 50 == 0):
                 Referee.objects.bulk_create(created_model)
                 created_model = []
  
-        if (created_model.count != 0):
+        if(created_model.count != 0):
             Referee.objects.bulk_create(created_model)
 
     @staticmethod
