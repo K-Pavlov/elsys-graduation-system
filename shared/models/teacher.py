@@ -17,6 +17,11 @@ class Teacher(DeletableModelBase):
     def soft_delete(self):
         self.firm = None
         self.members_of_comission.clear()
+        for referee in self.referees.all():
+            referee.soft_delete()
+
+        for mentor in self.mentors.all():
+            mentor.soft_delete()
 
         return super(Teacher, self).soft_delete()
 
