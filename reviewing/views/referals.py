@@ -5,6 +5,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -43,23 +44,19 @@ def get_page(request, page_num):
         return HttpResponse(html)
 
 def edit(request, id):
-    referal = Referal.objects.filter(id=id)
+    referal = get_object_or_404(Referal, pk=id)
+    context_data = {
+        'title': u'Променете рецензия',
+        'year': datetime.now().year,
+        'id': referal.id,
+        'season_form': SeasonYearsOnly(),
+    }
 
-    if not id or not referal.exists():
-        return HttpResponseRedirect('/referals/create')
-    else: 
-        context_data = {
-            'title': u'Променете рецензия',
-            'year': datetime.now().year,
-            'id': referal[0].id,
-            'season_form': SeasonYearsOnly(),
-        }
-
-        return create_from_form_edit(request, ReferalForm, 
-                            'all_referals', 
-                            'edit.html',
-                            context_data,
-                            referal[0])
+    return create_from_form_edit(request, ReferalForm, 
+                        'all_referals', 
+                        'edit.html',
+                        context_data,
+                        referal)
 
 def create(request):
     context_data = {

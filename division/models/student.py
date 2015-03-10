@@ -153,7 +153,6 @@ class Student(SeasonModelBase):
     def create_from_upload(objects):
         i = 0
         created_model = []
-        print 'wtf'
         for student_dict in objects:
             student_names = Student.__check_names(student_dict, 'fname', 'mname', 'lname')
             if(student_names):

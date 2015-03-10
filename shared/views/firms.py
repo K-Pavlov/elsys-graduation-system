@@ -5,6 +5,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -42,22 +43,19 @@ def get_page(request, page_num):
         return HttpResponse(html)
 
 def edit(request, id):
-    firm = Firm.objects.filter(id=id)
-    if not id or not firm.exists():
-        return HttpResponseRedirect('/firms/create')
-    else: 
-        context_data = {
-            'title': u'Променете фирма',
-            'year': datetime.now().year,
-            'id': firm[0].id,
-            'season_form': SeasonYearsOnly(),
-        }
+    firm = get_object_or_404(Firm, pk=id)
+    context_data = {
+        'title': u'Променете фирма',
+        'year': datetime.now().year,
+        'id': firm.id,
+        'season_form': SeasonYearsOnly(),
+    }
 
-        return create_from_form_edit(request, FirmForm, 
-                            'all_firms', 
-                            'edit.html',
-                            context_data,
-                            firm[0])
+    return create_from_form_edit(request, FirmForm, 
+                        'all_firms', 
+                        'edit.html',
+                        context_data,
+                        firm)
 
 def create(request):
     context_data = {

@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -40,22 +41,19 @@ def get_page(request, page_num):
         return HttpResponse(html)
 
 def edit(request, id):
-    season = Season.objects.filter(id=id)
-    if not id or not season.exists():
-        return HttpResponseRedirect('/seasons/create')
-    else: 
-        context_data = {
-            'title': u'Променете сезон',
-            'year': datetime.now().year,
-            'id': season[0].id,
-            'season_form': SeasonYearsOnly(),
-        }
+    season = get_object_or_404(Season, pk=id)
+    context_data = {
+        'title': u'Променете сезон',
+        'year': datetime.now().year,
+        'id': season.id,
+        'season_form': SeasonYearsOnly(),
+    }
 
-        return create_from_form_edit(request, SeasonForm, 
-                            'all_seasons', 
-                            'edit.html',
-                            context_data,
-                            season[0])
+    return create_from_form_edit(request, SeasonForm, 
+                        'all_seasons', 
+                        'edit.html',
+                        context_data,
+                        season)
 
 def create(request):
     context_data = {

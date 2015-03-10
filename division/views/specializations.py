@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -42,22 +43,19 @@ def get_page(request, page_num):
         return HttpResponse(html)
 
 def edit(request, id):
-    specialization = Specialization.objects.filter(id=id)
-    if not id or not specialization.exists():
-        return HttpResponseRedirect('/specializations/create')
-    else: 
-        context_data = {
-            'title': u'Променете специалност',
-            'year': datetime.now().year,
-            'id': specialization[0].id,
-            'season_form': SeasonYearsOnly(),
-        }
+    specialization = get_object_or_404(Specialization, pk=id)
+    context_data = {
+        'title': u'Променете специалност',
+        'year': datetime.now().year,
+        'id': specialization.id,
+        'season_form': SeasonYearsOnly(),
+    }
 
-        return create_from_form_edit(request, SpecializationForm, 
-                            'all_specializations', 
-                            'edit.html',
-                            context_data,
-                            specialization[0])
+    return create_from_form_edit(request, SpecializationForm, 
+                        'all_specializations', 
+                        'edit.html',
+                        context_data,
+                        specialization)
 
 def create(request):
     context_data = {

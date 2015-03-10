@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -41,21 +42,19 @@ def get_page(request, page_num):
         return HttpResponse(html)
 
 def edit(request, id):
-    teacher = Teacher.objects.filter(id=id)
-    if not id or not teacher.exists():
-        return HttpResponseRedirect('/teachers/create')
-    else: 
-        context_data = {
-            'title': u'Променете учител',
-            'year': datetime.now().year,
-            'id': teacher[0].id,
-            'season_form': SeasonYearsOnly()
-        }
-        return create_from_form_edit(request, TeacherForm, 
-                            'all_teachers', 
-                            'edit.html', 
-                            context_data,
-                            teacher[0])
+    teacher = get_object_or_404(Teacher, pk=id)
+    context_data = {
+        'title': u'Променете учител',
+        'year': datetime.now().year,
+        'id': teacher.id,
+        'season_form': SeasonYearsOnly()
+    }
+
+    return create_from_form_edit(request, TeacherForm, 
+                        'all_teachers', 
+                        'edit.html', 
+                        context_data,
+                        teacher)
 
 def create(request):
     context_data = {

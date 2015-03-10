@@ -123,21 +123,21 @@ def abstr_preview_csv(request, view, choices):
 
 def abstr_upload_data(request, model, redir):
     if(request.is_ajax()):
-            if(request.method == 'POST'):
-                post_as_list = list(request.POST.iterlists())
-                # Elements in the list are tuples 
-                model_tuple = post_as_list[0]
+        if(request.method == 'POST'):
+            post_as_list = list(request.POST.iterlists())
+            # Elements in the list are tuples 
+            model_tuple = post_as_list[0]
 
-                # So we need need the first argument of the tuple
-                # which holds our json data
-                model_data = model_tuple[0]
+            # So we need need the first argument of the tuple
+            # which holds our json data
+            model_data = model_tuple[0]
 
-                objects = json.loads(model_data.encode('utf-8'))
-                model.create_from_upload(objects)
+            objects = json.loads(model_data.encode('utf-8'))
+            model.create_from_upload(objects)
 
-                return HttpResponse(json.dumps({
-                                        'redir': redir
-                                    }))
+            return HttpResponse(json.dumps({
+                                    'redir': redir
+                                }))
 
     raise Http404
 

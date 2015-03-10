@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -46,21 +47,19 @@ def get_page(request, page_num):
         return HttpResponse(html)
 
 def edit(request, id):
-    comission = Comission.objects.filter(id=id)
-    if not id or not comission.exists():
-        return HttpResponseRedirect('/comissions/create')
-    else: 
-        context_data = {
-            'title': u'Променете комисия',
-            'year': datetime.now().year,
-            'id': comission[0].id,
-            'season_form': SeasonYearsOnly()
-        }
-        return create_from_form_edit(request, ComissionForm, 
-                            'all_comissions', 
-                            'comissions/edit.html', 
-                            context_data,
-                            comission[0])
+    comission = get_object_or_404(Comission, id=id)
+    context_data = {
+        'title': u'Променете комисия',
+        'year': datetime.now().year,
+        'id': comission.id,
+        'season_form': SeasonYearsOnly()
+    }
+
+    return create_from_form_edit(request, ComissionForm, 
+                        'all_comissions', 
+                        'comissions/edit.html', 
+                        context_data,
+                        comission)
 
 def create(request):
     context_data = {
@@ -103,17 +102,11 @@ def comission_students_indepth(request, id):
 
 #Not view
 def get_ctx_comission(id):
-    try:
-        comission = Comission.objects.get(id=id)
-    except Comission.DoesNotExist:
-        raise Http404
-
-    print comission.start_time
-
+    comission = get_object_or_404(Comission, pk=id)
     start_time = timezone.localtime(comission.start_time)
-
     date = ''
     time = ''
+
     if(start_time):
         date = start_time.date()
         hour = str(start_time.hour)

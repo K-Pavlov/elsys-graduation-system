@@ -13,7 +13,7 @@ class ClassLetter(DeletableModelBase):
         return super(ClassLetter, self).soft_delete()
 
     def __str__(self):
-        string = u"%s" % (self.letter)
+        string = u'%s' % (self.letter)
         return smart_bytes(string)
     
     class Meta:

@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -45,18 +45,14 @@ def get_page(request, page_num):
         return HttpResponse(html)
 
 def edit(request, id):
-    mentor = Mentor.objects.filter(id=id)
-    if(not id or not mentor.exists()):
-        return HttpResponseRedirect('/mentors/create')
-    else: 
-        context_data = {
-            'title': u'Променете ръководител',
-            'year': datetime.now().year,
-            'id': mentor[0].id,
-            'season_form': SeasonYearsOnly(),
-        }
+    mentor = get_object_or_404(Mentor, pk=id)
+    context_data = {
+        'title': u'Променете ръководител',
+        'year': datetime.now().year,
+        'id': mentor.id,
+        'season_form': SeasonYearsOnly(),
+    }
 
-    mentor = mentor[0]
     if(request.method == 'POST'):
         mentor_form = MentorForm(request.POST, instance=mentor)
         teacher_form = TeacherForm(request.POST, instance=mentor.teacher)

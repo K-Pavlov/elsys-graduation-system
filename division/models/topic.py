@@ -33,15 +33,15 @@ class Topic(SeasonModelBase):
         i = 0
         created_model = []
 
-        for topic in objects:
-            if (Topic.objects.filter(title= topic['title']).count() == 0):
+        for topic_dict in objects:
+            if (Topic.objects.filter(title= topic_dict['title']).count() == 0):
                 model = Topic()
                 try:
-                    model.title = topic['title']
+                    model.title = topic_dict['title']
                 except KeyError:
                     model.title = ''
                 try:
-                    model.description = topic['description']
+                    model.description = topic_dict['description']
                 except KeyError:
                     model.description = ''
 
@@ -50,7 +50,7 @@ class Topic(SeasonModelBase):
                 except Season.DoesNotExist:
                     pass
 
-                mentor = Mentor.create(topic)
+                mentor = Mentor.create(topic_dict)
 
                 if(mentor):
                     mentor.save()

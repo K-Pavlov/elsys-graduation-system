@@ -5,6 +5,7 @@ from datetime import datetime
  
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -45,24 +46,21 @@ def get_page(request, page_num):
         return HttpResponse(html)
  
 def edit(request, id):
-    topic = Topic.objects.filter(id=id)
-    if not id or not topic.exists():
-        return HttpResponseRedirect('/topics/create')
-    else:
-        context_data = {
-            'title': u'Променете тема',
-            'year': datetime.now().year,
-            'id': topic[0].id,
-            'season_form': SeasonYearsOnly()
-        }
-        return create_from_form_edit(request, TopicForm,
-                            'all_topics',
-                            'edit.html',
-                            context_data,
-                            topic[0])
+    topic = get_object_or_404(Topic, pk=id)
+    context_data = {
+        'title': u'Променете тема',
+        'year': datetime.now().year,
+        'id': topic.id,
+        'season_form': SeasonYearsOnly()
+    }
+
+    return create_from_form_edit(request, TopicForm,
+                        'all_topics',
+                        'edit.html',
+                        context_data,
+                        topic)
  
 def create(request):
-
     context_data = {
             'title': u'Създайте тема',
             'year': datetime.now().year,
