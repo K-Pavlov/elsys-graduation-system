@@ -9,14 +9,6 @@ from division.models import Student
 
 class ComissionForm(ModelForm):
     students = forms.ModelMultipleChoiceField(Student.objects.all(), required=False)
-    class Meta:
-        model = Comission
-        exclude = STANDARD_EXCLUDE_FORMS
-        widgets = {
-            'start_time': DateTimeWidget(attrs={
-                'id': 'date-picker'
-             }, usel10n = True, bootstrap_version=3,)
-        }
 
     def __init__(self, *args, **kwargs):
         super(ComissionForm, self).__init__(*args, **kwargs)
@@ -31,3 +23,12 @@ class ComissionForm(ModelForm):
         if commit:
             instance.save()
         return instance
+
+    class Meta:
+        model = Comission
+        exclude = STANDARD_EXCLUDE_FORMS
+        widgets = {
+            'start_time': DateTimeWidget(attrs={
+                'id': 'date-picker'
+             }, usel10n = True, bootstrap_version=3,)
+        }
