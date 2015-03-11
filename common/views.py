@@ -6,11 +6,13 @@ from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm
+from django.forms.util import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
 from django.shortcuts import render
 from django.template import RequestContext
 
 from shared.forms import UploadForm, SeasonYearsOnly
+from shared.models.teacher import Teacher
 
 def abstr_all(request, urls, view_info):
     page = paginate(1, view_info['model'])
@@ -89,6 +91,71 @@ def handle_invalid_model(form, context_data, request, template) :
         template,
         context_instance = RequestContext(request, context_data))
 
+def handle_form_mentor_ref(instance_form, teacher_form, model):
+    teacher = teacher_form.save(commit=False)
+    if(teacher_form.is_valid() and instance_form.is_valid()):
+        try:
+            teacher = Teacher.objects.get(first_name=teacher.first_name,
+                                            middle_name=teacher.middle_name,
+                                            last_name=teacher.last_name)
+        except Teacher.DoesNotExist:
+            teacher.save()
+
+        instance = save_form_mentor_ref(instance_form, teacher, model)
+        if(not instance):
+            errors = instance_form._errors.setdefault('__all__', ErrorList())
+            errors.append(u'Запис със същитите имена вече съществува')
+            return False
+        else:
+            return True
+
+def handle_edit_mentor_ref(instance_form, teacher_form, model):
+    teacher = teacher_form.save(commit=False)
+    if(teacher_form.is_valid() and instance_form.is_valid()):
+        try:
+            teacher = Teacher.objects.get(first_name=teacher.first_name,
+                                            middle_name=teacher.middle_name,
+                                            last_name=teacher.last_name)
+        except Teacher.DoesNotExist:
+            teacher.save()
+
+        instance_data = instance_form.save()
+        instance = model.objects.get(teacher=teacher, season=instance_data.season)
+        if(not instance.id == instance_data.id):
+                errors = instance_form._errors.setdefault('__all__', ErrorList())
+                errors.append(u'Запис със същитите имена вече съществува')
+                return False
+        else:
+                return True
+
+def save_form_mentor_ref(form, teacher, model):
+    try:
+        instance_data = form.save(commit=False)
+        instance = model.objects.get(teacher=teacher, season=instance_data.season)
+
+        return False
+    except model.DoesNotExist:
+        instance = model()
+        instance.teacher = teacher
+        instance.season = instance_data.season
+        instance.save()
+
+        return instance
+
+def abstr_delete(request, id, model):
+    if(request.is_ajax()):
+        try:
+            instance = model.objects.get(id=id)
+            instance.soft_delete()
+        except model.DoesNotExist:
+            return HttpResponseNotFound(json.dumps({
+                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
+                                }), content_type = "application/json")
+
+        return HttpResponse(json.dumps('Success'), content_type = "application/json")
+
+    raise Http404
+
 def abstr_preview_csv(request, view, choices):
     form = UploadForm()
     if(request.method == 'POST'):
@@ -146,20 +213,6 @@ def get_pair(name, value):
         'name': name,
         'value': value,
     }
-
-def abstr_delete(request, id, model):
-    if(request.is_ajax()):
-        try:
-            instance = model.objects.get(id=id)
-            instance.soft_delete()
-        except model.DoesNotExist:
-            return HttpResponseNotFound(json.dumps({
-                                    error: 'Възникна проблем при изтриването на записа, моля опитайте отново.'
-                                }), content_type = "application/json")
-
-        return HttpResponse(json.dumps('Success'), content_type = "application/json")
-
-    raise Http404
 
 def handler404(request):
     return HttpResponseNotFound('404.html', context_instance=RequestContext(request))

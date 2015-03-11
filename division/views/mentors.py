@@ -8,12 +8,13 @@ from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
+from common.views import get_pair, paginate, handle_form_mentor_ref, handle_edit_mentor_ref
+from common.views import abstr_all, abstr_delete, abstr_preview_csv, abstr_upload_data
 from division.forms import MentorForm
 from division.models.mentor import Mentor
 from shared.forms import SeasonYearsOnly, UploadForm, TeacherForm
 from shared.models.season import Season
-from common.views import get_pair, paginate
-from common.views import abstr_all, abstr_delete, abstr_preview_csv, abstr_upload_data
+from shared.models.teacher import Teacher
 
 def all(request):
     view_info = {
@@ -56,9 +57,7 @@ def edit(request, id):
     if(request.method == 'POST'):
         mentor_form = MentorForm(request.POST, instance=mentor)
         teacher_form = TeacherForm(request.POST, instance=mentor.teacher)
-        if(mentor_form.is_valid() and teacher_form.is_valid()):
-            mentor = mentor_form.save()
-            teacher = teacher_form.save()
+        if(handle_edit_mentor_ref(mentor_form, teacher_form, Mentor)):
             return HttpResponseRedirect(reverse('all_mentors'))
     else:
         mentor_form = MentorForm(instance=mentor)
@@ -81,12 +80,7 @@ def create(request):
     if(request.method == 'POST'):
         mentor_form = MentorForm(request.POST)
         teacher_form = TeacherForm(request.POST)
-        if(mentor_form.is_valid() and teacher_form.is_valid()):
-            mentor = mentor_form.save(commit=False)
-            teacher = teacher_form.save()
-            mentor.teacher = teacher
-            mentor.save()
-
+        if(handle_form_mentor_ref(mentor_form, teacher_form, Mentor)):
             return HttpResponseRedirect(reverse('all_mentors'))
     else:
         mentor_form = MentorForm()

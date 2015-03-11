@@ -235,12 +235,16 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'r8A08mRZdj8TTyRXcUvjcrRQ'
 
 # Predefined people can login only
 from collections import OrderedDict
+from django.db.utils import DatabaseError
 from django.contrib.auth.models import User
 from reviewing.models import Referee
 
-all_mails = [x for x in User.objects.values_list('email', flat=True) if x]
-all_mails += [x for x in Referee.objects.values_list('email', flat=True) if x]
-SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = list(OrderedDict.fromkeys(all_mails))
+try:
+    all_mails = [x for x in User.objects.values_list('email', flat=True) if x]
+    all_mails += [x for x in Referee.objects.values_list('email', flat=True) if x]
+    SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = list(OrderedDict.fromkeys(all_mails))
+except DatabaseError:
+    pass
 
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',

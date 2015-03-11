@@ -8,12 +8,12 @@ from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
+from common.views import get_pair, paginate, handle_form_mentor_ref, handle_edit_mentor_ref
+from common.views import abstr_all, abstr_delete, abstr_preview_csv, abstr_upload_data
 from reviewing.forms import RefereeForm
 from reviewing.models import Referee, Referal
 from shared.forms import SeasonYearsOnly, UploadForm, TeacherForm
 from shared.models.season import Season
-from common.views import get_pair, paginate
-from common.views import abstr_all, abstr_delete, abstr_preview_csv, abstr_upload_data
 
 def all(request):
     view_info = {
@@ -56,9 +56,7 @@ def edit(request, id):
     if(request.method == 'POST'):
         referee_form = RefereeForm(request.POST, instance=referee)
         teacher_form = TeacherForm(request.POST, instance=referee.teacher)
-        if(referee_form.is_valid() and teacher_form.is_valid()):
-            referee = referee_form.save()
-            teacher = teacher_form.save()
+        if(handle_edit_mentor_ref(referee_form, teacher_form, Referee)):
             return HttpResponseRedirect(reverse('all_referees'))
     else:
         referee_form = RefereeForm(instance=referee)
@@ -80,12 +78,7 @@ def create(request):
     if(request.method == 'POST'):
         referee_form = RefereeForm(request.POST)
         teacher_form = TeacherForm(request.POST)
-        if(referee_form.is_valid() and teacher_form.is_valid()):
-            referee = referee_form.save(commit=False)
-            teacher = teacher_form.save()
-            referee.teacher = teacher
-            referee.save()
-
+        if(handle_form_mentor_ref(referee_form, teacher_form, Referee)):
             return HttpResponseRedirect(reverse('all_referees'))
     else:
         referee_form = RefereeForm()

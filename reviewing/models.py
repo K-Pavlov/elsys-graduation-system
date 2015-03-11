@@ -15,13 +15,33 @@ from shared.models.season_model import SeasonModelBase
 class Referee(SeasonModelBase):
     teacher = models.ForeignKey(Teacher, verbose_name='Учител', blank=True,
                             null=True, default='', related_name='referees',)
-    email = models.EmailField(verbose_name='Имейл', max_length=254)
+    email = models.EmailField(verbose_name='Имейл', max_length=254, blank=True,
+                              null=True, default='')
 
     def soft_delete(self):
         self.topics.clear()
         self.students.clear()
 
         return super(Referee, self).soft_delete()
+
+    def validate_unique(self, *args, **kwargs):
+        super(Referee, self).validate_unique(*args, **kwargs)
+        if(not self.id):
+            if(self.__class__.objects.filter(teacher=self.teacher, season=self.season).exists()):
+                raise ValidationError(
+                    {
+                        NON_FIELD_ERRORS:
+                        ('Рецензент със същите имена вече съществува в този сеноз',)
+                    }
+                )
+
+            if(self.__class__.objects.filter(email=self.email)):
+                raise ValidationError(
+                    {
+                        NON_FIELD_ERRORS:
+                        ('Рецензент със същия имейл вече съществува')
+                    }
+                )
 
     @staticmethod
     def create_from_upload(objects):

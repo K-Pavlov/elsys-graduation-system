@@ -2,6 +2,7 @@
 import time
 import datetime
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.encoding import smart_bytes
 from django.utils.translation import gettext as _
@@ -20,6 +21,16 @@ class Season(DeletableModelBase):
         self.comission_set.clear()
 
         return super(Season, self).soft_delete()
+
+    def validate_unique(self, *args, **kwargs):
+        super(Season, self).validate_unique(*args, **kwargs)
+        if(self.pk is not None):
+            if(self.__class__.objects.filter(year=self.year).exists()):
+                raise ValidationError(
+                    {
+                        'year': ('Сезон със същите години вече съществува',)
+                    }
+                )
 
     def save(self, *args, **kwargs):
         if self.is_active:

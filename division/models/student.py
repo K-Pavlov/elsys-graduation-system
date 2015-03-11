@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import csv
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.encoding import smart_bytes
@@ -51,8 +52,19 @@ class Student(SeasonModelBase):
 
         return super(Student, self).soft_delete()
 
+    def validate_unique(self, *args, **kwargs):
+        super(Student, self).validate_unique(*args, **kwargs)
+        if(self.pk is not None):
+            if(self.__class__.objects.filter(first_name=self.first_name, middle_name=self.middle_name,
+                                             last_name=self.last_name, season=self.season).exists()):
+                raise ValidationError(
+                    {
+                        'first_name': ('Ученик със същите имена вече съществува в този сезон',)
+                    }
+                )
+
     def __str__(self):
-            return smart_bytes(u"%s %s %s" % (self.first_name, self.middle_name, self.last_name))
+            return smart_bytes(u'%s %s %s' % (self.first_name, self.middle_name, self.last_name))
 
     @staticmethod
     def __check_names(item_dict, fname, mname, lname):

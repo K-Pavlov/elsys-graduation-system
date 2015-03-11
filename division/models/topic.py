@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import csv 
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.encoding import smart_bytes
  
@@ -12,7 +13,7 @@ from shared.models.teacher import Teacher
 from reviewing.models import Referee
  
 class Topic(SeasonModelBase):
-    title = models.CharField(verbose_name='Заглавие', max_length=100, unique=True)
+    title = models.CharField(verbose_name='Заглавие', max_length=100,)
     description = models.TextField(verbose_name='Описание',)
     mentor = models.ForeignKey(Mentor, verbose_name='Ръководител', blank=True,
                                null=True, default='', related_name='topics',
@@ -27,6 +28,16 @@ class Topic(SeasonModelBase):
         self.referee = None
 
         return super(Topic, self).soft_delete()
+
+    def validate_unique(self, *args, **kwargs):
+        super(Topic, self).validate_unique(*args, **kwargs)
+        if(self.pk is not None):
+            if(self.__class__.objects.filter(title=self.title, season=self.season).exists()):
+                raise ValidationError(
+                    {
+                        'title': ('Тема със същото заглавие вече същетсвува в този сезон',)
+                    }
+                )
 
     @staticmethod
     def create_from_upload(objects):
