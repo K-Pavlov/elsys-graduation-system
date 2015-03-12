@@ -16,6 +16,8 @@ class Comission(SeasonModelBase):
     head_of_comission = models.OneToOneField(Teacher, verbose_name='Председател на комисията', blank=True,
                             null=True, default='', related_name='head_of_comission',
                             on_delete=models.SET_NULL,)
+    cabinet = models.CharField(verbose_name='Кабинет', max_length=20, blank=True,
+                               null=True, default='')
 
     def soft_delete(self):
         self.head_of_comission = None

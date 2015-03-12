@@ -6,6 +6,7 @@
             <th class="pointer-item">Членове на комисията</th>
             <th class="pointer-item">Ученици</th>
             <th class="pointer-item">Начален час</th>
+            <th class="pointer-item">Кабинет</th>
             <th class="pointer-item">Сезон</th>
             <th class="ignore"></th>
             <th class="ignore"></th>
@@ -38,6 +39,7 @@
                 {% endif %}
             </td>
             <td>{{ object.start_time|default_if_none:'' }}</td>
+            <td>{{ object.cabinet|default_if_none:'' }}</td>
             <td>{{ object.season|default_if_none:'' }}</td>
             <td class="col-md-1">
                 <a class="btn btn-info" style="float:left; margin-bottom: 10px;"
