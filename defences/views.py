@@ -101,12 +101,15 @@ def comission_students_indepth(request, id):
     return render_to_pdf('protocols/comission-students-indepth.html', context)
 
 def individual_software(request, com_id, mem_id):
+    context = get_ctx_individual(com_id, mem_id)
     return render_to_pdf('protocols/individual-software', context)
 
-def individual_computer_networks(request, id):
+def individual_computer_networks(request, com_id, mem_id):
+    context = get_ctx_individual(com_id, mem_id)
     return render_to_pdf('protocols/individual-computer-networks', context)
 
-def individual_hardware(request, id):
+def individual_hardware(request, com_id, mem_id):
+    context = get_ctx_individual(com_id, mem_id)
     return render_to_pdf('protocols/individual-hardware')
 
 #Not view
