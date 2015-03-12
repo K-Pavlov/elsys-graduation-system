@@ -100,7 +100,33 @@ def comission_students_indepth(request, id):
 
     return render_to_pdf('protocols/comission-students-indepth.html', context)
 
+def individual_software(request, com_id, mem_id):
+    return render_to_pdf('protocols/individual-software', context)
+
+def individual_computer_networks(request, id):
+    return render_to_pdf('protocols/individual-computer-networks', context)
+
+def individual_hardware(request, id):
+    return render_to_pdf('protocols/individual-hardware')
+
 #Not view
+def get_ctx_individual(com_id, mem_id):
+    comission = get_object_or_404(Comission, pk=com_id)
+    member = get_object_or_404(comission.members_of_comission, pk=mem_id)
+    
+    students = comission.students
+    year = ''
+    try:
+        year = Season.objects.get(is_active=True).year.split('/')[1]
+    except Season.DoesNotExist:
+        pass
+
+    context = {
+        'students': students,
+        'member': member,
+        'year': year,
+    }
+
 def get_ctx_comission(id):
     comission = get_object_or_404(Comission, pk=id)
     start_time = timezone.localtime(comission.start_time)

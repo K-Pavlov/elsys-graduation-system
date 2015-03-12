@@ -3,11 +3,13 @@
     <table id="all-table" class="table table-bordered table-condensed table-hover">
         <tr>
             <th class="pointer-item">Име</th>
+            <th class="pointer-item">Вид протокол</th>
             <th class="ignore"></th>
         </tr>
         {% for object in objects %}
         <tr id="{{ object.id }}">
             <td>{{ object.name }}</td>
+            <th>{{ object.protocol }}</th>
             <td class="col-md-1">
                 <a class="btn btn-info" style="float:left; margin-bottom: 10px;" href="{% url urls.edit id=object.id %}">Променете</a>
                 <form class="delete-form" style="float:left" object-id="{{ object.id }}" action="{% url urls.delete id=object.id %}" method="delete">

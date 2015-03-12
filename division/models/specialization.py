@@ -5,8 +5,26 @@ from django.utils.encoding import smart_bytes
 
 from shared.models.deletable_model import DeletableModelBase
 
+class Protocol(DeletableModelBase):
+    name = models.CharField(verbose_name='Име', max_length=100)
+    path_to_view = models.CharField(verbose_name='Път до изглед', max_length=100)
+
+    def soft_delete(self):
+        self.specializations.clear()
+        return super(Protocol, self).soft_delete()
+
+    def __str__(self):
+       return smart_bytes(self.name)
+
+    class Meta:
+        app_label = 'division'
+        db_table = 'protocol'
+        ordering = ['name']
+
 class Specialization(DeletableModelBase):
-    name = models.CharField(verbose_name= 'Име', max_length= 100)
+    name = models.CharField(verbose_name='Име', max_length=100)
+    protocol = models.ForeignKey(Protocol, verbose_name='Вид протокол', blank=True,
+                                 null=True, default='', related_name='specializations',)
 
     def soft_delete(self):
         self.students.clear()
@@ -23,8 +41,7 @@ class Specialization(DeletableModelBase):
                 )
 
     def __str__(self):
-        string = u'%s' % (self.name)
-        return smart_bytes(string)
+        return smart_bytes(self.name)
 
     class Meta:
         app_label = 'division'
